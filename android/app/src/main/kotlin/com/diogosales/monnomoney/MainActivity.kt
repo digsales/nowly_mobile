@@ -1,4 +1,4 @@
-package com.example.monno_money
+package com.diogosales.monnomoney
 
 import io.flutter.embedding.android.FlutterActivity
 
