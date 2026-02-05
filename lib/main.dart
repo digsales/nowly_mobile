@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monno_money/core/extensions/context_extensions.dart';
+import 'package:monno_money/l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 
 import 'core/theme/app_theme.dart';
@@ -36,6 +37,8 @@ class MyApp extends ConsumerWidget {
         return MaterialApp(
           title: 'Monno Money',
           debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.light(fontSize),
           darkTheme: AppTheme.dark(fontSize),
           themeMode: themeMode,
