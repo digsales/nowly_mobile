@@ -1,108 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:monno_money/core/extensions/context_extensions.dart';
+import 'package:sizer/sizer.dart';
 
-import '../../core/theme/app_palette.dart';
+import '../../core/widgets/app_button.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
+      backgroundColor: context.colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             children: [
-              const Spacer(flex: 2),
+              const Spacer(flex: 1),
               // Logo
               SvgPicture.asset(
-                isDark
+                context.isDark
                     ? 'assets/images/svg/logo_dark.svg'
-                    : 'assets/images/svg/logo_colored.svg',
+                    : 'assets/images/svg/logo_light.svg',
+                height: 40.h,
               ),
-              const Spacer(flex: 2),
+              const Spacer(flex: 1),
               // Welcome text
               Text(
                 'Seja Bem Vindo!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: isDark
-                          ? AppPalette.textPrimaryDark
-                          : AppPalette.highContrastWhite,
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.w500
+                ),
               ),
               const SizedBox(height: 32),
-              // Login button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton(
-                  onPressed: () {
-                    // TODO: navigate to login
-                  },
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: isDark
-                          ? AppPalette.textSecondaryDark
-                          : AppPalette.highContrastWhite,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                  child: Text(
-                    'Já tenho conta',
-                    style: TextStyle(
-                      color: isDark
-                          ? AppPalette.textPrimaryDark
-                          : AppPalette.highContrastWhite,
-                    ),
-                  ),
-                ),
+              AppButton(
+                text: 'Já tenho conta',
+                variant: AppButtonVariant.outlined,
+                onPressed: () {
+                  // TODO: navigate to login
+                },
               ),
               const SizedBox(height: 12),
-              // Register button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: navigate to register
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark
-                        ? AppPalette.primary
-                        : AppPalette.highContrastBlack,
-                    foregroundColor: AppPalette.highContrastWhite,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                  child: const Text('Criar conta'),
-                ),
+              AppButton(
+                text: 'Criar conta',
+                onPressed: () {
+                  // TODO: navigate to register
+                },
               ),
               const Spacer(),
               // Footer
               Text.rich(
                 TextSpan(
                   text: 'Criado por ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: isDark
-                        ? AppPalette.textSecondaryDark
-                        : AppPalette.highContrastWhite.withValues(alpha: 0.7),
+                  style: context.textTheme.labelSmall?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
                   children: [
                     TextSpan(
                       text: 'Diogo Sales',
-                      style: TextStyle(
+                      style: context.textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppPalette.primary
-                            : AppPalette.highContrastWhite,
+                        color: context.colorScheme.primary
                       ),
                     ),
                   ],
