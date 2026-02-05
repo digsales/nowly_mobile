@@ -2,10 +2,10 @@
   "@@locale": "pt",
 
   "appName": "Monno Money",
+  "appCreator": "Diogo Sales",
 
   "onboardingWelcome": "Seja Bem Vindo!",
   "onboardingLogin": "Já tenho conta",
   "onboardingRegister": "Criar conta",
-  "onboardingCreatedBy": "Criado por ",
-  "onboardingAuthor": "Diogo Sales"
+  "onboardingCreatedBy": "Criado por "
 }
