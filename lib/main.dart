@@ -30,6 +30,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final fontScale = ref.watch(fontScaleProvider);
+    final locale = ref.watch(localeProvider);
     final fontSize = _baseFontSize * fontScale;
 
     return Sizer(
@@ -37,6 +38,7 @@ class MyApp extends ConsumerWidget {
         return MaterialApp(
           title: 'Monno Money',
           debugShowCheckedModeBanner: false,
+          locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppTheme.light(fontSize),
