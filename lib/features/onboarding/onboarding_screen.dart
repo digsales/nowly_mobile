@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monno_money/core/extensions/context_extensions.dart';
 import 'package:sizer/sizer.dart';
@@ -64,19 +63,21 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   Widget _logo(BuildContext context, {double? height, double? width}) {
-    return SvgPicture.asset(
-      context.isDark
-          ? 'assets/images/svg/logo_dark.svg'
-          : 'assets/images/svg/logo_light.svg',
-      height: height,
-      width: width,
+    return Semantics(
+      label: context.l10n.appName,
+      child: SvgPicture.asset(
+        context.isDark
+            ? 'assets/images/svg/logo_dark.svg'
+            : 'assets/images/svg/logo_light.svg',
+        height: height,
+        width: width,
+      ),
     );
   }
 
   Widget _welcomeText(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Text(
-      l10n.onboardingWelcome,
+      context.l10n.onboardingWelcome,
       style: context.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.w500,
       ),
@@ -84,11 +85,10 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   Widget _buttons(BuildContext context, {double? buttonWidth}) {
-    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         AppButton(
-          text: l10n.onboardingLogin,
+          text: context.l10n.onboardingLogin,
           variant: AppButtonVariant.outlined,
           width: buttonWidth,
           onPressed: () {
@@ -97,7 +97,7 @@ class OnboardingScreen extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         AppButton(
-          text: l10n.onboardingRegister,
+          text: context.l10n.onboardingRegister,
           width: buttonWidth,
           onPressed: () {
             // TODO: navigate to register
@@ -108,16 +108,15 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   Widget _footer(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Text.rich(
       TextSpan(
-        text: l10n.onboardingCreatedBy,
+        text: context.l10n.onboardingCreatedBy,
         style: context.textTheme.labelSmall?.copyWith(
           color: context.colorScheme.onSurfaceVariant,
         ),
         children: [
           TextSpan(
-            text: l10n.onboardingAuthor,
+            text: context.l10n.onboardingAuthor,
             style: context.textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w600,
               color: context.colorScheme.primary,

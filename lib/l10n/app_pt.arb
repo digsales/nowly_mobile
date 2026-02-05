@@ -1,5 +1,8 @@
 {
   "@@locale": "pt",
+
+  "appName": "Monno Money",
+
   "onboardingWelcome": "Seja Bem Vindo!",
   "onboardingLogin": "Já tenho conta",
   "onboardingRegister": "Criar conta",
