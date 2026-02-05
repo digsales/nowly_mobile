@@ -12,9 +12,8 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.surface,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
+      body: Padding(
+          padding: context.paddingScreen,
           child: Column(
             children: [
               const Spacer(flex: 1),
@@ -71,7 +70,6 @@ class OnboardingScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

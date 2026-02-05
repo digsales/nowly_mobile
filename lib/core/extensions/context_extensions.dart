@@ -7,4 +7,13 @@ extension BuildContextExtensions on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
   Size get screenSize => MediaQuery.sizeOf(this);
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
+  EdgeInsets get paddingScreen {
+    final padding = MediaQuery.paddingOf(this);
+    return EdgeInsets.only(
+      left: padding.left + 32,
+      right: padding.right + 32,
+      top: padding.top,
+      bottom: padding.bottom,
+    );
+  }
 }
