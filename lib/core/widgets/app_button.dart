@@ -11,11 +11,13 @@ class AppButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.variant = AppButtonVariant.filled,
+    this.width,
   });
 
   final String text;
   final VoidCallback? onPressed;
   final AppButtonVariant variant;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AppButton extends StatelessWidget {
       AppButtonVariant.filled => ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(100.w, 31.sp),
+            minimumSize: Size(width ?? 100.w, 31.sp),
             backgroundColor: context.colorScheme.primary,
             foregroundColor: context.colorScheme.surface,
             shape: RoundedRectangleBorder(
@@ -40,7 +42,7 @@ class AppButton extends StatelessWidget {
       AppButtonVariant.outlined => OutlinedButton(
           onPressed: onPressed,
           style: OutlinedButton.styleFrom(
-            minimumSize: Size(100.w, 31.sp),
+            minimumSize: Size(width ?? 100.w, 31.sp),
             side: BorderSide(color: context.colorScheme.primary),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),

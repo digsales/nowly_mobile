@@ -12,64 +12,115 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.surface,
-      body: Padding(
-          padding: context.paddingScreen,
-          child: Column(
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return Padding(
+            padding: context.paddingScreen,
+            child: Device.orientation == Orientation.portrait ? _buildPortrait(context) : _buildLandscape(context),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPortrait(BuildContext context) {
+    return Column(
+      children: [
+        const Spacer(),
+        _logo(context, height: 40.h),
+        const Spacer(),
+        _welcomeText(context),
+        const SizedBox(height: 32),
+        _buttons(context),
+        const Spacer(),
+        _footer(context),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildLandscape(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Spacer(flex: 1),
-              // Logo
-              SvgPicture.asset(
-                context.isDark
-                    ? 'assets/images/svg/logo_dark.svg'
-                    : 'assets/images/svg/logo_light.svg',
-                height: 40.h,
+              _logo(context, width: 37.w),
+              Column(
+                children: [
+                  _welcomeText(context),
+                  const SizedBox(height: 32),
+                  _buttons(context, buttonWidth: 40.w),
+                ],
               ),
-              const Spacer(flex: 1),
-              // Welcome text
-              Text(
-                'Seja Bem Vindo!',
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.w500
-                ),
-              ),
-              const SizedBox(height: 32),
-              AppButton(
-                text: 'Já tenho conta',
-                variant: AppButtonVariant.outlined,
-                onPressed: () {
-                  // TODO: navigate to login
-                },
-              ),
-              const SizedBox(height: 12),
-              AppButton(
-                text: 'Criar conta',
-                onPressed: () {
-                  // TODO: navigate to register
-                },
-              ),
-              const Spacer(),
-              // Footer
-              Text.rich(
-                TextSpan(
-                  text: 'Criado por ',
-                  style: context.textTheme.labelSmall?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'Diogo Sales',
-                      style: context.textTheme.labelSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: context.colorScheme.primary
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
             ],
           ),
+          _footer(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _logo(BuildContext context, {double? height, double? width}) {
+    return SvgPicture.asset(
+      context.isDark
+          ? 'assets/images/svg/logo_dark.svg'
+          : 'assets/images/svg/logo_light.svg',
+      height: height,
+      width: width,
+    );
+  }
+
+  Widget _welcomeText(BuildContext context) {
+    return Text(
+      'Seja Bem Vindo!',
+      style: context.textTheme.displayMedium?.copyWith(
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  Widget _buttons(BuildContext context, {double? buttonWidth}) {
+    return Column(
+      children: [
+        AppButton(
+          text: 'Já tenho conta',
+          variant: AppButtonVariant.outlined,
+          width: buttonWidth,
+          onPressed: () {
+            // TODO: navigate to login
+          },
         ),
+        const SizedBox(height: 12),
+        AppButton(
+          text: 'Criar conta',
+          width: buttonWidth,
+          onPressed: () {
+            // TODO: navigate to register
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _footer(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: 'Criado por ',
+        style: context.textTheme.labelSmall?.copyWith(
+          color: context.colorScheme.onSurfaceVariant,
+        ),
+        children: [
+          TextSpan(
+            text: 'Diogo Sales',
+            style: context.textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: context.colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
