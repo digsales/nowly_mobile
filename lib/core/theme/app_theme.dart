@@ -8,11 +8,12 @@ abstract final class AppTheme {
         brightness: Brightness.light,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppPalette.primary,
+          primary: AppPalette.primary,
           surface: AppPalette.backgroundLight,
           onSurface: AppPalette.textPrimaryLight,
           brightness: Brightness.light,
         ),
-        scaffoldBackgroundColor: AppPalette.backgroundLight,
+        scaffoldBackgroundColor: AppPalette.primary,
         fontFamily: 'Poppins',
       );
 
@@ -21,6 +22,7 @@ abstract final class AppTheme {
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppPalette.primary,
+          primary: AppPalette.primary,
           surface: AppPalette.backgroundDark,
           onSurface: AppPalette.textPrimaryDark,
           brightness: Brightness.dark,
