@@ -35,4 +35,36 @@ abstract final class AppTheme {
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
       );
+
+  static ThemeData lightHighContrast(double baseFontSize) => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppPalette.highContrastPrimaryLight,
+          primary: AppPalette.highContrastPrimaryLight,
+          surface: AppPalette.highContrastWhite,
+          onSurface: AppPalette.highContrastBlack,
+          onSurfaceVariant: AppPalette.highContrastBlack,
+          brightness: Brightness.light,
+        ),
+        scaffoldBackgroundColor: AppPalette.highContrastPrimaryLight,
+        fontFamily: 'Poppins',
+        textTheme: AppTypography.textTheme(baseFontSize),
+      );
+
+  static ThemeData darkHighContrast(double baseFontSize) => ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppPalette.highContrastPrimaryDark,
+          primary: AppPalette.highContrastPrimaryDark,
+          surface: AppPalette.highContrastBlack,
+          onSurface: AppPalette.highContrastWhite,
+          onSurfaceVariant: AppPalette.highContrastWhite,
+          brightness: Brightness.dark,
+        ),
+        scaffoldBackgroundColor: AppPalette.highContrastPrimaryDark,
+        fontFamily: 'Poppins',
+        textTheme: AppTypography.textTheme(baseFontSize),
+      );
 }
