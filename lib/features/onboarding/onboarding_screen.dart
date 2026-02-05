@@ -116,7 +116,7 @@ class OnboardingScreen extends StatelessWidget {
         ),
         children: [
           TextSpan(
-            text: context.l10n.onboardingAuthor,
+            text: context.l10n.appCreator,
             style: context.textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w600,
               color: context.colorScheme.primary,
