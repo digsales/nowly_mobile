@@ -6,3 +6,5 @@ final themeModeProvider = StateProvider<ThemeMode>((_) => ThemeMode.system);
 final fontScaleProvider = StateProvider<double>((_) => 1.0);
 
 final localeProvider = StateProvider<Locale?>((_) => null);
+
+final highContrastProvider = StateProvider<bool>((_) => false);

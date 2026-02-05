@@ -18,10 +18,11 @@ abstract final class AppPalette {
   static const Color textPrimaryDark = Color(0xFFD1D1D1);
   static const Color textSecondaryDark = Color(0xFF888888);
 
-  // Neutral (se quiser manter genérico)
+  // High contrast
   static const Color highContrastWhite = Color(0xFFFFFFFF);
   static const Color highContrastBlack = Color(0xFF000000);
-  static const Color highContrastPrimary = Color.fromARGB(255, 0, 255, 170);
+  static const Color highContrastPrimaryLight = Color(0xFF006B45);
+  static const Color highContrastPrimaryDark = Color(0xFF4ADE80);
 
   // Semantic
   static const Color error = Color(0xFFD32F2F);

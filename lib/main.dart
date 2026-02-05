@@ -31,6 +31,7 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
+    final highContrast = ref.watch(highContrastProvider);
     final fontSize = _baseFontSize * fontScale;
 
     return Sizer(
@@ -41,8 +42,10 @@ class MyApp extends ConsumerWidget {
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppTheme.light(fontSize),
-          darkTheme: AppTheme.dark(fontSize),
+          theme: highContrast ? AppTheme.lightHighContrast(fontSize) : AppTheme.light(fontSize),
+          darkTheme: highContrast ? AppTheme.darkHighContrast(fontSize) : AppTheme.dark(fontSize),
+          highContrastTheme: AppTheme.lightHighContrast(fontSize),
+          highContrastDarkTheme: AppTheme.darkHighContrast(fontSize),
           themeMode: themeMode,
           builder: (context, child) {
             return AnnotatedRegion<SystemUiOverlayStyle>(
