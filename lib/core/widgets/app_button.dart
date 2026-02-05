@@ -19,42 +19,40 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100.w,
-      height: 60,
-      child: switch (variant) {
-        AppButtonVariant.filled => ElevatedButton(
-            onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: context.colorScheme.primary,
-              foregroundColor: context.colorScheme.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-            ),
-            child: Text(
-              text,
-              style: context.textTheme.labelLarge?.copyWith(
-                color: context.colorScheme.surface,
-              ),
+    return switch (variant) {
+      AppButtonVariant.filled => ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(100.w, 31.sp),
+            backgroundColor: context.colorScheme.primary,
+            foregroundColor: context.colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
             ),
           ),
-        AppButtonVariant.outlined => OutlinedButton(
-            onPressed: onPressed,
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: context.colorScheme.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-            ),
-            child: Text(
-              text,
-              style: context.textTheme.labelLarge?.copyWith(
-                color: context.colorScheme.primary,
-              ),
+          child: Text(
+            text,
+            style: context.textTheme.labelLarge?.copyWith(
+              color: context.colorScheme.surface,
             ),
           ),
-      },
-    );
+        ),
+      AppButtonVariant.outlined => OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            minimumSize: Size(100.w, 31.sp),
+            side: BorderSide(color: context.colorScheme.primary),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+          ),
+          child: Text(
+            text,
+            style: context.textTheme.labelLarge?.copyWith(
+              color: context.colorScheme.primary,
+            ),
+          ),
+        ),
+    };
   }
 }
