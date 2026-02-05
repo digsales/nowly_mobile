@@ -1,117 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:monno_money/l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:monno_money/core/extensions/context_extensions.dart';
+import 'package:sizer/sizer.dart';
 
-import '../../core/theme/app_palette.dart';
+import '../../core/widgets/app_button.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
+      backgroundColor: context.colorScheme.surface,
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return Padding(
+            padding: context.paddingScreen,
+            child: Device.orientation == Orientation.portrait ? _buildPortrait(context) : _buildLandscape(context),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPortrait(BuildContext context) {
+    return Column(
+      children: [
+        const Spacer(),
+        _logo(context, height: 40.h),
+        const Spacer(),
+        _welcomeText(context),
+        const SizedBox(height: 32),
+        _buttons(context),
+        const Spacer(),
+        _footer(context),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildLandscape(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Spacer(flex: 2),
-              // Logo
-              SvgPicture.asset(
-                isDark
-                    ? 'assets/images/svg/logo_dark.svg'
-                    : 'assets/images/svg/logo_colored.svg',
+              _logo(context, width: 37.w),
+              Column(
+                children: [
+                  _welcomeText(context),
+                  const SizedBox(height: 32),
+                  _buttons(context, buttonWidth: 40.w),
+                ],
               ),
-              const Spacer(flex: 2),
-              // Welcome text
-              Text(
-                'Seja Bem Vindo!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      color: isDark
-                          ? AppPalette.textPrimaryDark
-                          : AppPalette.highContrastWhite,
-                      fontWeight: FontWeight.w700,
-                    ),
-              ),
-              const SizedBox(height: 32),
-              // Login button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton(
-                  onPressed: () {
-                    // TODO: navigate to login
-                  },
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: isDark
-                          ? AppPalette.textSecondaryDark
-                          : AppPalette.highContrastWhite,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                  child: Text(
-                    'Já tenho conta',
-                    style: TextStyle(
-                      color: isDark
-                          ? AppPalette.textPrimaryDark
-                          : AppPalette.highContrastWhite,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Register button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: navigate to register
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark
-                        ? AppPalette.primary
-                        : AppPalette.highContrastBlack,
-                    foregroundColor: AppPalette.highContrastWhite,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                  child: const Text('Criar conta'),
-                ),
-              ),
-              const Spacer(),
-              // Footer
-              Text.rich(
-                TextSpan(
-                  text: 'Criado por ',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: isDark
-                        ? AppPalette.textSecondaryDark
-                        : AppPalette.highContrastWhite.withValues(alpha: 0.7),
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'Diogo Sales',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: isDark
-                            ? AppPalette.primary
-                            : AppPalette.highContrastWhite,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
             ],
           ),
+          _footer(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _logo(BuildContext context, {double? height, double? width}) {
+    return SvgPicture.asset(
+      context.isDark
+          ? 'assets/images/svg/logo_dark.svg'
+          : 'assets/images/svg/logo_light.svg',
+      height: height,
+      width: width,
+    );
+  }
+
+  Widget _welcomeText(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Text(
+      l10n.onboardingWelcome,
+      style: context.textTheme.displayMedium?.copyWith(
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  Widget _buttons(BuildContext context, {double? buttonWidth}) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      children: [
+        AppButton(
+          text: l10n.onboardingLogin,
+          variant: AppButtonVariant.outlined,
+          width: buttonWidth,
+          onPressed: () {
+            // TODO: navigate to login
+          },
         ),
+        const SizedBox(height: 12),
+        AppButton(
+          text: l10n.onboardingRegister,
+          width: buttonWidth,
+          onPressed: () {
+            // TODO: navigate to register
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _footer(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Text.rich(
+      TextSpan(
+        text: l10n.onboardingCreatedBy,
+        style: context.textTheme.labelSmall?.copyWith(
+          color: context.colorScheme.onSurfaceVariant,
+        ),
+        children: [
+          TextSpan(
+            text: l10n.onboardingAuthor,
+            style: context.textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: context.colorScheme.primary,
+            ),
+          ),
+        ],
       ),
     );
   }
