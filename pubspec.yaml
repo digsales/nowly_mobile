@@ -22,7 +22,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  change_app_package_name: ^1.5.0 # dart run change_app_package_name:main com.diogosales.monnomoney
+  change_app_package_name: ^1.5.0 # dart run change_app_package_name:main com.diogosales.nowly
   names_launcher: ^0.0.2
   icons_launcher: ^3.0.3
   flutter_native_splash: ^2.4.7
@@ -61,7 +61,7 @@ names_launcher:
   # Para aplicar as mudanças, execute:
   # dart run names_launcher:change
   name:
-    default: "Monno Money"
+    default: "Nowly"
   platforms:
     android:
       enable: true
@@ -105,7 +105,7 @@ flutter_native_splash:
   web: false
   fullscreen: true
 
-  color: "#F7F7F7"
+  color: "#F1EDF8"
   image: assets/images/splash/splash_logo_light.png
   branding: assets/images/splash/splash_branding_light.png
 
@@ -114,7 +114,7 @@ flutter_native_splash:
   branding_dark: assets/images/splash/splash_branding_dark.png
 
   android_12:
-    color: "#F7F7F7"
+    color: "#F1EDF8"
     image: assets/images/splash/splash_logo_android12_light.png
     branding: assets/images/splash/splash_branding_android12_light.png
 

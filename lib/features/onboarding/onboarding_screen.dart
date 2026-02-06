@@ -27,7 +27,7 @@ class OnboardingScreen extends StatelessWidget {
     return Column(
       children: [
         const Spacer(),
-        _logo(context, height: 40.h),
+        _logo(context, height: 25.h),
         const Spacer(),
         _welcomeText(context),
         const SizedBox(height: 32),
@@ -40,25 +40,34 @@ class OnboardingScreen extends StatelessWidget {
   }
 
   Widget _buildLandscape(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _logo(context, width: 37.w),
-              Column(
-                children: [
-                  _welcomeText(context),
-                  const SizedBox(height: 32),
-                  _buttons(context, buttonWidth: 40.w),
-                ],
-              ),
-            ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox.shrink(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _logo(context, width: 25.w),
+                    Column(
+                      children: [
+                        _welcomeText(context),
+                        const SizedBox(height: 32),
+                        _buttons(context, buttonWidth: 40.w),
+                      ],
+                    ),
+                  ],
+                ),
+                _footer(context),
+              ],
+            ),
           ),
-          _footer(context),
-        ],
-      ),
+        );
+      },
     );
   }
 
