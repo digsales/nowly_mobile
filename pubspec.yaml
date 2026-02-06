@@ -56,6 +56,9 @@ flutter:
           weight: 800
         - asset: assets/fonts/poppins/Poppins-Black.ttf
           weight: 900
+    - family: Ultra
+      fonts:
+        - asset: assets/fonts/ultra/Ultra-Regular.ttf
 
 names_launcher:
   # Para aplicar as mudanças, execute:
