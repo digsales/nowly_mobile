@@ -37,7 +37,7 @@ class MyApp extends ConsumerWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
-          title: 'Monno Money',
+          title: 'Nowly',
           debugShowCheckedModeBanner: false,
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
