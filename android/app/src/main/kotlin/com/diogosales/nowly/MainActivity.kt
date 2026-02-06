@@ -1,4 +1,4 @@
-package com.diogosales.monnomoney
+package com.diogosales.nowly
 
 import io.flutter.embedding.android.FlutterActivity
 
