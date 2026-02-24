@@ -1,4 +1,4 @@
-# monno_money
+# Nowly
 
 A new Flutter project.
 
