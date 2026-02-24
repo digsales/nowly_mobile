@@ -114,16 +114,16 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 32),
         AppTextField(
           controller: controller.emailController,
-          label: 'E-mail',
-          hintText: 'Digite seu e-mail',
+          label: context.l10n.textFieldLabelEmail,
+          hintText: context.l10n.textFieldHintEmail,
           prefixIcon: Icons.person_outline,
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 16),
         AppTextField(
           controller: controller.passwordController,
-          label: 'Senha',
-          hintText: 'Digite sua senha',
+          label: context.l10n.textFieldLabelPassword,
+          hintText: context.l10n.textFieldHintPassword,
           prefixIcon: Icons.lock_outline,
           obscureText: controller.obscurePassword,
           suffixIcon: IconButton(
@@ -144,7 +144,7 @@ class SigninPage extends ConsumerWidget {
               // TODO: navegar para tela de recuperação de senha
             },
             child: Text(
-              'Esqueceu a senha?',
+              context.l10n.signinForgotPassword,
               style: context.textTheme.labelSmall?.copyWith(
                 color: context.colorScheme.onSurfaceVariant,
               ),
@@ -153,7 +153,7 @@ class SigninPage extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
         AppButton(
-          text: 'Entrar',
+          text: context.l10n.signinButton,
           onPressed: controller.signin,
           isProcessing: controller.isLoading,
         ),
@@ -163,7 +163,7 @@ class SigninPage extends ConsumerWidget {
 
   Widget _introductionText(BuildContext context) {
     return Text(
-      "Olá\nEntre em sua conta",
+      context.l10n.signinGreeting,
       style: context.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.w500,
         color: context.isDark
@@ -185,13 +185,13 @@ class SigninPage extends ConsumerWidget {
             child: Text.rich(
               textAlign: TextAlign.end,
               TextSpan(
-                text: "Não tem uma conta?\n",
+                text: context.l10n.signinNoAccount,
                 style: context.textTheme.labelSmall?.copyWith(
                   color: context.colorScheme.onSurfaceVariant,
                 ),
                 children: [
                   TextSpan(
-                    text: "Cadastre-se",
+                    text: context.l10n.signinRegister,
                     style: context.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
