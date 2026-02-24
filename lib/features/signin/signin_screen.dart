@@ -83,15 +83,11 @@ class SigninPage extends ConsumerWidget {
           child: Padding(
             padding: context.paddingScreen,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  children: [
-                    const SizedBox(height: 32),
-                    _introductionText(context),
-                  ],
-                ),
+                const SizedBox(height: 32),
+                _introductionText(context),
               ],
             ),
           ),
