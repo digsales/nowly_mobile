@@ -76,32 +76,63 @@ class SigninPage extends ConsumerWidget {
   }
 
   Widget _buildLandscape(BuildContext context, WidgetRef ref) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Padding(
+            padding: context.paddingScreen,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox.shrink(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Column(
                   children: [
-                    Column(
-                      children: [
-                        _introductionText(context),
-                        const SizedBox(height: 32),
-                      ],
-                    ),
+                    const SizedBox(height: 32),
+                    _introductionText(context),
                   ],
                 ),
                 _footer(context),
               ],
             ),
           ),
-        );
-      },
+        ),
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: context.paddingTop,
+              bottom: context.paddingBottom,
+            ),
+            child: Container(
+            height: double.infinity,
+            decoration: BoxDecoration(
+              color: context.colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(50),
+                bottomLeft: Radius.circular(50),
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(36, 16, 36, 16),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _loginForm(context, ref),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -111,7 +142,6 @@ class SigninPage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 32),
         AppTextField(
           controller: controller.emailController,
           label: context.l10n.textFieldLabelEmail,
