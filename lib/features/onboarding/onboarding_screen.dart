@@ -12,7 +12,6 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colorScheme.surface,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return Padding(
@@ -76,9 +75,7 @@ class OnboardingScreen extends StatelessWidget {
     return Semantics(
       label: context.l10n.appName,
       child: SvgPicture.asset(
-        context.isDark
-            ? 'assets/images/svg/logo_dark.svg'
-            : 'assets/images/svg/logo_light.svg',
+        'assets/images/svg/logo_colored.svg',
         height: height,
         width: width,
       ),
@@ -90,6 +87,9 @@ class OnboardingScreen extends StatelessWidget {
       context.l10n.onboardingWelcome,
       style: context.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.w500,
+        color: context.isDark
+          ? context.colorScheme.onSurface
+          : context.colorScheme.surface,
       ),
     );
   }
@@ -100,6 +100,8 @@ class OnboardingScreen extends StatelessWidget {
         AppButton(
           text: context.l10n.onboardingLogin,
           variant: AppButtonVariant.outlined,
+          detailColor: context.colorScheme.surface,
+          textColor: context.colorScheme.surface,
           width: buttonWidth,
           onPressed: () {
             Navigator.of(context).push(
@@ -113,6 +115,8 @@ class OnboardingScreen extends StatelessWidget {
         AppButton(
           text: context.l10n.onboardingRegister,
           width: buttonWidth,
+          detailColor: context.colorScheme.surface,
+          textColor: context.colorScheme.primary,
           onPressed: () {
             // TODO: navigate to register
           },
@@ -126,14 +130,14 @@ class OnboardingScreen extends StatelessWidget {
       TextSpan(
         text: context.l10n.onboardingCreatedBy,
         style: context.textTheme.labelSmall?.copyWith(
-          color: context.colorScheme.onSurfaceVariant,
+          color: context.colorScheme.surface,
         ),
         children: [
           TextSpan(
             text: context.l10n.appCreator,
             style: context.textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: context.colorScheme.primary,
+              color: context.colorScheme.onSurface,
             ),
           ),
         ],

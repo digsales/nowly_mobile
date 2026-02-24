@@ -54,7 +54,7 @@ class MyApp extends ConsumerWidget {
                 statusBarIconBrightness:
                     context.isDark
                         ? Brightness.light
-                        : Brightness.dark,
+                        : Brightness.light,
                 systemNavigationBarColor: Colors.transparent,
                 systemNavigationBarIconBrightness:
                     context.isDark
