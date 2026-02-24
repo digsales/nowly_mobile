@@ -12,12 +12,16 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.variant = AppButtonVariant.filled,
     this.width,
+    this.detailColor,
+    this.textColor,
   });
 
   final String text;
   final VoidCallback? onPressed;
   final AppButtonVariant variant;
   final double? width;
+  final Color? detailColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +30,8 @@ class AppButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             minimumSize: Size(width ?? 100.w, 31.sp),
-            backgroundColor: context.colorScheme.primary,
-            foregroundColor: context.colorScheme.surface,
+            backgroundColor: detailColor ?? context.colorScheme.primary,
+            foregroundColor: textColor ?? context.colorScheme.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
             ),
@@ -35,7 +39,7 @@ class AppButton extends StatelessWidget {
           child: Text(
             text,
             style: context.textTheme.labelLarge?.copyWith(
-              color: context.colorScheme.surface,
+              color: textColor ?? context.colorScheme.surface,
             ),
           ),
         ),
@@ -43,7 +47,7 @@ class AppButton extends StatelessWidget {
           onPressed: onPressed,
           style: OutlinedButton.styleFrom(
             minimumSize: Size(width ?? 100.w, 31.sp),
-            side: BorderSide(color: context.colorScheme.primary),
+            side: BorderSide(color: detailColor ?? context.colorScheme.primary),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
             ),
@@ -51,7 +55,7 @@ class AppButton extends StatelessWidget {
           child: Text(
             text,
             style: context.textTheme.labelLarge?.copyWith(
-              color: context.colorScheme.primary,
+              color: textColor ?? context.colorScheme.primary,
             ),
           ),
         ),
