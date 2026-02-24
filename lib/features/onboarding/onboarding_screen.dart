@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monno_money/core/extensions/context_extensions.dart';
+import 'package:monno_money/features/signin/signin_screen.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/widgets/app_button.dart';
@@ -101,7 +102,11 @@ class OnboardingScreen extends StatelessWidget {
           variant: AppButtonVariant.outlined,
           width: buttonWidth,
           onPressed: () {
-            // TODO: navigate to login
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const SigninPage(),
+              ),
+            );
           },
         ),
         const SizedBox(height: 12),
