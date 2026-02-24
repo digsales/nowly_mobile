@@ -92,17 +92,15 @@ class SigninPage extends ConsumerWidget {
                     _introductionText(context),
                   ],
                 ),
-                _footer(context),
               ],
             ),
           ),
         ),
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Padding(
             padding: EdgeInsets.only(
               top: context.paddingTop,
-              bottom: context.paddingBottom,
             ),
             child: Container(
             height: double.infinity,
@@ -110,10 +108,9 @@ class SigninPage extends ConsumerWidget {
               color: context.colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(50),
-                bottomLeft: Radius.circular(50),
               ),
             ),
-            padding: const EdgeInsets.fromLTRB(36, 16, 36, 16),
+            padding: EdgeInsets.fromLTRB(36, 16, context.paddingRight + 36, 16),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
@@ -123,6 +120,8 @@ class SigninPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _loginForm(context, ref),
+                        const SizedBox(height: 32),
+                        _footer(context),
                       ],
                     ),
                   ),
@@ -142,6 +141,7 @@ class SigninPage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 32),
         AppTextField(
           controller: controller.emailController,
           label: context.l10n.textFieldLabelEmail,
