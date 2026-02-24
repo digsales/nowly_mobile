@@ -92,6 +92,9 @@ class SigninPage extends StatelessWidget {
       "Olá\nEntre em sua conta",
       style: context.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.w500,
+        color: context.isDark
+          ? context.colorScheme.onSurface
+          : context.colorScheme.surface,
       ),
     );
   }
