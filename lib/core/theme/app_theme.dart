@@ -4,6 +4,13 @@ import 'app_palette.dart';
 import 'app_typography.dart';
 
 abstract final class AppTheme {
+  static const _pageTransitionsTheme = PageTransitionsTheme(
+    builders: {
+      TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    },
+  );
+
   static ThemeData light(double baseFontSize) => ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
@@ -18,6 +25,7 @@ abstract final class AppTheme {
         scaffoldBackgroundColor: AppPalette.primary,
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
+        pageTransitionsTheme: _pageTransitionsTheme,
       );
 
   static ThemeData dark(double baseFontSize) => ThemeData(
@@ -34,6 +42,7 @@ abstract final class AppTheme {
         scaffoldBackgroundColor: AppPalette.primary,
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
+        pageTransitionsTheme: _pageTransitionsTheme,
       );
 
   static ThemeData lightHighContrast(double baseFontSize) => ThemeData(
@@ -50,6 +59,7 @@ abstract final class AppTheme {
         scaffoldBackgroundColor: AppPalette.highContrastPrimaryLight,
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
+        pageTransitionsTheme: _pageTransitionsTheme,
       );
 
   static ThemeData darkHighContrast(double baseFontSize) => ThemeData(
@@ -66,5 +76,6 @@ abstract final class AppTheme {
         scaffoldBackgroundColor: AppPalette.highContrastPrimaryDark,
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
+        pageTransitionsTheme: _pageTransitionsTheme,
       );
 }
