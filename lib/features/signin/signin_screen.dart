@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monno_money/core/extensions/context_extensions.dart';
 import 'package:monno_money/core/widgets/app_button.dart';
 import 'package:monno_money/core/widgets/app_text_field.dart';
+import 'package:monno_money/core/widgets/touchable_opacity.dart';
 import 'package:monno_money/features/signin/signin_provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -49,15 +50,24 @@ class SigninPage extends ConsumerWidget {
               ),
             ),
             padding: context.paddingScreen,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox.shrink(),
-                _loginForm(context, ref),
-                const SizedBox.shrink(),
-                const SizedBox.shrink(),
-                _footer(context),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox.shrink(),
+                        _loginForm(context, ref),
+                        const SizedBox.shrink(),
+                        const SizedBox(height: 32),
+                        _footer(context),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -129,10 +139,15 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 8),
         Align(
           alignment: Alignment.centerRight,
-          child: Text(
-            'Esqueceu a senha?',
-            style: context.textTheme.labelSmall?.copyWith(
-              color: context.colorScheme.onSurfaceVariant,
+          child: TouchableOpacity(
+            onTap: () {
+              // TODO: navegar para tela de recuperação de senha
+            },
+            child: Text(
+              'Esqueceu a senha?',
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
         ),
@@ -163,21 +178,26 @@ class SigninPage extends ConsumerWidget {
       alignment: Alignment.centerRight,
       child: Column(
         children: [
-          Text.rich(
-            textAlign: TextAlign.end,
-            TextSpan(
-              text: "Não tem uma conta?\n",
-              style: context.textTheme.labelSmall?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
-              children: [
-                TextSpan(
-                  text: "Cadastre-se",
-                  style: context.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+          TouchableOpacity(
+            onTap: () {
+              // TODO: navegar para tela de cadastro
+            },
+            child: Text.rich(
+              textAlign: TextAlign.end,
+              TextSpan(
+                text: "Não tem uma conta?\n",
+                style: context.textTheme.labelSmall?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
                 ),
-              ],
+                children: [
+                  TextSpan(
+                    text: "Cadastre-se",
+                    style: context.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 32),
