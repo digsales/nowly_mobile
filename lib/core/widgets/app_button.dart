@@ -47,7 +47,10 @@ class AppButton extends StatelessWidget {
           onPressed: onPressed,
           style: OutlinedButton.styleFrom(
             minimumSize: Size(width ?? 100.w, 31.sp),
-            side: BorderSide(color: detailColor ?? context.colorScheme.primary),
+            side: BorderSide(
+              color: detailColor ?? context.colorScheme.primary,
+              width: 2
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
             ),
