@@ -139,7 +139,8 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 24),
         AppButton(
           text: 'Entrar',
-          onPressed: controller.isLoading ? null : controller.signin,
+          onPressed: controller.signin,
+          isProcessing: controller.isLoading,
         ),
       ],
     );
