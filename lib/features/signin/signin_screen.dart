@@ -167,7 +167,7 @@ class SigninPage extends ConsumerWidget {
           alignment: Alignment.centerRight,
           child: TouchableOpacity(
             onTap: () {
-              // TODO: navegar para tela de recuperação de senha
+              // TODO: context.push(AppRoutes.forgotPassword);
             },
             child: Text(
               context.l10n.signinForgotPassword,
@@ -206,7 +206,7 @@ class SigninPage extends ConsumerWidget {
         children: [
           TouchableOpacity(
             onTap: () {
-              // TODO: navegar para tela de cadastro
+              // TODO: context.push(AppRoutes.register);
             },
             child: Text.rich(
               textAlign: TextAlign.end,
