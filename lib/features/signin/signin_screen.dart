@@ -62,6 +62,7 @@ class SigninPage extends ConsumerWidget {
                   ? Icons.visibility_outlined
                   : Icons.visibility_off_outlined,
               color: context.colorScheme.onSurfaceVariant,
+              size: (context.textTheme.bodyMedium!.fontSize!) * 1.71,
             ),
             onPressed: controller.toggleObscurePassword,
           ),
