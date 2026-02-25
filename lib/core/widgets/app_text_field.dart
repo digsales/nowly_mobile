@@ -51,6 +51,7 @@ class _AppTextFieldState extends State<AppTextField> {
   static const double _circleSize = 56;
   static const double _fieldHeight = 48;
   static const double _circleOverlap = 12;
+  static const double _shadowBlur = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +69,12 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
             ),
           ),
-        SizedBox(
-          height: _circleSize,
-          child: Stack(
-            clipBehavior: Clip.none,
+        Padding(
+          padding: const EdgeInsets.only(left: _shadowBlur),
+          child: SizedBox(
+            height: _circleSize,
+            child: Stack(
+              clipBehavior: Clip.none,
             children: [
               // Text field — full width, padded left to sit behind the circle
               Padding(
@@ -159,6 +162,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 ),
               ),
             ],
+          ),
           ),
         ),
       ],
