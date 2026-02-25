@@ -3,140 +3,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monno_money/core/extensions/context_extensions.dart';
 import 'package:monno_money/core/widgets/app_button.dart';
 import 'package:monno_money/core/widgets/app_text_field.dart';
+import 'package:monno_money/core/widgets/auth_layout.dart';
 import 'package:monno_money/core/widgets/touchable_opacity.dart';
 import 'package:monno_money/features/signin/signin_provider.dart';
-import 'package:sizer/sizer.dart';
 
 class SigninPage extends ConsumerWidget {
   const SigninPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          return Device.orientation == Orientation.portrait
-              ? _buildPortrait(context, ref)
-              : _buildLandscape(context, ref);
-        },
+    return AuthLayout(
+      header: Text(
+        context.l10n.signinGreeting,
+        style: context.textTheme.displayMedium?.copyWith(
+          fontWeight: FontWeight.w500,
+          color: context.isDark
+              ? context.colorScheme.onSurface
+              : context.colorScheme.surface,
+        ),
       ),
-    );
-  }
-
-  Widget _buildPortrait(BuildContext context, WidgetRef ref) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: context.paddingScreen,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 60),
-              _introductionText(context),
-              SizedBox(height: 60 - context.paddingBottom),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: context.colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-            ),
-            padding: context.paddingScreen,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const SizedBox.shrink(),
-                        _loginForm(context, ref),
-                        const SizedBox.shrink(),
-                        const SizedBox(height: 32),
-                        _footer(context),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLandscape(BuildContext context, WidgetRef ref) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Padding(
-            padding: context.paddingScreen,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 32),
-                        _introductionText(context),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: context.paddingTop,
-            ),
-            child: Container(
-            height: double.infinity,
-            decoration: BoxDecoration(
-              color: context.colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50),
-              ),
-            ),
-            padding: EdgeInsets.fromLTRB(36, 16, context.paddingRight + 36, 16),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _loginForm(context, ref),
-                        const SizedBox(height: 32),
-                        _footer(context),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          ),
-        ),
-      ],
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox.shrink(),
+          _loginForm(context, ref),
+          const SizedBox.shrink(),
+          const SizedBox(height: 32),
+          _footer(context),
+        ],
+      ),
     );
   }
 
@@ -193,18 +88,6 @@ class SigninPage extends ConsumerWidget {
           isProcessing: controller.isLoading,
         ),
       ],
-    );
-  }
-
-  Widget _introductionText(BuildContext context) {
-    return Text(
-      context.l10n.signinGreeting,
-      style: context.textTheme.displayMedium?.copyWith(
-        fontWeight: FontWeight.w500,
-        color: context.isDark
-            ? context.colorScheme.onSurface
-            : context.colorScheme.surface,
-      ),
     );
   }
 
