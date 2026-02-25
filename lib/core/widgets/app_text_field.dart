@@ -50,7 +50,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
   static const double _circleSize = 56;
   static const double _fieldHeight = 48;
-  static const double _circleOverlap = 12;
+  static const double _circleOverlap = 20;
   static const double _shadowBlur = 8;
 
   @override
@@ -122,10 +122,7 @@ class _AppTextFieldState extends State<AppTextField> {
                           ),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
+                        contentPadding: const EdgeInsets.fromLTRB(24, 12, 16, 12),
                       ),
                     ),
                   ),
