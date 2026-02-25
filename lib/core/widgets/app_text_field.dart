@@ -14,6 +14,9 @@ class AppTextField extends StatefulWidget {
     this.keyboardType,
     this.onChanged,
     this.textCapitalization = TextCapitalization.none,
+    this.multiline = false,
+    this.maxLines,
+    this.minLines,
   });
 
   final TextEditingController? controller;
@@ -25,6 +28,9 @@ class AppTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
   final TextCapitalization textCapitalization;
+  final bool multiline;
+  final int? maxLines;
+  final int? minLines;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -69,100 +75,162 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
             ),
           ),
-        Padding(
-          padding: const EdgeInsets.only(left: _shadowBlur),
-          child: SizedBox(
-            height: _circleSize,
-            child: Stack(
-              clipBehavior: Clip.none,
-            children: [
-              // Text field — full width, padded left to sit behind the circle
-              Padding(
-                padding: const EdgeInsets.only(left: _circleSize - _circleOverlap),
-                child: Center(
-                  child: SizedBox(
-                    height: _fieldHeight,
-                    child: TextField(
-                      controller: widget.controller,
-                      focusNode: _focusNode,
-                      obscureText: widget.obscureText,
-                      keyboardType: widget.keyboardType,
-                      textCapitalization: widget.textCapitalization,
-                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                      onChanged: widget.onChanged,
-                      style: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colorScheme.onSurface,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: widget.hintText,
-                        hintStyle: context.textTheme.bodyMedium?.copyWith(
-                          color: context.colorScheme.onSurfaceVariant,
-                        ),
-                        suffixIcon: widget.suffixIcon,
-                        filled: true,
-                        fillColor: context.colorScheme.surfaceContainerHighest,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(24),
-                            bottomRight: Radius.circular(24),
-                          ),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(24),
-                            bottomRight: Radius.circular(24),
-                          ),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(24),
-                            bottomRight: Radius.circular(24),
-                          ),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.fromLTRB(24, 12, 16, 12),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // Circle with icon — on top, left-aligned
-              Positioned(
-                left: 0,
-                top: 0,
-                bottom: 0,
-                child: Container(
-                  width: _circleSize,
-                  height: _circleSize,
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.surface,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: widget.prefixIcon != null
-                      ? Icon(
-                          widget.prefixIcon,
-                          color: _isFocused
-                              ? context.colorScheme.primary
-                              : context.colorScheme.onSurfaceVariant,
-                          size: 24,
-                        )
-                      : null,
-                ),
-              ),
-            ],
-          ),
-          ),
-        ),
+        if (widget.multiline) _buildMultiline(context) else _buildDefault(context),
       ],
+    );
+  }
+
+  Widget _buildDefault(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: _shadowBlur),
+      child: SizedBox(
+        height: _circleSize,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: _circleSize - _circleOverlap),
+              child: Center(
+                child: SizedBox(
+                  height: _fieldHeight,
+                  child: _textField(
+                    context,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                    contentPadding: const EdgeInsets.fromLTRB(24, 12, 16, 12),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                width: _circleSize,
+                height: _circleSize,
+                decoration: BoxDecoration(
+                  color: context.colorScheme.surface,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: widget.prefixIcon != null
+                    ? Icon(
+                        widget.prefixIcon,
+                        color: _isFocused
+                            ? context.colorScheme.primary
+                            : context.colorScheme.onSurfaceVariant,
+                        size: 24,
+                      )
+                    : null,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMultiline(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: _shadowBlur),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: _circleSize - _circleOverlap),
+            child: _textField(
+              context,
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(24),
+                bottomRight: Radius.circular(24),
+                bottomLeft: Radius.circular(24),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(24, 12, 16, 12),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            top: 0,
+            child: Container(
+              width: _circleSize,
+              height: _circleSize,
+              decoration: BoxDecoration(
+                color: context.colorScheme.surface,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: widget.prefixIcon != null
+                  ? Icon(
+                      widget.prefixIcon,
+                      color: _isFocused
+                          ? context.colorScheme.primary
+                          : context.colorScheme.onSurfaceVariant,
+                      size: 24,
+                    )
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _textField(
+    BuildContext context, {
+    required BorderRadius borderRadius,
+    required EdgeInsets contentPadding,
+  }) {
+    return TextField(
+      controller: widget.controller,
+      focusNode: _focusNode,
+      obscureText: widget.obscureText,
+      keyboardType: widget.multiline ? TextInputType.multiline : widget.keyboardType,
+      textCapitalization: widget.textCapitalization,
+      maxLines: widget.multiline ? (widget.maxLines ?? 8) : 1,
+      minLines: widget.multiline ? (widget.minLines ?? 3) : null,
+      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+      onChanged: widget.onChanged,
+      style: context.textTheme.bodyMedium?.copyWith(
+        color: context.colorScheme.onSurface,
+      ),
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        hintStyle: context.textTheme.bodyMedium?.copyWith(
+          color: context.colorScheme.onSurfaceVariant,
+        ),
+        prefixIcon: null,
+        suffixIcon: widget.suffixIcon,
+        filled: true,
+        fillColor: context.colorScheme.surfaceContainerHighest,
+        border: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: contentPadding,
+      ),
     );
   }
 }
