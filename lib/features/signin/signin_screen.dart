@@ -82,13 +82,22 @@ class SigninPage extends ConsumerWidget {
           flex: 1,
           child: Padding(
             padding: context.paddingScreen,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 32),
-                _introductionText(context),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 32),
+                        _introductionText(context),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
