@@ -10,7 +10,7 @@ class AppTextField extends StatefulWidget {
     this.label,
     this.prefixIcon,
     this.suffixIcon,
-    this.obscureText = false,
+    this.isPassword = false,
     this.keyboardType,
     this.onChanged,
     this.textCapitalization = TextCapitalization.none,
@@ -24,7 +24,7 @@ class AppTextField extends StatefulWidget {
   final String? label;
   final IconData? prefixIcon;
   final Widget? suffixIcon;
-  final bool obscureText;
+  final bool isPassword;
   final TextInputType? keyboardType;
   final ValueChanged<String>? onChanged;
   final TextCapitalization textCapitalization;
@@ -39,6 +39,7 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   final _focusNode = FocusNode();
   bool _isFocused = false;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -153,6 +154,7 @@ class _AppTextFieldState extends State<AppTextField> {
                     contentPadding: EdgeInsets.fromLTRB(
                       hPadding, vPadding, trailingPadding, vPadding,
                     ),
+                    iconSize: iconSize,
                   ),
                 ),
               ),
@@ -202,6 +204,7 @@ class _AppTextFieldState extends State<AppTextField> {
               contentPadding: EdgeInsets.fromLTRB(
                 hPadding, vPadding, trailingPadding, vPadding,
               ),
+              iconSize: iconSize,
             ),
           ),
           Positioned(
@@ -255,11 +258,12 @@ class _AppTextFieldState extends State<AppTextField> {
     BuildContext context, {
     required BorderRadius borderRadius,
     required EdgeInsets contentPadding,
+    required double iconSize,
   }) {
     return TextField(
       controller: widget.controller,
       focusNode: _focusNode,
-      obscureText: widget.obscureText,
+      obscureText: widget.isPassword && _obscureText,
       keyboardType: widget.multiline ? TextInputType.multiline : widget.keyboardType,
       textCapitalization: widget.textCapitalization,
       maxLines: widget.multiline ? (widget.maxLines ?? 8) : 1,
@@ -274,7 +278,18 @@ class _AppTextFieldState extends State<AppTextField> {
         hintStyle: context.textTheme.bodyMedium?.copyWith(
           color: context.colorScheme.onSurfaceVariant,
         ),
-        suffixIcon: widget.suffixIcon,
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                icon: Icon(
+                  _obscureText
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                  color: context.colorScheme.onSurfaceVariant,
+                  size: iconSize,
+                ),
+                onPressed: () => setState(() => _obscureText = !_obscureText),
+              )
+            : widget.suffixIcon,
         filled: true,
         fillColor: context.colorScheme.surfaceContainerHighest,
         border: OutlineInputBorder(

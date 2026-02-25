@@ -55,17 +55,7 @@ class SigninPage extends ConsumerWidget {
           label: context.l10n.textFieldLabelPassword,
           hintText: context.l10n.textFieldHintPassword,
           prefixIcon: Icons.lock_outline,
-          obscureText: controller.obscurePassword,
-          suffixIcon: IconButton(
-            icon: Icon(
-              controller.obscurePassword
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
-              color: context.colorScheme.onSurfaceVariant,
-              size: (context.textTheme.bodyMedium!.fontSize!) * 1.71,
-            ),
-            onPressed: controller.toggleObscurePassword,
-          ),
+          isPassword: true,
         ),
         const SizedBox(height: 8),
         Align(

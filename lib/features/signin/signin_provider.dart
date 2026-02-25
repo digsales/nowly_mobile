@@ -7,16 +7,9 @@ class SigninController extends ChangeNotifier {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  bool _obscurePassword = true;
   bool _isLoading = false;
 
-  bool get obscurePassword => _obscurePassword;
   bool get isLoading => _isLoading;
-
-  void toggleObscurePassword() {
-    _obscurePassword = !_obscurePassword;
-    notifyListeners();
-  }
 
   Future<void> signin() async {
     _isLoading = true;
