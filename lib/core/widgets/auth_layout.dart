@@ -68,10 +68,11 @@ class AuthLayout extends StatelessWidget {
                 topRight: Radius.circular(50),
               ),
             ),
-            padding: context.paddingScreen,
+            padding: EdgeInsets.only(top: 16, bottom: context.paddingBottom),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
+                  padding: EdgeInsets.only(left: context.paddingLeft + 32, right: context.paddingRight + 32),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: constraints.maxHeight),
                     child: body,
@@ -125,10 +126,11 @@ class AuthLayout extends StatelessWidget {
                   topLeft: Radius.circular(50),
                 ),
               ),
-              padding: EdgeInsets.fromLTRB(36, 16, context.paddingRight + 36, 16),
+              padding: EdgeInsets.fromLTRB(0, 16, 0, context.paddingBottom),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
+                    padding: EdgeInsets.only(left: context.paddingLeft + 32, right: context.paddingRight + 32),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: body,
