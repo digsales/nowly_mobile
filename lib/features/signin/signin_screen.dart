@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_button.dart';
+import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/auth_layout.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
@@ -12,6 +13,11 @@ class SigninPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(signinProvider, (prev, next) {
+      if (next.errorMessage != null && next.errorMessage != prev?.errorMessage) {
+        AppSnackBar.show(context, next.errorMessage!);
+      }
+    });
     return AuthLayout(
       header: Text(
         context.l10n.signinGreeting,
