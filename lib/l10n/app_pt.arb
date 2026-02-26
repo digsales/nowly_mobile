@@ -7,5 +7,34 @@
   "onboardingWelcome": "Seja bem vindo!",
   "onboardingLogin": "Já tenho conta",
   "onboardingRegister": "Criar conta",
-  "onboardingCreatedBy": "Criado por "
+  "onboardingCreatedBy": "Criado por ",
+
+  "textFieldLabelEmail": "E-mail",
+  "textFieldHintEmail": "Digite seu e-mail",
+  "textFieldLabelPassword": "Senha",
+  "textFieldHintPassword": "Digite sua senha",
+
+  "signinGreeting": "Olá\nEntre em sua conta",
+  "signinForgotPassword": "Esqueceu a senha?",
+  "signinButton": "Entrar",
+  "signinNoAccount": "Não tem uma conta?\n",
+  "signinRegister": "Cadastre-se",
+
+  "validatorRequired": "Este campo é obrigatório",
+  "validatorEmail": "Digite um e-mail válido",
+  "validatorPasswordMin": "A senha deve ter no mínimo 8 caracteres",
+  "validatorPasswordUppercase": "A senha deve ter ao menos uma letra maiúscula",
+  "validatorPasswordLowercase": "A senha deve ter ao menos uma letra minúscula",
+  "validatorPasswordDigit": "A senha deve ter ao menos um número",
+  "validatorPasswordSpecial": "A senha deve ter ao menos um caractere especial",
+
+  "authErrorUserNotFound": "Usuário não encontrado",
+  "authErrorWrongPassword": "Senha incorreta",
+  "authErrorInvalidEmail": "E-mail inválido",
+  "authErrorUserDisabled": "Conta desativada",
+  "authErrorTooManyRequests": "Muitas tentativas. Tente novamente mais tarde",
+  "authErrorInvalidCredential": "Credenciais inválidas",
+  "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
+  "authErrorWeakPassword": "Senha muito fraca",
+  "authErrorUnknown": "Erro inesperado. Tente novamente"
 }

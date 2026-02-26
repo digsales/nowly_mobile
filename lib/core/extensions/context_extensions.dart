@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 
 extension BuildContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -9,6 +9,12 @@ extension BuildContextExtensions on BuildContext {
   Size get screenSize => MediaQuery.sizeOf(this);
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
   AppLocalizations get l10n => AppLocalizations.of(this)!;
+  EdgeInsets get padding => MediaQuery.paddingOf(this);
+  double get paddingTop => MediaQuery.paddingOf(this).top;
+  double get paddingBottom => MediaQuery.paddingOf(this).bottom;
+  double get paddingLeft => MediaQuery.paddingOf(this).left;
+  double get paddingRight => MediaQuery.paddingOf(this).right;
+
   EdgeInsets get paddingScreen {
     final padding = MediaQuery.paddingOf(this);
     return EdgeInsets.only(

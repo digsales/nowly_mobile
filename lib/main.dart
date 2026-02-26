@@ -1,16 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monno_money/core/extensions/context_extensions.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
-import 'features/onboarding/onboarding_screen.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -33,10 +38,11 @@ class MyApp extends ConsumerWidget {
     final locale = ref.watch(localeProvider);
     final highContrast = ref.watch(highContrastProvider);
     final fontSize = _baseFontSize * fontScale;
+    final router = ref.watch(routerProvider);
 
     return Sizer(
       builder: (context, orientation, deviceType) {
-        return MaterialApp(
+        return MaterialApp.router(
           title: 'Nowly',
           debugShowCheckedModeBanner: false,
           locale: locale,
@@ -47,6 +53,7 @@ class MyApp extends ConsumerWidget {
           highContrastTheme: AppTheme.lightHighContrast(fontSize),
           highContrastDarkTheme: AppTheme.darkHighContrast(fontSize),
           themeMode: themeMode,
+          routerConfig: router,
           builder: (context, child) {
             return AnnotatedRegion<SystemUiOverlayStyle>(
               value: SystemUiOverlayStyle(
@@ -54,7 +61,7 @@ class MyApp extends ConsumerWidget {
                 statusBarIconBrightness:
                     context.isDark
                         ? Brightness.light
-                        : Brightness.dark,
+                        : Brightness.light,
                 systemNavigationBarColor: Colors.transparent,
                 systemNavigationBarIconBrightness:
                     context.isDark
@@ -66,7 +73,6 @@ class MyApp extends ConsumerWidget {
               child: child!,
             );
           },
-          home: const OnboardingScreen(),
         );
       },
     );

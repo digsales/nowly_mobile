@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "monno_money" "\0"
+            VALUE "FileDescription", "nowly" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "monno_money" "\0"
+            VALUE "InternalName", "nowly" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "monno_money.exe" "\0"
-            VALUE "ProductName", "monno_money" "\0"
+            VALUE "OriginalFilename", "nowly.exe" "\0"
+            VALUE "ProductName", "nowly" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:monno_money/core/extensions/context_extensions.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/router/app_router.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/widgets/app_button.dart';
@@ -11,7 +13,6 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colorScheme.surface,
       body: OrientationBuilder(
         builder: (context, orientation) {
           return Padding(
@@ -75,9 +76,7 @@ class OnboardingScreen extends StatelessWidget {
     return Semantics(
       label: context.l10n.appName,
       child: SvgPicture.asset(
-        context.isDark
-            ? 'assets/images/svg/logo_dark.svg'
-            : 'assets/images/svg/logo_light.svg',
+        'assets/images/svg/logo_colored.svg',
         height: height,
         width: width,
       ),
@@ -89,6 +88,7 @@ class OnboardingScreen extends StatelessWidget {
       context.l10n.onboardingWelcome,
       style: context.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.w500,
+        color: context.colorScheme.onPrimary,
       ),
     );
   }
@@ -99,17 +99,21 @@ class OnboardingScreen extends StatelessWidget {
         AppButton(
           text: context.l10n.onboardingLogin,
           variant: AppButtonVariant.outlined,
+          detailColor: context.colorScheme.surface,
+          textColor: context.colorScheme.surface,
           width: buttonWidth,
           onPressed: () {
-            // TODO: navigate to login
+            context.push(AppRoutes.signin);
           },
         ),
         const SizedBox(height: 12),
         AppButton(
           text: context.l10n.onboardingRegister,
           width: buttonWidth,
+          detailColor: context.colorScheme.surface,
+          textColor: context.colorScheme.primary,
           onPressed: () {
-            // TODO: navigate to register
+            // TODO: context.push(AppRoutes.register);
           },
         ),
       ],
@@ -121,14 +125,14 @@ class OnboardingScreen extends StatelessWidget {
       TextSpan(
         text: context.l10n.onboardingCreatedBy,
         style: context.textTheme.labelSmall?.copyWith(
-          color: context.colorScheme.onSurfaceVariant,
+          color: context.colorScheme.surface,
         ),
         children: [
           TextSpan(
             text: context.l10n.appCreator,
             style: context.textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: context.colorScheme.primary,
+              color: context.colorScheme.onSurface,
             ),
           ),
         ],
