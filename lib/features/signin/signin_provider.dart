@@ -31,10 +31,6 @@ class SigninController extends ChangeNotifier {
     final validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
       Validators.minLength(8, l10n.validatorPasswordMin),
-      Validators.hasUppercase(l10n.validatorPasswordUppercase),
-      Validators.hasLowercase(l10n.validatorPasswordLowercase),
-      Validators.hasDigit(l10n.validatorPasswordDigit),
-      Validators.hasSpecialChar(l10n.validatorPasswordSpecial),
     ]);
     _passwordError = validator(passwordController.text);
     notifyListeners();

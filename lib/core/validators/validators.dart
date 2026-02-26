@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 typedef Validator = String? Function(String value);
 
 abstract final class Validators {
@@ -37,18 +39,8 @@ abstract final class Validators {
         RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value) ? null : message;
   }
 
-  static Validator password(String message) {
-    return (value) {
-      final hasMin = value.length >= 8;
-      final hasUpper = RegExp(r'[A-Z]').hasMatch(value);
-      final hasLower = RegExp(r'[a-z]').hasMatch(value);
-      final hasDigit = RegExp(r'[0-9]').hasMatch(value);
-      final hasSpecial = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
-
-      return (hasMin && hasUpper && hasLower && hasDigit && hasSpecial)
-          ? null
-          : message;
-    };
+  static Validator match(TextEditingController controller, String message) {
+    return (value) => value != controller.text ? message : null;
   }
 
   static Validator combine(List<Validator> validators) {
