@@ -23,9 +23,7 @@ class SigninPage extends ConsumerWidget {
         context.l10n.signinGreeting,
         style: context.textTheme.displayMedium?.copyWith(
           fontWeight: FontWeight.w500,
-          color: context.isDark
-              ? context.colorScheme.onSurface
-              : context.colorScheme.surface,
+          color: context.colorScheme.onPrimary,
         ),
       ),
       body: Column(

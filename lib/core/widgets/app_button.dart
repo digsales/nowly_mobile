@@ -88,7 +88,7 @@ class _AppButtonState extends State<AppButton> with SingleTickerProviderStateMix
 
   Color _resolveTextColor(BuildContext context) {
     return switch (widget.variant) {
-      AppButtonVariant.filled => widget.textColor ?? context.colorScheme.surface,
+      AppButtonVariant.filled => widget.textColor ?? context.colorScheme.onPrimary,
       AppButtonVariant.outlined => widget.textColor ?? context.colorScheme.primary,
     };
   }

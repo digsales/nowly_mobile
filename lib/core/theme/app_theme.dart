@@ -17,6 +17,7 @@ abstract final class AppTheme {
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppPalette.primary,
           primary: AppPalette.primary,
+          onPrimary: AppPalette.backgroundLight,
           surface: AppPalette.backgroundLight,
           surfaceContainerHighest: AppPalette.inputFillLight,
           onSurface: AppPalette.textPrimaryLight,
@@ -35,6 +36,7 @@ abstract final class AppTheme {
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppPalette.primary,
           primary: AppPalette.primary,
+          onPrimary: AppPalette.textPrimaryDark,
           surface: AppPalette.backgroundDark,
           surfaceContainerHighest: AppPalette.inputFillDark,
           onSurface: AppPalette.textPrimaryDark,
@@ -53,6 +55,7 @@ abstract final class AppTheme {
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppPalette.highContrastPrimaryLight,
           primary: AppPalette.highContrastPrimaryLight,
+          onPrimary: AppPalette.highContrastWhite,
           surface: AppPalette.highContrastWhite,
           surfaceContainerHighest: AppPalette.inputFillHighContrastLight,
           onSurface: AppPalette.highContrastBlack,
@@ -71,6 +74,7 @@ abstract final class AppTheme {
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppPalette.highContrastPrimaryDark,
           primary: AppPalette.highContrastPrimaryDark,
+          onPrimary: AppPalette.highContrastBlack,
           surface: AppPalette.highContrastBlack,
           surfaceContainerHighest: AppPalette.inputFillHighContrastDark,
           onSurface: AppPalette.highContrastWhite,

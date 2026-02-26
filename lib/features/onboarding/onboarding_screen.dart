@@ -88,9 +88,7 @@ class OnboardingScreen extends StatelessWidget {
       context.l10n.onboardingWelcome,
       style: context.textTheme.displayMedium?.copyWith(
         fontWeight: FontWeight.w500,
-        color: context.isDark
-          ? context.colorScheme.onSurface
-          : context.colorScheme.surface,
+        color: context.colorScheme.onPrimary,
       ),
     );
   }
