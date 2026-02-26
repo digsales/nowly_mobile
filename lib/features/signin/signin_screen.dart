@@ -100,7 +100,7 @@ class SigninPage extends ConsumerWidget {
       child: Column(
         children: [
           TouchableOpacity(
-            onTap: () => context.pushReplacement(AppRoutes.register),
+            onTap: () => context.pushReplacement(AppRoutes.signup),
             child: Text.rich(
               textAlign: TextAlign.end,
               TextSpan(

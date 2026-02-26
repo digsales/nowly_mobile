@@ -9,7 +9,7 @@ import '../../features/signup/signup_screen.dart';
 abstract class AppRoutes {
   static const String onboarding = '/';
   static const String signin = '/signin';
-  static const String register = '/register';
+  static const String signup = '/signup';
   static const String forgotPassword = '/forgot-password';
 }
 
@@ -59,7 +59,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             _buildPage(state, const SigninPage()),
       ),
       GoRoute(
-        path: AppRoutes.register,
+        path: AppRoutes.signup,
         pageBuilder: (context, state) =>
             _buildPage(state, const SignupPage()),
       ),
