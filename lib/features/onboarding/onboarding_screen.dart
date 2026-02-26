@@ -113,7 +113,7 @@ class OnboardingScreen extends StatelessWidget {
           detailColor: context.colorScheme.surface,
           textColor: context.colorScheme.primary,
           onPressed: () {
-            // TODO: context.push(AppRoutes.register);
+            context.push(AppRoutes.register);
           },
         ),
       ],
