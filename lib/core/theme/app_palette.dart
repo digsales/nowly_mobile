@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 abstract final class AppPalette {
   // Brand (seu verde principal)
   static const Color primary = Color(0xFF7A5FA6);
-  static const Color primaryLight = Color(0xFFA996C7);
-  static const Color primaryDark = Color(0xFF4B3A6A);
+  static const Color primaryLight = Color(0xFF4B3A6A);
+  static const Color primaryDark = Color(0xFFA996C7);
 
   // Light theme
   static const Color backgroundLight = Color(0xFFF1EDF8);
