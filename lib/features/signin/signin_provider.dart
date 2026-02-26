@@ -1,55 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monno_money/core/validators/field_controller.dart';
 import 'package:monno_money/core/validators/validators.dart';
 import 'package:monno_money/l10n/app_localizations.dart';
 
 final signinProvider = ChangeNotifierProvider.autoDispose((_) => SigninController());
 
 class SigninController extends ChangeNotifier {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final email = FieldController();
+  final password = FieldController();
 
   bool _isLoading = false;
-  String? _emailError;
-  String? _passwordError;
-  bool _submitted = false;
 
   bool get isLoading => _isLoading;
-  String? get emailError => _emailError;
-  String? get passwordError => _passwordError;
 
-  void validateEmail(AppLocalizations l10n) {
-    final validator = Validators.combine([
+  Future<void> signin(AppLocalizations l10n) async {
+    email.validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
       Validators.email(l10n.validatorEmail),
     ]);
-    _emailError = validator(emailController.text);
-    notifyListeners();
-  }
-
-  void validatePassword(AppLocalizations l10n) {
-    final validator = Validators.combine([
+    password.validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
       Validators.minLength(8, l10n.validatorPasswordMin),
     ]);
-    _passwordError = validator(passwordController.text);
-    notifyListeners();
-  }
 
-  void onEmailChanged(AppLocalizations l10n) {
-    if (_submitted) validateEmail(l10n);
-  }
-
-  void onPasswordChanged(AppLocalizations l10n) {
-    if (_submitted) validatePassword(l10n);
-  }
-
-  Future<void> signin(AppLocalizations l10n) async {
-    _submitted = true;
-    validateEmail(l10n);
-    validatePassword(l10n);
-
-    if (_emailError != null || _passwordError != null) return;
+    if (!validateAll([email, password])) {
+      notifyListeners();
+      return;
+    }
 
     _isLoading = true;
     notifyListeners();
@@ -63,10 +41,20 @@ class SigninController extends ChangeNotifier {
     }
   }
 
+  void onEmailChanged(String value) {
+    email.onChanged(value);
+    notifyListeners();
+  }
+
+  void onPasswordChanged(String value) {
+    password.onChanged(value);
+    notifyListeners();
+  }
+
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    email.dispose();
+    password.dispose();
     super.dispose();
   }
 }
