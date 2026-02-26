@@ -6,7 +6,7 @@ import 'package:nowly/core/validators/validators.dart';
 import 'package:nowly/l10n/app_localizations.dart';
 
 final signinProvider =
-    NotifierProvider<SigninNotifier, SigninState>(SigninNotifier.new);
+    NotifierProvider.autoDispose<SigninNotifier, SigninState>(SigninNotifier.new);
 
 class SigninState {
   const SigninState({
