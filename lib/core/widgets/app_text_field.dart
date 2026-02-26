@@ -17,6 +17,7 @@ class AppTextField extends StatefulWidget {
     this.multiline = false,
     this.maxLines,
     this.minLines,
+    this.errorText,
   });
 
   final TextEditingController? controller;
@@ -31,6 +32,7 @@ class AppTextField extends StatefulWidget {
   final bool multiline;
   final int? maxLines;
   final int? minLines;
+  final String? errorText;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -78,6 +80,9 @@ class _AppTextFieldState extends State<AppTextField> {
     final trailingPadding = fontSize * 1.14;  // 16
     final labelBottom = fontSize * 0.57;  // 8
 
+    final hasError = widget.errorText != null;
+    final errorPadding = fontSize * 0.43; // 6
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -103,6 +108,7 @@ class _AppTextFieldState extends State<AppTextField> {
             hPadding: hPadding,
             vPadding: vPadding,
             trailingPadding: trailingPadding,
+            hasError: hasError,
           )
         else
           _buildDefault(
@@ -116,6 +122,17 @@ class _AppTextFieldState extends State<AppTextField> {
             hPadding: hPadding,
             vPadding: vPadding,
             trailingPadding: trailingPadding,
+            hasError: hasError,
+          ),
+        if (hasError)
+          Padding(
+            padding: EdgeInsets.only(top: errorPadding, left: shadowBlur),
+            child: Text(
+              widget.errorText!,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.error,
+              ),
+            ),
           ),
       ],
     );
@@ -132,6 +149,7 @@ class _AppTextFieldState extends State<AppTextField> {
     required double hPadding,
     required double vPadding,
     required double trailingPadding,
+    required bool hasError,
   }) {
     return Padding(
       padding: EdgeInsets.only(left: shadowBlur),
@@ -168,6 +186,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 circleSize: circleSize,
                 shadowBlur: shadowBlur,
                 iconSize: iconSize,
+                hasError: hasError,
               ),
             ),
           ],
@@ -186,6 +205,7 @@ class _AppTextFieldState extends State<AppTextField> {
     required double hPadding,
     required double vPadding,
     required double trailingPadding,
+    required bool hasError,
   }) {
     return Padding(
       padding: EdgeInsets.only(left: shadowBlur),
@@ -215,6 +235,7 @@ class _AppTextFieldState extends State<AppTextField> {
               circleSize: circleSize,
               shadowBlur: shadowBlur,
               iconSize: iconSize,
+              hasError: hasError,
             ),
           ),
         ],
@@ -227,6 +248,7 @@ class _AppTextFieldState extends State<AppTextField> {
     required double circleSize,
     required double shadowBlur,
     required double iconSize,
+    required bool hasError,
   }) {
     return Container(
       width: circleSize,
@@ -245,9 +267,11 @@ class _AppTextFieldState extends State<AppTextField> {
       child: widget.prefixIcon != null
           ? Icon(
               widget.prefixIcon,
-              color: _isFocused
-                  ? context.colorScheme.primary
-                  : context.colorScheme.onSurfaceVariant,
+              color: hasError
+                  ? context.colorScheme.error
+                  : _isFocused
+                      ? context.colorScheme.primary
+                      : context.colorScheme.onSurfaceVariant,
               size: iconSize,
             )
           : null,

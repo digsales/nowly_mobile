@@ -18,5 +18,13 @@
   "signinForgotPassword": "Esqueceu a senha?",
   "signinButton": "Entrar",
   "signinNoAccount": "Não tem uma conta?\n",
-  "signinRegister": "Cadastre-se"
+  "signinRegister": "Cadastre-se",
+
+  "validatorRequired": "Este campo é obrigatório",
+  "validatorEmail": "Digite um e-mail válido",
+  "validatorPasswordMin": "A senha deve ter no mínimo 8 caracteres",
+  "validatorPasswordUppercase": "A senha deve ter ao menos uma letra maiúscula",
+  "validatorPasswordLowercase": "A senha deve ter ao menos uma letra minúscula",
+  "validatorPasswordDigit": "A senha deve ter ao menos um número",
+  "validatorPasswordSpecial": "A senha deve ter ao menos um caractere especial"
 }
