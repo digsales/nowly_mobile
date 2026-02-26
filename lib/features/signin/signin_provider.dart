@@ -1,18 +1,45 @@
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monno_money/core/services/auth_service.dart';
+import 'package:monno_money/core/services/auth_service_provider.dart';
 import 'package:monno_money/core/validators/field_controller.dart';
 import 'package:monno_money/core/validators/validators.dart';
 import 'package:monno_money/l10n/app_localizations.dart';
 
-final signinProvider = ChangeNotifierProvider.autoDispose((_) => SigninController());
+final signinProvider =
+    NotifierProvider<SigninNotifier, SigninState>(SigninNotifier.new);
 
-class SigninController extends ChangeNotifier {
+class SigninState {
+  const SigninState({
+    this.isLoading = false,
+    this.errorMessage,
+  });
+
+  final bool isLoading;
+  final String? errorMessage;
+
+  SigninState copyWith({bool? isLoading, String? errorMessage}) {
+    return SigninState(
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage,
+    );
+  }
+}
+
+class SigninNotifier extends Notifier<SigninState> {
+  late final AuthService _authService;
   final email = FieldController();
   final password = FieldController();
 
-  bool _isLoading = false;
-
-  bool get isLoading => _isLoading;
+  @override
+  SigninState build() {
+    _authService = ref.read(authServiceProvider);
+    ref.onDispose(() {
+      email.dispose();
+      password.dispose();
+    });
+    return const SigninState();
+  }
 
   Future<void> signin(AppLocalizations l10n) async {
     email.validator = Validators.combine([
@@ -25,36 +52,48 @@ class SigninController extends ChangeNotifier {
     ]);
 
     if (!validateAll([email, password])) {
-      notifyListeners();
+      state = state.copyWith();
       return;
     }
 
-    _isLoading = true;
-    notifyListeners();
+    state = state.copyWith(isLoading: true);
 
     try {
-      // TODO: implement signin logic
-      await Future.delayed(const Duration(seconds: 2));
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      await _authService.signin(
+        email: email.text,
+        password: password.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: _mapFirebaseError(e.code),
+      );
+      return;
     }
+
+    state = state.copyWith(isLoading: false);
   }
 
   void onEmailChanged(String value) {
     email.onChanged(value);
-    notifyListeners();
+    state = state.copyWith();
   }
 
   void onPasswordChanged(String value) {
     password.onChanged(value);
-    notifyListeners();
+    state = state.copyWith();
   }
 
-  @override
-  void dispose() {
-    email.dispose();
-    password.dispose();
-    super.dispose();
+  String _mapFirebaseError(String code) {
+    // TODO: add l10n keys for these messages
+    return switch (code) {
+      'user-not-found' => 'Usuário não encontrado',
+      'wrong-password' => 'Senha incorreta',
+      'invalid-email' => 'E-mail inválido',
+      'user-disabled' => 'Conta desativada',
+      'too-many-requests' => 'Muitas tentativas. Tente novamente mais tarde',
+      'invalid-credential' => 'Credenciais inválidas',
+      _ => 'Erro ao fazer login. Tente novamente',
+    };
   }
 }

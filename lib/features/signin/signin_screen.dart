@@ -36,7 +36,8 @@ class SigninPage extends ConsumerWidget {
   }
 
   Widget _loginForm(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(signinProvider);
+    final state = ref.watch(signinProvider);
+    final notifier = ref.read(signinProvider.notifier);
     final l10n = context.l10n;
 
     return Column(
@@ -44,23 +45,23 @@ class SigninPage extends ConsumerWidget {
       children: [
         const SizedBox(height: 32),
         AppTextField(
-          controller: controller.email.controller,
+          controller: notifier.email.controller,
           label: l10n.textFieldLabelEmail,
           hintText: l10n.textFieldHintEmail,
           prefixIcon: Icons.person_outline,
           keyboardType: TextInputType.emailAddress,
-          errorText: controller.email.error,
-          onChanged: controller.onEmailChanged,
+          errorText: notifier.email.error,
+          onChanged: notifier.onEmailChanged,
         ),
         const SizedBox(height: 16),
         AppTextField(
-          controller: controller.password.controller,
+          controller: notifier.password.controller,
           label: l10n.textFieldLabelPassword,
           hintText: l10n.textFieldHintPassword,
           prefixIcon: Icons.lock_outline,
           isPassword: true,
-          errorText: controller.password.error,
-          onChanged: controller.onPasswordChanged,
+          errorText: notifier.password.error,
+          onChanged: notifier.onPasswordChanged,
         ),
         const SizedBox(height: 8),
         Align(
@@ -80,8 +81,8 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 24),
         AppButton(
           text: context.l10n.signinButton,
-          onPressed: () => controller.signin(l10n),
-          isProcessing: controller.isLoading,
+          onPressed: () => notifier.signin(l10n),
+          isProcessing: state.isLoading,
         ),
       ],
     );
