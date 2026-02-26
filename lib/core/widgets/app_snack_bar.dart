@@ -28,7 +28,7 @@ abstract final class AppSnackBar {
 
     final (backgroundColor, textColor) = switch (type) {
       SnackBarType.success => (colors.primary, colors.onPrimary),
-      SnackBarType.warning => (colors.tertiary, colors.onTertiary),
+      SnackBarType.warning => (colors.onSurface, colors.surface),
       SnackBarType.error => (colors.error, colors.onError),
     };
 
