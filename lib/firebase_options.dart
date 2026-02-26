@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'nowly-b63e7.firebasestorage.app',
     measurementId: 'G-1GY7FN0LP3',
   );
+
 }

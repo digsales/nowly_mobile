@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:monno_money/core/extensions/context_extensions.dart';
-import 'package:monno_money/core/router/app_router.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/router/app_router.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/widgets/app_button.dart';

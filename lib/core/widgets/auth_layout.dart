@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monno_money/core/extensions/context_extensions.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:sizer/sizer.dart';
 
 class AuthLayout extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 
 class AuthException implements Exception {
   AuthException(this.code);

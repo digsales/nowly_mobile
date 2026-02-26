@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monno_money/core/extensions/context_extensions.dart';
-import 'package:monno_money/core/widgets/app_button.dart';
-import 'package:monno_money/core/widgets/app_text_field.dart';
-import 'package:monno_money/core/widgets/auth_layout.dart';
-import 'package:monno_money/core/widgets/touchable_opacity.dart';
-import 'package:monno_money/features/signin/signin_provider.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/widgets/app_button.dart';
+import 'package:nowly/core/widgets/app_text_field.dart';
+import 'package:nowly/core/widgets/auth_layout.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:nowly/features/signin/signin_provider.dart';
 
 class SigninPage extends ConsumerWidget {
   const SigninPage({super.key});

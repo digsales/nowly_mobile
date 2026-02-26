@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 
 extension BuildContextExtensions on BuildContext {
   ThemeData get theme => Theme.of(this);

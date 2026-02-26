@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monno_money/core/services/auth_service.dart';
-import 'package:monno_money/core/services/auth_service_provider.dart';
-import 'package:monno_money/core/validators/field_controller.dart';
-import 'package:monno_money/core/validators/validators.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
+import 'package:nowly/core/services/auth_service.dart';
+import 'package:nowly/core/services/auth_service_provider.dart';
+import 'package:nowly/core/validators/field_controller.dart';
+import 'package:nowly/core/validators/validators.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 
 final signinProvider =
     NotifierProvider<SigninNotifier, SigninState>(SigninNotifier.new);

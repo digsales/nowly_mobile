@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:monno_money/core/extensions/context_extensions.dart';
-import 'package:monno_money/l10n/app_localizations.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 
 import 'core/router/app_router.dart';
