@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1090384398970",
+    "project_id": "nowly-b63e7",
+    "storage_bucket": "nowly-b63e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090384398970:android:3640e7475b5fdc44a289c3",
+        "android_client_info": {
+          "package_name": "com.diogosales.nowly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeKiyoi-6qcjFjo8OJuk7IQjEH9prtnUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
