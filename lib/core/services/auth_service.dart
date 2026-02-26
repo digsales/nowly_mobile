@@ -1,4 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:monno_money/l10n/app_localizations.dart';
+
+class AuthException implements Exception {
+  AuthException(this.code);
+  final String code;
+
+  String message(AppLocalizations l10n) {
+    return switch (code) {
+      'user-not-found' => l10n.authErrorUserNotFound,
+      'wrong-password' => l10n.authErrorWrongPassword,
+      'invalid-email' => l10n.authErrorInvalidEmail,
+      'user-disabled' => l10n.authErrorUserDisabled,
+      'too-many-requests' => l10n.authErrorTooManyRequests,
+      'invalid-credential' => l10n.authErrorInvalidCredential,
+      'email-already-in-use' => l10n.authErrorEmailAlreadyInUse,
+      'weak-password' => l10n.authErrorWeakPassword,
+      _ => l10n.authErrorUnknown,
+    };
+  }
+}
 
 class AuthService {
   AuthService(this._auth);
@@ -18,8 +38,8 @@ class AuthService {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException {
-      rethrow;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
     }
   }
 
@@ -32,16 +52,16 @@ class AuthService {
         email: email,
         password: password,
       );
-    } on FirebaseAuthException {
-      rethrow;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
     }
   }
 
   Future<void> resetPassword({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException {
-      rethrow;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
     }
   }
 

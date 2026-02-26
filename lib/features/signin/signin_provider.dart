@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monno_money/core/services/auth_service.dart';
 import 'package:monno_money/core/services/auth_service_provider.dart';
@@ -63,10 +62,10 @@ class SigninNotifier extends Notifier<SigninState> {
         email: email.text,
         password: password.text,
       );
-    } on FirebaseAuthException catch (e) {
+    } on AuthException catch (e) {
       state = state.copyWith(
         isLoading: false,
-        errorMessage: _mapFirebaseError(e.code),
+        errorMessage: e.message(l10n),
       );
       return;
     }
@@ -82,18 +81,5 @@ class SigninNotifier extends Notifier<SigninState> {
   void onPasswordChanged(String value) {
     password.onChanged(value);
     state = state.copyWith();
-  }
-
-  String _mapFirebaseError(String code) {
-    // TODO: add l10n keys for these messages
-    return switch (code) {
-      'user-not-found' => 'Usuário não encontrado',
-      'wrong-password' => 'Senha incorreta',
-      'invalid-email' => 'E-mail inválido',
-      'user-disabled' => 'Conta desativada',
-      'too-many-requests' => 'Muitas tentativas. Tente novamente mais tarde',
-      'invalid-credential' => 'Credenciais inválidas',
-      _ => 'Erro ao fazer login. Tente novamente',
-    };
   }
 }
