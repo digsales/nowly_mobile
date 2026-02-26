@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+/// Reduces opacity on press, similar to React Native's `TouchableOpacity`.
+///
+/// ```dart
+/// TouchableOpacity(
+///   onTap: () => print('pressed'),
+///   child: Text('Forgot password?'),
+/// )
+/// ```
 class TouchableOpacity extends StatefulWidget {
   const TouchableOpacity({
     super.key,
@@ -8,8 +16,13 @@ class TouchableOpacity extends StatefulWidget {
     this.activeOpacity = 0.4,
   });
 
+  /// Child widget that receives the opacity effect.
   final Widget child;
+
+  /// Callback fired on tap release.
   final VoidCallback onTap;
+
+  /// Opacity applied while pressing. Defaults to `0.4`.
   final double activeOpacity;
 
   @override

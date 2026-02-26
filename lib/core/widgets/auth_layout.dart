@@ -2,6 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:sizer/sizer.dart';
 
+/// Responsive layout for authentication screens (login, signup, etc.).
+///
+/// In **portrait**: header on primary background at the top + body with
+/// rounded corners on the surface below.
+///
+/// In **landscape**: two columns — header on the left (1/4) and body on
+/// the right (3/4) with a rounded top-left corner.
+///
+/// ```dart
+/// AuthLayout(
+///   header: Text('Hello\nSign in to your account'),
+///   body: Column(children: [...]),
+/// )
+/// ```
 class AuthLayout extends StatelessWidget {
   const AuthLayout({
     super.key,
@@ -9,7 +23,10 @@ class AuthLayout extends StatelessWidget {
     required this.body,
   });
 
+  /// Widget displayed in the highlight area (primary background).
   final Widget header;
+
+  /// Widget with the main content (form, buttons, etc.).
   final Widget body;
 
   @override

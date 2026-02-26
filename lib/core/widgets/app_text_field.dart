@@ -2,6 +2,24 @@ import 'package:flutter/material.dart';
 
 import '../extensions/context_extensions.dart';
 
+/// Custom text field with a circular icon badge on the left.
+///
+/// Supports single-line and multiline modes, password fields with
+/// visibility toggle, and error display with theme error color.
+///
+/// All dimensions are proportional to the theme's `bodyMedium.fontSize`,
+/// ensuring responsiveness with the user's font scale.
+///
+/// ```dart
+/// AppTextField(
+///   controller: notifier.email.controller,
+///   label: 'E-mail',
+///   hintText: 'Enter your e-mail',
+///   prefixIcon: Icons.person_outline,
+///   errorText: notifier.email.error,
+///   onChanged: notifier.onEmailChanged,
+/// )
+/// ```
 class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
@@ -20,18 +38,44 @@ class AppTextField extends StatefulWidget {
     this.errorText,
   });
 
+  /// Text editing controller.
   final TextEditingController? controller;
+
+  /// Hint text shown when the field is empty.
   final String? hintText;
+
+  /// Label displayed above the field in primary color.
   final String? label;
+
+  /// Icon displayed inside the circle badge on the left.
   final IconData? prefixIcon;
+
+  /// Custom trailing widget. Ignored when [isPassword] is `true`.
   final Widget? suffixIcon;
+
+  /// When `true`, obscures text and shows a visibility toggle.
   final bool isPassword;
+
+  /// Keyboard type (email, number, etc.).
   final TextInputType? keyboardType;
+
+  /// Callback fired on every text change.
   final ValueChanged<String>? onChanged;
+
+  /// Text capitalization behavior.
   final TextCapitalization textCapitalization;
+
+  /// When `true`, renders in multiline mode with adapted border radius.
   final bool multiline;
+
+  /// Maximum number of lines in multiline mode. Defaults to 8.
   final int? maxLines;
+
+  /// Minimum number of lines in multiline mode. Defaults to 3.
   final int? minLines;
+
+  /// Error text displayed below the field. When non-null, the circle
+  /// icon turns to `colorScheme.error`.
   final String? errorText;
 
   @override

@@ -4,8 +4,21 @@ import 'package:sizer/sizer.dart';
 
 import '../extensions/context_extensions.dart';
 
+/// Visual variants for [AppButton].
 enum AppButtonVariant { filled, outlined }
 
+/// Reusable button with two variants: [filled] and [outlined].
+///
+/// Shows an animated hourglass spinner when [isProcessing] is `true`,
+/// disabling interaction until processing completes.
+///
+/// ```dart
+/// AppButton(
+///   text: 'Sign in',
+///   onPressed: () => controller.signin(),
+///   isProcessing: state.isLoading,
+/// )
+/// ```
 class AppButton extends StatefulWidget {
   const AppButton({
     super.key,
@@ -18,12 +31,25 @@ class AppButton extends StatefulWidget {
     this.isProcessing = false,
   });
 
+  /// Text displayed on the button.
   final String text;
+
+  /// Tap callback. If `null`, the button is disabled.
   final VoidCallback? onPressed;
+
+  /// Visual variant: [AppButtonVariant.filled] (default) or [AppButtonVariant.outlined].
   final AppButtonVariant variant;
+
+  /// Custom width. Defaults to full screen width.
   final double? width;
+
+  /// Background color (filled) or border color (outlined). Defaults to `colorScheme.primary`.
   final Color? detailColor;
+
+  /// Text color. Default depends on the variant.
   final Color? textColor;
+
+  /// When `true`, shows the spinner and disables interaction.
   final bool isProcessing;
 
   @override
