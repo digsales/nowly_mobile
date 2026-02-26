@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/router/app_router.dart';
 import 'package:nowly/core/widgets/app_button.dart';
@@ -54,7 +55,7 @@ class SigninPage extends ConsumerWidget {
           controller: notifier.email.controller,
           label: l10n.textFieldLabelEmail,
           hintText: l10n.textFieldHintEmail,
-          prefixIcon: Icons.person_outline,
+          prefixIcon: Ionicons.person_outline,
           keyboardType: TextInputType.emailAddress,
           errorText: notifier.email.error,
           onChanged: notifier.onEmailChanged,
@@ -64,7 +65,7 @@ class SigninPage extends ConsumerWidget {
           controller: notifier.password.controller,
           label: l10n.textFieldLabelPassword,
           hintText: l10n.textFieldHintPassword,
-          prefixIcon: Icons.lock_outline,
+          prefixIcon: Ionicons.lock_closed_outline,
           isPassword: true,
           errorText: notifier.password.error,
           onChanged: notifier.onPasswordChanged,
