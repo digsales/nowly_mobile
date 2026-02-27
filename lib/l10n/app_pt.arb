@@ -31,6 +31,14 @@
   "signupHasAccount": "Já tem uma conta?\n",
   "signupSignin": "Entre",
 
+  "forgotPasswordGreeting": "Redefina sua senha",
+  "forgotPasswordButton": "Enviar e-mail",
+  "forgotPasswordSuccess": "E-mail de redefinição enviado com sucesso",
+  "forgotPasswordRemembered": "Lembrou sua senha?\n",
+  "forgotPasswordSignin": "Entre",
+  "forgotPasswordNoAccount": "Não tem uma conta?\n",
+  "forgotPasswordSignup": "Cadastre-se",
+
   "validatorRequired": "Este campo é obrigatório",
   "validatorMinLength": "Mínimo de {min} caracteres.",
   "@validatorMinLength": {
