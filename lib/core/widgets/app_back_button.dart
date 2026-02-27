@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 
@@ -14,16 +15,15 @@ class AppBackButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.arrow_back_ios_new,
-            size: 16,
+            Ionicons.chevron_back_outline,
+            size: context.textTheme.labelLarge!.fontSize!,
             color: context.colorScheme.onPrimary,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           Text(
             "Voltar",
             style: context.textTheme.labelLarge?.copyWith(
               color: context.colorScheme.onPrimary,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],
