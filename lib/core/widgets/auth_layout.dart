@@ -116,7 +116,7 @@ class AuthLayout extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Padding(
-            padding: context.paddingScreen,
+            padding: context.paddingScreen.copyWith(left: context.paddingLeft + 16, right: 32),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
@@ -126,12 +126,15 @@ class AuthLayout extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
                         if (showBackButton)... [
                           const AppBackButton(),
                           const SizedBox(height: 32),
                         ],
-                        _buildHeader(context),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16),
+                          child: _buildHeader(context),
+                        ),
                       ],
                     ),
                   ),
