@@ -66,6 +66,16 @@ class SignupPage extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         AppTextField(
+          controller: notifier.confirmEmail.controller,
+          label: l10n.textFieldLabelConfirmEmail,
+          hintText: l10n.textFieldHintConfirmEmail,
+          prefixIcon: Ionicons.mail_outline,
+          keyboardType: TextInputType.emailAddress,
+          errorText: notifier.confirmEmail.error,
+          onChanged: notifier.onConfirmEmailChanged,
+        ),
+        const SizedBox(height: 16),
+        AppTextField(
           controller: notifier.password.controller,
           label: l10n.textFieldLabelPassword,
           hintText: l10n.textFieldHintPassword,

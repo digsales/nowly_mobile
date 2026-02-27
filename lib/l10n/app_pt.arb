@@ -11,8 +11,14 @@
 
   "textFieldLabelEmail": "E-mail",
   "textFieldHintEmail": "Digite seu e-mail",
+  "textFieldLabelConfirmEmail": "Confirmar e-mail",
+  "textFieldHintConfirmEmail": "Confirme seu e-mail",
   "textFieldLabelPassword": "Senha",
   "textFieldHintPassword": "Digite sua senha",
+  "textFieldLabelName": "Nome",
+  "textFieldHintName": "Digite seu nome",
+  "textFieldLabelPasswordConfirm": "Confirmar senha",
+  "textFieldHintPasswordConfirm": "Confirme sua senha",
 
   "signinGreeting": "Olá\nEntre em sua conta",
   "signinForgotPassword": "Esqueceu a senha?",
@@ -25,19 +31,22 @@
   "signupHasAccount": "Já tem uma conta?\n",
   "signupSignin": "Entre",
 
-  "textFieldLabelName": "Nome",
-  "textFieldHintName": "Digite seu nome",
-  "textFieldLabelPasswordConfirm": "Confirmar senha",
-  "textFieldHintPasswordConfirm": "Confirme sua senha",
-
-  "validatorPasswordMatch": "As senhas não coincidem",
   "validatorRequired": "Este campo é obrigatório",
+  "validatorMinLength": "Mínimo de {min} caracteres.",
+  "@validatorMinLength": {
+    "description": "Mensagem de validação para campo com tamanho mínimo.",
+    "placeholders": {
+      "min": {}
+    }
+  },
   "validatorEmail": "Digite um e-mail válido",
+  "validatorEmailMatch": "Os e-mails não coincidem",
   "validatorPasswordMin": "A senha deve ter no mínimo 8 caracteres",
   "validatorPasswordUppercase": "A senha deve ter ao menos uma letra maiúscula",
   "validatorPasswordLowercase": "A senha deve ter ao menos uma letra minúscula",
   "validatorPasswordDigit": "A senha deve ter ao menos um número",
   "validatorPasswordSpecial": "A senha deve ter ao menos um caractere especial",
+  "validatorPasswordMatch": "As senhas não coincidem",
 
   "authErrorUserNotFound": "Usuário não encontrado",
   "authErrorWrongPassword": "Senha incorreta",

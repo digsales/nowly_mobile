@@ -30,6 +30,7 @@ class SignupNotifier extends Notifier<SignupState> {
   late final AuthService _authService;
   final name = FieldController();
   final email = FieldController();
+  final confirmEmail = FieldController();
   final password = FieldController();
   final confirmPassword = FieldController();
 
@@ -39,6 +40,7 @@ class SignupNotifier extends Notifier<SignupState> {
     ref.onDispose(() {
       name.dispose();
       email.dispose();
+      confirmEmail.dispose();
       password.dispose();
       confirmPassword.dispose();
     });
@@ -46,11 +48,19 @@ class SignupNotifier extends Notifier<SignupState> {
   }
 
   Future<void> signup(AppLocalizations l10n) async {
-    name.validator = Validators.required(l10n.validatorRequired);
+    name.validator = Validators.combine([
+      Validators.required(l10n.validatorRequired),
+      Validators.minLength(3, l10n.validatorMinLength(3))
+    ]);
 
     email.validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
       Validators.email(l10n.validatorEmail),
+    ]);
+    
+    confirmEmail.validator = Validators.combine([
+      Validators.required(l10n.validatorRequired),
+      Validators.match(email.controller, l10n.validatorEmailMatch),
     ]);
 
     password.validator = Validators.combine([
@@ -67,7 +77,7 @@ class SignupNotifier extends Notifier<SignupState> {
       Validators.match(password.controller, l10n.validatorPasswordMatch),
     ]);
 
-    if (!validateAll([name, email, password, confirmPassword])) {
+    if (!validateAll([name, email, confirmEmail, password, confirmPassword])) {
       state = state.copyWith();
       return;
     }
@@ -98,6 +108,11 @@ class SignupNotifier extends Notifier<SignupState> {
 
   void onEmailChanged(String value) {
     email.onChanged(value);
+    state = state.copyWith();
+  }
+  
+  void onConfirmEmailChanged(String value) {
+    confirmEmail.onChanged(value);
     state = state.copyWith();
   }
 
