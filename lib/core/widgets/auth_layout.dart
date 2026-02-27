@@ -57,24 +57,27 @@ class AuthLayout extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: context.paddingScreen,
-          child: SizedBox(
-            height: 20.h,
+          padding: context.paddingScreen.copyWith(bottom: 0, left: context.paddingLeft + 16),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 20.h
+            ),
             child:Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (showBackButton)
-                  const Column(
-                    children: [
-                      SizedBox(height: 32),
-                      AppBackButton()
-                    ],
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                    child: AppBackButton(),
                   )
                 else
-                  const SizedBox.shrink(),
-                _buildHeader(context),
-                const SizedBox.shrink(),
+                  const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: _buildHeader(context),
+                ),
+                const SizedBox(height: 32),
               ],
             ),
           ),
