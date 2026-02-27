@@ -15,6 +15,7 @@ class AuthException implements Exception {
       'invalid-credential' => l10n.authErrorInvalidCredential,
       'email-already-in-use' => l10n.authErrorEmailAlreadyInUse,
       'weak-password' => l10n.authErrorWeakPassword,
+      'requires-recent-login' => l10n.authErrorRequiresRecentLogin,
       _ => l10n.authErrorUnknown,
     };
   }
@@ -67,5 +68,29 @@ class AuthService {
 
   Future<void> signout() async {
     await _auth.signOut();
+  }
+
+  Future<void> deleteAccount({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+
+      if (user == null) {
+        throw AuthException('user-not-found');
+      }
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+
+      await user.delete();
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
+    }
   }
 }

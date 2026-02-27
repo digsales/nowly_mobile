@@ -47,5 +47,6 @@
   "authErrorInvalidCredential": "Credenciais inválidas",
   "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
   "authErrorWeakPassword": "Senha muito fraca",
+  "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
   "authErrorUnknown": "Erro inesperado. Tente novamente"
 }
