@@ -22,13 +22,7 @@ class SignupPage extends ConsumerWidget {
       }
     });
     return AuthLayout(
-      header: Text(
-        context.l10n.signupGreeting,
-        style: context.textTheme.displayMedium?.copyWith(
-          fontWeight: FontWeight.w500,
-          color: context.colorScheme.onPrimary,
-        ),
-      ),
+      headerText: context.l10n.signupGreeting,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

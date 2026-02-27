@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/widgets/app_back_button.dart';
 import 'package:sizer/sizer.dart';
 
 /// Responsive layout for authentication screens (login, signup, etc.).
@@ -19,14 +20,22 @@ import 'package:sizer/sizer.dart';
 class AuthLayout extends StatelessWidget {
   const AuthLayout({
     super.key,
-    required this.header,
+    this.headerText,
+    this.headerBuilder,
+    this.showBackButton = false,
     required this.body,
   });
 
-  /// Widget displayed in the highlight area (primary background).
-  final Widget header;
+  /// Simple text header (default styled)
+  final String? headerText;
 
-  /// Widget with the main content (form, buttons, etc.).
+  /// Custom header builder (has priority over headerText)
+  final WidgetBuilder? headerBuilder;
+
+  /// Show backbutton to return to last stack page
+  final bool showBackButton;
+
+  /// Main content
   final Widget body;
 
   @override
@@ -49,13 +58,25 @@ class AuthLayout extends StatelessWidget {
       children: [
         Padding(
           padding: context.paddingScreen,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 60),
-              header,
-              SizedBox(height: 60 - context.paddingBottom),
-            ],
+          child: SizedBox(
+            height: 20.h,
+            child:Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showBackButton)
+                  const Column(
+                    children: [
+                      SizedBox(height: 32),
+                      AppBackButton()
+                    ],
+                  )
+                else
+                  const SizedBox.shrink(),
+                _buildHeader(context),
+                const SizedBox.shrink(),
+              ],
+            ),
           ),
         ),
         Expanded(
@@ -103,7 +124,11 @@ class AuthLayout extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 32),
-                        header,
+                        if (showBackButton)... [
+                          const AppBackButton(),
+                          const SizedBox(height: 32),
+                        ],
+                        _buildHeader(context),
                       ],
                     ),
                   ),
@@ -130,7 +155,7 @@ class AuthLayout extends StatelessWidget {
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
-                    padding: EdgeInsets.only(left: context.paddingLeft + 32, right: context.paddingRight + 32),
+                    padding: EdgeInsets.only(left: 32, right: context.paddingRight + 32),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: body,
@@ -143,5 +168,27 @@ class AuthLayout extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  /// Centralized header resolution logic
+  Widget _buildHeader(BuildContext context) {
+    final Widget resolvedHeader;
+
+    if (headerBuilder != null) {
+      resolvedHeader = headerBuilder!(context);
+    } else if (headerText != null) {
+      resolvedHeader = Text(
+        headerText!,
+        style: context.textTheme.displayMedium?.copyWith(
+          fontWeight: FontWeight.w500,
+          fontFamily: "Ultra",
+          color: context.colorScheme.onPrimary,
+        ),
+      );
+    } else {
+      resolvedHeader = const SizedBox.shrink();
+    }
+
+    return resolvedHeader;
   }
 }
