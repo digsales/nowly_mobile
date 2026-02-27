@@ -20,6 +20,17 @@
   "signinNoAccount": "Não tem uma conta?\n",
   "signinRegister": "Cadastre-se",
 
+  "signupGreeting": "Bem vindo\nCrie sua conta",
+  "signupButton": "Cadastrar",
+  "signupHasAccount": "Já tem uma conta?\n",
+  "signupSignin": "Entre",
+
+  "textFieldLabelName": "Nome",
+  "textFieldHintName": "Digite seu nome",
+  "textFieldLabelPasswordConfirm": "Confirmar senha",
+  "textFieldHintPasswordConfirm": "Confirme sua senha",
+
+  "validatorPasswordMatch": "As senhas não coincidem",
   "validatorRequired": "Este campo é obrigatório",
   "validatorEmail": "Digite um e-mail válido",
   "validatorPasswordMin": "A senha deve ter no mínimo 8 caracteres",
@@ -36,5 +47,6 @@
   "authErrorInvalidCredential": "Credenciais inválidas",
   "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
   "authErrorWeakPassword": "Senha muito fraca",
+  "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
   "authErrorUnknown": "Erro inesperado. Tente novamente"
 }

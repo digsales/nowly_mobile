@@ -9,25 +9,25 @@ import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/auth_layout.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
-import 'package:nowly/features/signin/signin_provider.dart';
+import 'package:nowly/features/signup/signup_provider.dart';
 
-class SigninPage extends ConsumerWidget {
-  const SigninPage({super.key});
+class SignupPage extends ConsumerWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(signinProvider, (prev, next) {
+    ref.listen(signupProvider, (prev, next) {
       if (next.errorMessage != null && next.errorMessage != prev?.errorMessage) {
         AppSnackBar.show(context, next.errorMessage!);
       }
     });
     return AuthLayout(
-      headerText: context.l10n.signinGreeting,
+      headerText: context.l10n.signupGreeting,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const SizedBox.shrink(),
-          _loginForm(context, ref),
+          _signupForm(context, ref),
           const SizedBox.shrink(),
           const SizedBox(height: 32),
           _footer(context),
@@ -36,9 +36,9 @@ class SigninPage extends ConsumerWidget {
     );
   }
 
-  Widget _loginForm(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(signinProvider);
-    final notifier = ref.read(signinProvider.notifier);
+  Widget _signupForm(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(signupProvider);
+    final notifier = ref.read(signupProvider.notifier);
     final l10n = context.l10n;
 
     return Column(
@@ -46,10 +46,20 @@ class SigninPage extends ConsumerWidget {
       children: [
         const SizedBox(height: 32),
         AppTextField(
+          controller: notifier.name.controller,
+          label: l10n.textFieldLabelName,
+          hintText: l10n.textFieldHintName,
+          prefixIcon: Ionicons.person_outline,
+          textCapitalization: TextCapitalization.words,
+          errorText: notifier.name.error,
+          onChanged: notifier.onNameChanged,
+        ),
+        const SizedBox(height: 16),
+        AppTextField(
           controller: notifier.email.controller,
           label: l10n.textFieldLabelEmail,
           hintText: l10n.textFieldHintEmail,
-          prefixIcon: Ionicons.person_outline,
+          prefixIcon: Ionicons.mail_outline,
           keyboardType: TextInputType.emailAddress,
           errorText: notifier.email.error,
           onChanged: notifier.onEmailChanged,
@@ -64,25 +74,20 @@ class SigninPage extends ConsumerWidget {
           errorText: notifier.password.error,
           onChanged: notifier.onPasswordChanged,
         ),
-        const SizedBox(height: 8),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TouchableOpacity(
-            onTap: () {
-              // TODO: context.push(AppRoutes.forgotPassword);
-            },
-            child: Text(
-              context.l10n.signinForgotPassword,
-              style: context.textTheme.labelSmall?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
+        const SizedBox(height: 16),
+        AppTextField(
+          controller: notifier.confirmPassword.controller,
+          label: l10n.textFieldLabelPasswordConfirm,
+          hintText: l10n.textFieldHintPasswordConfirm,
+          prefixIcon: Ionicons.lock_closed_outline,
+          isPassword: true,
+          errorText: notifier.confirmPassword.error,
+          onChanged: notifier.onConfirmPasswordChanged,
         ),
         const SizedBox(height: 24),
         AppButton(
-          text: context.l10n.signinButton,
-          onPressed: () => notifier.signin(l10n),
+          text: l10n.signupButton,
+          onPressed: () => notifier.signup(l10n),
           isProcessing: state.isLoading,
         ),
       ],
@@ -95,17 +100,17 @@ class SigninPage extends ConsumerWidget {
       child: Column(
         children: [
           TouchableOpacity(
-            onTap: () => context.pushReplacement(AppRoutes.signup),
+            onTap: () => context.pushReplacement(AppRoutes.signin),
             child: Text.rich(
               textAlign: TextAlign.end,
               TextSpan(
-                text: context.l10n.signinNoAccount,
+                text: context.l10n.signupHasAccount,
                 style: context.textTheme.labelSmall?.copyWith(
                   color: context.colorScheme.onSurfaceVariant,
                 ),
                 children: [
                   TextSpan(
-                    text: context.l10n.signinRegister,
+                    text: context.l10n.signupSignin,
                     style: context.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
