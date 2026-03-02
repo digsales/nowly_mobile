@@ -58,6 +58,56 @@ CustomTransitionPage _buildPage(GoRouterState state, Widget child) {
   );
 }
 
+class _TabSwitcher extends StatefulWidget {
+  const _TabSwitcher({
+    required this.currentIndex,
+    required this.children,
+  });
+
+  final int currentIndex;
+  final List<Widget> children;
+
+  @override
+  State<_TabSwitcher> createState() => _TabSwitcherState();
+}
+
+class _TabSwitcherState extends State<_TabSwitcher> {
+  int _previousIndex = 0;
+
+  @override
+  void didUpdateWidget(_TabSwitcher oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      _previousIndex = oldWidget.currentIndex;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final goingRight = widget.currentIndex > _previousIndex;
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (child, animation) {
+        final isIncoming = child.key == ValueKey(widget.currentIndex);
+        final begin = isIncoming
+            ? Offset(goingRight ? 1.0 : -1.0, 0)
+            : Offset(goingRight ? -1.0 : 1.0, 0);
+        final slide = Tween<Offset>(
+          begin: begin,
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut));
+
+        return SlideTransition(position: slide, child: child);
+      },
+      child: KeyedSubtree(
+        key: ValueKey(widget.currentIndex),
+        child: widget.children[widget.currentIndex],
+      ),
+    );
+  }
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
@@ -112,9 +162,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       // authenticated shell
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
         builder: (context, state, navigationShell) =>
             HomeShell(navigationShell: navigationShell),
+        navigatorContainerBuilder: (context, navigationShell, children) =>
+            _TabSwitcher(
+              currentIndex: navigationShell.currentIndex,
+              children: children,
+            ),
         branches: [
           StatefulShellBranch(
             routes: [
