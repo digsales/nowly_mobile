@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
+import 'package:nowly/features/categories/categories_screen.dart';
+import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
+import 'package:nowly/features/home/home_shell.dart';
+import 'package:nowly/features/profile/profile_screen.dart';
 
 import '../../features/forgot_password/forgot_password_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
@@ -15,9 +19,12 @@ abstract class AppRoutes {
   static const String signin = '/signin';
   static const String signup = '/signup';
   static const String forgotPassword = '/forgot-password';
-  
+
   // authenticated routes
   static const String home = '/home';
+  static const String categories = '/categories';
+  static const String history = '/history';
+  static const String profile = '/profile';
 }
 
 enum PageTransitionType {
@@ -69,7 +76,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           state.fullPath == AppRoutes.forgotPassword ||
           state.fullPath == AppRoutes.onboarding;
 
-      // Not logged - Only auth rotes
+      // Not logged - Only auth routes
       if (!isLoggedIn && !isAuthRoute) {
         return AppRoutes.onboarding;
       }
@@ -104,11 +111,48 @@ final routerProvider = Provider<GoRouter>((ref) {
             _buildPage(state, const ForgotPasswordPage()),
       ),
 
-      // authenticated routes
-      GoRoute(
-        path: AppRoutes.home,
-        pageBuilder: (context, state) =>
-            _buildPage(state, const HomeScreen()),
+      // authenticated shell
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            HomeShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const HomeScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.categories,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const CategoriesScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.history,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const HistoryScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const ProfileScreen()),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );

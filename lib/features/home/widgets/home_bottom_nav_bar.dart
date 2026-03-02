@@ -1,0 +1,39 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:nowly/core/extensions/context_extensions.dart';
+
+class HomeBottomNavBar extends StatelessWidget {
+  const HomeBottomNavBar({
+    super.key,
+    required this.activeIndex,
+    required this.onTap,
+  });
+
+  final int activeIndex;
+  final ValueChanged<int> onTap;
+
+  static const _icons = [
+    Ionicons.home_outline,
+    Ionicons.grid_outline,
+    Ionicons.time_outline,
+    Ionicons.person_outline,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBottomNavigationBar(
+      icons: _icons,
+      activeIndex: activeIndex,
+      gapLocation: GapLocation.center,
+      notchSmoothness: NotchSmoothness.softEdge,
+      leftCornerRadius: 32,
+      rightCornerRadius: 32,
+      onTap: onTap,
+      activeColor: context.colorScheme.primary,
+      inactiveColor: context.colorScheme.onSurfaceVariant,
+      backgroundColor: context.colorScheme.surface,
+      iconSize: 26,
+    );
+  }
+}
