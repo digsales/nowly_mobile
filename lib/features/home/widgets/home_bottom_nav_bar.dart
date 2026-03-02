@@ -33,6 +33,8 @@ class HomeBottomNavBar extends StatelessWidget {
       activeColor: context.colorScheme.primary,
       inactiveColor: context.colorScheme.onSurfaceVariant,
       backgroundColor: context.colorScheme.surface,
+      splashRadius: 0,
+      scaleFactor: 0.5,
       iconSize: 26,
     );
   }
