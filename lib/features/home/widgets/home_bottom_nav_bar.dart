@@ -22,20 +22,31 @@ class HomeBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBottomNavigationBar(
-      icons: _icons,
-      activeIndex: activeIndex,
-      gapLocation: GapLocation.center,
-      notchSmoothness: NotchSmoothness.softEdge,
-      leftCornerRadius: 32,
-      rightCornerRadius: 32,
-      onTap: onTap,
-      activeColor: context.colorScheme.primary,
-      inactiveColor: context.colorScheme.onSurfaceVariant,
-      backgroundColor: context.colorScheme.surface,
-      splashRadius: 0,
-      scaleFactor: 0.5,
-      iconSize: 26,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: AnimatedBottomNavigationBar(
+        icons: _icons,
+        activeIndex: activeIndex,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.softEdge,
+        leftCornerRadius: 32,
+        rightCornerRadius: 32,
+        onTap: onTap,
+        activeColor: context.colorScheme.primary,
+        inactiveColor: context.colorScheme.onSurfaceVariant,
+        backgroundColor: context.colorScheme.surface,
+        splashRadius: 0,
+        scaleFactor: 0.5,
+        iconSize: 26,
+      ),
     );
   }
 }

@@ -13,6 +13,7 @@ class HomeShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
+      backgroundColor: context.colorScheme.surface,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // TODO: abrir tela de adicionar task

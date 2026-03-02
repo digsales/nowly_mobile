@@ -12,6 +12,7 @@ class HomeScreen extends ConsumerWidget {
     final authService = ref.read(authServiceProvider);
 
     return Scaffold(
+      backgroundColor: context.colorScheme.surface,
       appBar: AppBar(title: const Text("Início")),
       body: Center(
         child: AppButton(
