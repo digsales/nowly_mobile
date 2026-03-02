@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
+import 'package:nowly/features/categories/categories_screen.dart';
+import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
+import 'package:nowly/features/home/home_shell.dart';
+import 'package:nowly/features/profile/profile_screen.dart';
 
 import '../../features/forgot_password/forgot_password_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
@@ -15,9 +19,12 @@ abstract class AppRoutes {
   static const String signin = '/signin';
   static const String signup = '/signup';
   static const String forgotPassword = '/forgot-password';
-  
+
   // authenticated routes
   static const String home = '/home';
+  static const String categories = '/categories';
+  static const String history = '/history';
+  static const String profile = '/profile';
 }
 
 enum PageTransitionType {
@@ -51,6 +58,56 @@ CustomTransitionPage _buildPage(GoRouterState state, Widget child) {
   );
 }
 
+class _TabSwitcher extends StatefulWidget {
+  const _TabSwitcher({
+    required this.currentIndex,
+    required this.children,
+  });
+
+  final int currentIndex;
+  final List<Widget> children;
+
+  @override
+  State<_TabSwitcher> createState() => _TabSwitcherState();
+}
+
+class _TabSwitcherState extends State<_TabSwitcher> {
+  int _previousIndex = 0;
+
+  @override
+  void didUpdateWidget(_TabSwitcher oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      _previousIndex = oldWidget.currentIndex;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final goingRight = widget.currentIndex > _previousIndex;
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      transitionBuilder: (child, animation) {
+        final isIncoming = child.key == ValueKey(widget.currentIndex);
+        final begin = isIncoming
+            ? Offset(goingRight ? 1.0 : -1.0, 0)
+            : Offset(goingRight ? -1.0 : 1.0, 0);
+        final slide = Tween<Offset>(
+          begin: begin,
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut));
+
+        return SlideTransition(position: slide, child: child);
+      },
+      child: KeyedSubtree(
+        key: ValueKey(widget.currentIndex),
+        child: widget.children[widget.currentIndex],
+      ),
+    );
+  }
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
@@ -69,7 +126,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           state.fullPath == AppRoutes.forgotPassword ||
           state.fullPath == AppRoutes.onboarding;
 
-      // Not logged - Only auth rotes
+      // Not logged - Only auth routes
       if (!isLoggedIn && !isAuthRoute) {
         return AppRoutes.onboarding;
       }
@@ -104,11 +161,53 @@ final routerProvider = Provider<GoRouter>((ref) {
             _buildPage(state, const ForgotPasswordPage()),
       ),
 
-      // authenticated routes
-      GoRoute(
-        path: AppRoutes.home,
-        pageBuilder: (context, state) =>
-            _buildPage(state, const HomeScreen()),
+      // authenticated shell
+      StatefulShellRoute(
+        builder: (context, state, navigationShell) =>
+            HomeShell(navigationShell: navigationShell),
+        navigatorContainerBuilder: (context, navigationShell, children) =>
+            _TabSwitcher(
+              currentIndex: navigationShell.currentIndex,
+              children: children,
+            ),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const HomeScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.categories,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const CategoriesScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.history,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const HistoryScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                pageBuilder: (context, state) =>
+                    _buildPage(state, const ProfileScreen()),
+              ),
+            ],
+          ),
+        ],
       ),
     ],
   );
