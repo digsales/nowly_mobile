@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
-import 'package:nowly/features/categories/categories_screen.dart';
 import 'package:nowly/features/history/history_screen.dart';
+import 'package:nowly/features/ranking/ranking_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
 import 'package:nowly/features/profile/profile_screen.dart';
@@ -22,7 +22,7 @@ abstract class AppRoutes {
 
   // authenticated routes
   static const String home = '/home';
-  static const String categories = '/categories';
+  static const String ranking = '/ranking';
   static const String history = '/history';
   static const String profile = '/profile';
 }
@@ -183,9 +183,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.categories,
+                path: AppRoutes.ranking,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, const CategoriesScreen()),
+                    _buildPage(state, const RankingScreen()),
               ),
             ],
           ),
