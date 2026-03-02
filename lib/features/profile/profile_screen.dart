@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nowly/core/widgets/app_layout.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -6,7 +7,10 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text("Perfil")),
+      body: AppLayout(
+        headerText: "Perfil",
+        body: Center(child: Text("Perfil")),
+      ),
     );
   }
 }
