@@ -11,8 +11,14 @@
 
   "textFieldLabelEmail": "E-mail",
   "textFieldHintEmail": "Digite seu e-mail",
+  "textFieldLabelConfirmEmail": "Confirmar e-mail",
+  "textFieldHintConfirmEmail": "Confirme seu e-mail",
   "textFieldLabelPassword": "Senha",
   "textFieldHintPassword": "Digite sua senha",
+  "textFieldLabelName": "Nome",
+  "textFieldHintName": "Digite seu nome",
+  "textFieldLabelPasswordConfirm": "Confirmar senha",
+  "textFieldHintPasswordConfirm": "Confirme sua senha",
 
   "signinGreeting": "Olá\nEntre em sua conta",
   "signinForgotPassword": "Esqueceu a senha?",
@@ -20,13 +26,35 @@
   "signinNoAccount": "Não tem uma conta?\n",
   "signinRegister": "Cadastre-se",
 
+  "signupGreeting": "Bem vindo\nCrie sua conta",
+  "signupButton": "Cadastrar",
+  "signupHasAccount": "Já tem uma conta?\n",
+  "signupSignin": "Entre",
+
+  "forgotPasswordGreeting": "Redefina sua senha",
+  "forgotPasswordButton": "Enviar e-mail",
+  "forgotPasswordSuccess": "E-mail de redefinição enviado com sucesso",
+  "forgotPasswordRemembered": "Lembrou sua senha?\n",
+  "forgotPasswordSignin": "Entre",
+  "forgotPasswordNoAccount": "Não tem uma conta?\n",
+  "forgotPasswordSignup": "Cadastre-se",
+
   "validatorRequired": "Este campo é obrigatório",
+  "validatorMinLength": "Mínimo de {min} caracteres.",
+  "@validatorMinLength": {
+    "description": "Mensagem de validação para campo com tamanho mínimo.",
+    "placeholders": {
+      "min": {}
+    }
+  },
   "validatorEmail": "Digite um e-mail válido",
+  "validatorEmailMatch": "Os e-mails não coincidem",
   "validatorPasswordMin": "A senha deve ter no mínimo 8 caracteres",
   "validatorPasswordUppercase": "A senha deve ter ao menos uma letra maiúscula",
   "validatorPasswordLowercase": "A senha deve ter ao menos uma letra minúscula",
   "validatorPasswordDigit": "A senha deve ter ao menos um número",
   "validatorPasswordSpecial": "A senha deve ter ao menos um caractere especial",
+  "validatorPasswordMatch": "As senhas não coincidem",
 
   "authErrorUserNotFound": "Usuário não encontrado",
   "authErrorWrongPassword": "Senha incorreta",
@@ -36,5 +64,6 @@
   "authErrorInvalidCredential": "Credenciais inválidas",
   "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
   "authErrorWeakPassword": "Senha muito fraca",
+  "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
   "authErrorUnknown": "Erro inesperado. Tente novamente"
 }

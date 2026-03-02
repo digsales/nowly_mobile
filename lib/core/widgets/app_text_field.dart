@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 import '../extensions/context_extensions.dart';
 
@@ -350,8 +351,8 @@ class _AppTextFieldState extends State<AppTextField> {
             ? IconButton(
                 icon: Icon(
                   _obscureText
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                      ? Ionicons.eye_outline
+                      : Ionicons.eye_off_outline,
                   color: context.colorScheme.onSurfaceVariant,
                   size: iconSize,
                 ),
