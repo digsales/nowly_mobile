@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/forgot_password/forgot_password_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/signin/signin_screen.dart';
 import '../../features/signup/signup_screen.dart';
@@ -63,11 +64,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) =>
             _buildPage(state, const SignupPage()),
       ),
-      // GoRoute(
-      //   path: AppRoutes.forgotPassword,
-      //   pageBuilder: (context, state) =>
-      //       _buildPage(state, const ForgotPasswordPage()),
-      // ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        pageBuilder: (context, state) =>
+            _buildPage(state, const ForgotPasswordPage()),
+      ),
     ],
   );
 });
