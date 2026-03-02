@@ -5,3 +5,8 @@ import 'auth_service.dart';
 final authServiceProvider = Provider<AuthService>(
   (_) => AuthService(FirebaseAuth.instance),
 );
+
+final authStateProvider = StreamProvider<User?>((ref) {
+  final authService = ref.watch(authServiceProvider);
+  return authService.authStateChanges;
+});
