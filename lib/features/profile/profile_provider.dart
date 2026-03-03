@@ -73,11 +73,15 @@ class ProfileNotifier extends Notifier<ProfileState> {
     }
 
     try {
-      await _userRepository.deleteAllUserData(uid);
-      await _authService.deleteAccount(
+      // 1. Verify password first (fails fast if wrong)
+      await _authService.reauthenticate(
         email: email,
         password: password.text,
       );
+      // 2. Delete Firestore data (user is authenticated)
+      await _userRepository.deleteAllUserData(uid);
+      // 3. Delete Auth account (already re-authenticated)
+      await _authService.deleteCurrentUser();
     } on AuthException catch (e) {
       debugPrint('AuthException code: ${e.code}');
       if (!ref.mounted) return false;

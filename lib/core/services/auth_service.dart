@@ -70,24 +70,28 @@ class AuthService {
     await _auth.signOut();
   }
 
-  Future<void> deleteAccount({
+  Future<void> reauthenticate({
     required String email,
     required String password,
   }) async {
     try {
       final user = _auth.currentUser;
-
-      if (user == null) {
-        throw AuthException('user-not-found');
-      }
+      if (user == null) throw AuthException('user-not-found');
 
       final credential = EmailAuthProvider.credential(
         email: email,
         password: password,
       );
-
       await user.reauthenticateWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
+    }
+  }
 
+  Future<void> deleteCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw AuthException('user-not-found');
       await user.delete();
     } on FirebaseAuthException catch (e) {
       throw AuthException(e.code);
