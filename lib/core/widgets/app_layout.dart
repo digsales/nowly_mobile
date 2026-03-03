@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_back_button.dart';
@@ -38,9 +40,6 @@ class AppLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backButtonHeight = showBackButton ? kToolbarHeight : 0.0;
-    final totalHeaderHeight = context.paddingTop + backButtonHeight + 20.h;
-
     return Scaffold(
       backgroundColor: context.colorScheme.primary,
       body: NestedScrollView(
@@ -50,7 +49,7 @@ class AppLayout extends StatelessWidget {
             floating: true,
             delegate: _AppHeaderDelegate(
               minExtent: context.paddingTop,
-              maxExtent: totalHeaderHeight,
+              maxExtent: math.max(20.h, context.paddingTop + kToolbarHeight * 2),
               showBackButton: showBackButton,
               header: _buildHeader(context),
             ),
