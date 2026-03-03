@@ -1,11 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/core/services/auth_service.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 import 'package:nowly/core/validators/field_controller.dart';
 import 'package:nowly/core/validators/validators.dart';
 import 'package:nowly/l10n/app_localizations.dart';
+
+final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {
+  final authService = ref.watch(authServiceProvider);
+  final uid = authService.currentUser?.uid;
+  if (uid == null) return Stream.value(null);
+  return ref.watch(userRepositoryProvider).watchUser(uid);
+});
 
 final profileProvider =
     NotifierProvider.autoDispose<ProfileNotifier, ProfileState>(
