@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/models/user.dart';
+import 'package:nowly/core/repositories/category_repository.dart';
 import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/core/services/auth_service.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
@@ -31,6 +32,7 @@ class SignupState {
 class SignupNotifier extends Notifier<SignupState> {
   late final AuthService _authService;
   late final UserRepository _userRepository;
+  late final CategoryRepository _categoryRepository;
   final name = FieldController();
   final email = FieldController();
   final confirmEmail = FieldController();
@@ -41,6 +43,7 @@ class SignupNotifier extends Notifier<SignupState> {
   SignupState build() {
     _authService = ref.read(authServiceProvider);
     _userRepository = ref.read(userRepositoryProvider);
+    _categoryRepository = ref.read(categoryRepositoryProvider);
     ref.onDispose(() {
       name.dispose();
       email.dispose();
@@ -109,6 +112,7 @@ class SignupNotifier extends Notifier<SignupState> {
           currentStreak: 0,
         );
         await _userRepository.createUser(user);
+        await _categoryRepository.seedDefaultCategories(uid, l10n);
       }
     } on AuthException catch (e) {
       debugPrint('AuthException code: ${e.code}');

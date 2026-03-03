@@ -75,5 +75,12 @@
   "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
   "authErrorUnknown": "Erro inesperado. Tente novamente",
 
-  "fabAddTask": "Adicionar tarefa"
+  "fabAddTask": "Adicionar tarefa",
+
+  "categoryStudy": "Estudo",
+  "categoryWork": "Trabalho",
+  "categoryHealth": "Saúde",
+  "categoryPersonal": "Pessoal",
+  "categoryHome": "Casa",
+  "categorySocial": "Social"
 }
