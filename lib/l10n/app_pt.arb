@@ -84,6 +84,12 @@
   "categoryHome": "Casa",
   "categorySocial": "Social",
 
+  "settingsDarkMode": "Modo escuro",
+  "settingsHighContrast": "Alto contraste",
+  "settingsFontSize": "Tamanho da fonte",
+  "settingsChangePassword": "Alterar senha",
+  "settingsLanguage": "Idioma",
+
   "deleteAccountButton": "Excluir conta",
   "deleteAccountTitle": "Excluir conta",
   "deleteAccountMessage": "Essa ação é irreversível. Digite sua senha para confirmar.",
