@@ -85,6 +85,8 @@
   "categorySocial": "Social",
 
   "settingsName": "Nome",
+  "settingsEditNameTitle": "Editar nome",
+  "settingsEditNameButton": "Salvar",
   "settingsDarkMode": "Modo escuro",
   "settingsHighContrast": "Alto contraste",
   "settingsFontSize": "Tamanho da fonte",

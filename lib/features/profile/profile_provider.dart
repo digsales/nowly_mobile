@@ -110,6 +110,18 @@ class ProfileNotifier extends Notifier<ProfileState> {
     state = state.copyWith();
   }
 
+  Future<bool> updateName(String name) async {
+    final uid = _authService.currentUser?.uid;
+    if (uid == null || name.trim().isEmpty) return false;
+
+    try {
+      await _userRepository.updateUser(uid, {'name': name.trim()});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
   Future<void> signout() async {
     await _authService.signout();
   }

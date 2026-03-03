@@ -11,6 +11,7 @@ import 'package:nowly/core/widgets/app_setting_tile.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:nowly/features/profile/widgets/delete_account_dialog.dart';
+import 'package:nowly/features/profile/widgets/edit_name_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -75,15 +76,23 @@ class ProfileScreen extends ConsumerWidget {
         AppSettingTile(
           icon: Ionicons.person_outline,
           label: l10n.settingsName,
-          trailing: Text(
-            user.name,
-            style: context.textTheme.bodyMedium?.copyWith(
-              color: context.colorScheme.onSurfaceVariant,
-            ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                user.name,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Ionicons.chevron_forward_outline, size: 18),
+            ],
           ),
-          onTap: () {
-            // TODO: edit name
-          },
+          onTap: () => showDialog(
+            context: context,
+            builder: (_) => EditNameDialog(currentName: user.name),
+          ),
         ),
         AppSettingTile(
           icon: Ionicons.lock_closed_outline,
