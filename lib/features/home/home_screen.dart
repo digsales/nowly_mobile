@@ -7,11 +7,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AppLayout(
-        headerText: context.l10n.home,
-        body: Center(child: Text(context.l10n.home)),
-      ),
+    return AppLayout(
+      headerText: context.l10n.home,
+      body: Center(child: Text(context.l10n.home)),
     );
   }
 }

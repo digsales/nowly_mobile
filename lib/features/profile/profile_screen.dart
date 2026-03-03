@@ -12,18 +12,16 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authService = ref.read(authServiceProvider);
 
-    return Scaffold(
-      body: AppLayout(
-        headerText: context.l10n.profile,
-        body: Center(
-          child: AppButton(
-            text: "Sair do app",
-            detailColor: context.colorScheme.error,
-            textColor: context.colorScheme.onError,
-            onPressed: () async {
-              await authService.signout();
-            },
-          ),
+    return AppLayout(
+      headerText: context.l10n.profile,
+      body: Center(
+        child: AppButton(
+          text: "Sair do app",
+          detailColor: context.colorScheme.error,
+          textColor: context.colorScheme.onError,
+          onPressed: () async {
+            await authService.signout();
+          },
         ),
       ),
     );

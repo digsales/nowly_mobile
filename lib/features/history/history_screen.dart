@@ -7,11 +7,9 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AppLayout(
-        headerText: context.l10n.history,
-        body: Center(child: Text(context.l10n.history)),
-      ),
+    return AppLayout(
+      headerText: context.l10n.history,
+      body: Center(child: Text(context.l10n.history)),
     );
   }
 }
