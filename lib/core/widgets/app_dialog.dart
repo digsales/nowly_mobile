@@ -113,77 +113,83 @@ class AppDialog extends StatelessWidget {
     final onAccent = onColor ?? context.colorScheme.onPrimary;
     final actions = actionsBuilder?.call(context) ?? _buildDefaultActions(context);
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: IntrinsicHeight(
-          child: Stack(
-            alignment: Alignment.topCenter,
-            clipBehavior: Clip.none,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: _badgeOverlap),
-                child: Material(
-                  color: context.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(24),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      24, _badgeOverlap + 16, 24, 24,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          title,
-                          style: context.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 50),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: IntrinsicHeight(
+            child: Stack(
+              alignment: Alignment.topCenter,
+              clipBehavior: Clip.none,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: _badgeOverlap),
+                  child: Material(
+                    color: context.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(24),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        24, _badgeOverlap + 16, 24, 24,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            title,
+                            style: context.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        if (subtitle != null || body != null) ...[
-                          const SizedBox(height: 12),
-                          Flexible(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (subtitle != null)
-                                    Text(
-                                      subtitle!,
-                                      style: context.textTheme.bodyMedium,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  if (body != null) ...[
-                                    if (subtitle != null) const SizedBox(height: 16),
-                                    body!,
+                          if (subtitle != null || body != null) ...[
+                            const SizedBox(height: 12),
+                            Flexible(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (subtitle != null)
+                                      Text(
+                                        subtitle!,
+                                        style: context.textTheme.bodyMedium,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    if (body != null) ...[
+                                      if (subtitle != null) const SizedBox(height: 16),
+                                      body!,
+                                    ],
                                   ],
-                                ],
+                                ),
                               ),
                             ),
-                          ),
+                          ],
+                          if (actions.isNotEmpty) ...[
+                            const SizedBox(height: 24),
+                            ...actions,
+                          ],
                         ],
-                        if (actions.isNotEmpty) ...[
-                          const SizedBox(height: 24),
-                          ...actions,
-                        ],
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: 0,
-                child: Container(
-                  width: _badgeSize,
-                  height: _badgeSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: accent,
+                Positioned(
+                  top: 0,
+                  child: Container(
+                    width: _badgeSize,
+                    height: _badgeSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: accent,
+                    ),
+                    child: Icon(icon, color: onAccent, size: 38),
                   ),
-                  child: Icon(icon, color: onAccent, size: 38),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
