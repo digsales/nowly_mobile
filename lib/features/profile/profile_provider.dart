@@ -122,6 +122,17 @@ class ProfileNotifier extends Notifier<ProfileState> {
     }
   }
 
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final email = _authService.currentUser?.email;
+    if (email == null) throw AuthException('user-not-found');
+
+    await _authService.reauthenticate(email: email, password: currentPassword);
+    await _authService.updatePassword(newPassword);
+  }
+
   Future<void> signout() async {
     await _authService.signout();
   }

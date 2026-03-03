@@ -88,6 +88,16 @@ class AuthService {
     }
   }
 
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw AuthException('user-not-found');
+      await user.updatePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
+    }
+  }
+
   Future<void> deleteCurrentUser() async {
     try {
       final user = _auth.currentUser;
