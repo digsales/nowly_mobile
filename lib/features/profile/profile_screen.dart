@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_loading.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:nowly/features/profile/widgets/delete_account_dialog.dart';
+import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -20,6 +22,12 @@ class ProfileScreen extends ConsumerWidget {
       body: switch (userAsync) {
         AsyncData(:final value) when value != null => Column(
             children: [
+              AppAvatar(
+                name: value.name,
+                imageUrl: value.avatarUrl,
+                size: 50.sp,
+              ),
+              const SizedBox(height: 16),
               Text(
                 value.name,
                 style: context.textTheme.headlineSmall?.copyWith(
