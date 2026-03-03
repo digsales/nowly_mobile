@@ -16,6 +16,7 @@ class DeleteAccountDialog extends ConsumerWidget {
     final l10n = context.l10n;
 
     return AlertDialog(
+      backgroundColor: context.colorScheme.surface,
       title: Text(l10n.deleteAccountTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -41,7 +42,9 @@ class DeleteAccountDialog extends ConsumerWidget {
           onPressed: state.isLoading
               ? null
               : () => Navigator.of(context).pop(),
-          child: Text(l10n.deleteAccountCancel),
+          child: Text(
+            l10n.deleteAccountCancel,
+          ),
         ),
         AppButton(
           text: l10n.deleteAccountConfirm,
@@ -50,8 +53,10 @@ class DeleteAccountDialog extends ConsumerWidget {
           isProcessing: state.isLoading,
           width: 120,
           onPressed: () async {
-            await notifier.deleteAccount(l10n);
-            if (context.mounted) Navigator.of(context).pop();
+            final success = await notifier.deleteAccount(l10n);
+            if (context.mounted && success) {
+              Navigator.of(context).pop();
+            }
           },
         ),
       ],

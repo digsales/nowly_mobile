@@ -43,14 +43,15 @@ class ProfileNotifier extends Notifier<ProfileState> {
     return const ProfileState();
   }
 
-  Future<void> deleteAccount(AppLocalizations l10n) async {
+  Future<bool> deleteAccount(AppLocalizations l10n) async {
     password.validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
+      Validators.minLength(8, l10n.validatorMinLength(8)),
     ]);
 
     if (!password.validate()) {
       state = state.copyWith();
-      return;
+      return false;
     }
 
     state = state.copyWith(isLoading: true);
@@ -60,7 +61,7 @@ class ProfileNotifier extends Notifier<ProfileState> {
 
     if (uid == null || email == null) {
       state = state.copyWith(isLoading: false);
-      return;
+      return false;
     }
 
     try {
@@ -71,24 +72,25 @@ class ProfileNotifier extends Notifier<ProfileState> {
       );
     } on AuthException catch (e) {
       debugPrint('AuthException code: ${e.code}');
-      if (!ref.mounted) return;
+      if (!ref.mounted) return false;
       state = state.copyWith(
         isLoading: false,
         errorMessage: e.message(l10n),
       );
-      return;
+      return false;
     } on Exception catch (e) {
       debugPrint('Delete account error: $e');
-      if (!ref.mounted) return;
+      if (!ref.mounted) return false;
       state = state.copyWith(
         isLoading: false,
         errorMessage: l10n.authErrorUnknown,
       );
-      return;
+      return false;
     }
 
-    if (!ref.mounted) return;
+    if (!ref.mounted) return true;
     state = state.copyWith(isLoading: false);
+    return true;
   }
 
   void onPasswordChanged(String value) {
