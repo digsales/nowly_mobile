@@ -23,6 +23,7 @@ extension TaskStatusX on TaskStatus {
 class Task {
   final String id;
   final String userId;
+  final String categoryId;
   final String title;
   final String? description;
   final DateTime startDate;
@@ -36,6 +37,7 @@ class Task {
   const Task({
     required this.id,
     required this.userId,
+    required this.categoryId,
     required this.title,
     this.description,
     required this.startDate,
@@ -51,6 +53,7 @@ class Task {
     return Task(
       id: id,
       userId: json['userId'] as String,
+      categoryId: json['categoryId'] as String,
       title: json['title'] as String,
       description: json['description'] as String?,
       startDate: DateTime.parse(json['startDate'] as String),
@@ -70,6 +73,7 @@ class Task {
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
+      'categoryId': categoryId,
       'title': title,
       'description': description,
       'startDate': startDate.toIso8601String(),
@@ -84,6 +88,7 @@ class Task {
 
   Task copyWith({
     String? userId,
+    String? categoryId,
     String? title,
     String? description,
     DateTime? startDate,
@@ -97,6 +102,7 @@ class Task {
     return Task(
       id: id,
       userId: userId ?? this.userId,
+      categoryId: categoryId ?? this.categoryId,
       title: title ?? this.title,
       description: description ?? this.description,
       startDate: startDate ?? this.startDate,

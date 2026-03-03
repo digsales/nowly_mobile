@@ -12,6 +12,7 @@ class HomeShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: navigationShell,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
