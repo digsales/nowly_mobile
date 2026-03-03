@@ -123,7 +123,7 @@ class _AppLayoutState extends State<AppLayout> {
                 top: 16,
                 left: context.paddingLeft + 32,
                 right: context.paddingRight + 32,
-                bottom: context.paddingBottom + 150,
+                bottom: context.paddingBottom + 50,
               ),
               child: widget.body,
             ),
