@@ -106,7 +106,7 @@ class AppDialog extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: accent,
                   ),
-                  child: Icon(icon, color: context.colorScheme.surface, size: 28),
+                  child: Icon(icon, color: context.colorScheme.surface, size: 38),
                 ),
               ),
             ],
