@@ -121,7 +121,7 @@ class _AppLayoutState extends State<AppLayout> {
             ),
             child: SingleChildScrollView(
               padding: EdgeInsets.only(
-                top: 16,
+                top: 32,
                 left: context.paddingLeft + 32,
                 right: context.paddingRight + 32,
                 bottom: context.paddingBottom + 50,
