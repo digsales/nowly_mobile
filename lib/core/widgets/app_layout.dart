@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_back_button.dart';
+import 'package:sizer/sizer.dart';
 
 /// Page layout for authenticated screens.
 ///
@@ -21,7 +22,6 @@ class AppLayout extends StatelessWidget {
     this.headerBuilder,
     this.showBackButton = false,
     required this.body,
-    this.headerExpandedHeight = 96.0,
   });
 
   /// Simple text header (styled with Ultra font)
@@ -36,46 +36,47 @@ class AppLayout extends StatelessWidget {
   /// Main content
   final Widget body;
 
-  /// Height of the header content area (excluding top padding and back button)
-  final double headerExpandedHeight;
-
   @override
   Widget build(BuildContext context) {
-    final paddingTop = context.paddingTop;
-    final backButtonHeight = showBackButton ? 52.0 : 0.0;
-    final totalHeaderHeight =
-        paddingTop + backButtonHeight + headerExpandedHeight + 24.0;
+    final backButtonHeight = showBackButton ? kToolbarHeight : 0.0;
+    final totalHeaderHeight = context.paddingTop + backButtonHeight + 20.h;
 
     return Scaffold(
       backgroundColor: context.colorScheme.primary,
-      body: CustomScrollView(
-        slivers: [
+      body: NestedScrollView(
+        headerSliverBuilder: (context, _) => [
           SliverPersistentHeader(
+            pinned: true,
             floating: true,
             delegate: _AppHeaderDelegate(
+              minExtent: context.paddingTop,
               maxExtent: totalHeaderHeight,
               showBackButton: showBackButton,
               header: _buildHeader(context),
             ),
           ),
-          SliverToBoxAdapter(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: MediaQuery.sizeOf(context).height - paddingTop,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surface,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
-                ),
-                child: body,
+        ],
+        body: Padding(
+          padding: EdgeInsets.only(top: context.paddingTop),
+          child: Container(
+            decoration: BoxDecoration(
+              color: context.colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(50),
+                topRight: Radius.circular(50),
               ),
             ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                top: 16,
+                left: context.paddingLeft + 32,
+                right: context.paddingRight + 32,
+                bottom: context.paddingBottom + 16,
+              ),
+              child: body,
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -98,49 +99,56 @@ class AppLayout extends StatelessWidget {
 
 class _AppHeaderDelegate extends SliverPersistentHeaderDelegate {
   const _AppHeaderDelegate({
+    required this.minExtent,
     required this.maxExtent,
     required this.showBackButton,
     required this.header,
   });
 
   @override
+  final double minExtent;
+  @override
   final double maxExtent;
   final bool showBackButton;
   final Widget header;
 
   @override
-  double get minExtent => 0;
-
-  @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final opacity = (1.0 - shrinkOffset / maxExtent).clamp(0.0, 1.0);
-    return Opacity(
-      opacity: opacity,
-      child: Container(
-        color: context.colorScheme.primary,
-        padding: EdgeInsets.fromLTRB(
-          context.paddingLeft + 32,
-          context.paddingTop + 8,
-          context.paddingRight + 32,
-          24,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (showBackButton) ...[
-              const AppBackButton(),
-              const SizedBox(height: 8),
+    return ClipRect(
+        child: Transform.translate(
+          offset: Offset(0, -shrinkOffset),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: context.paddingLeft + 16,
+              right: context.paddingRight + 32,
+              top: context.paddingTop,
+            ),
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showBackButton)
+                const Padding(
+                  padding: EdgeInsets.only(top: 16, bottom: 16),
+                  child: AppBackButton(),
+                )
+              else
+                const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: header,
+              ),
+              const SizedBox(height: 0),
             ],
-            header,
-          ],
+          ),
         ),
-      ),
-    );
+        ),
+      );
   }
 
   @override
   bool shouldRebuild(_AppHeaderDelegate old) =>
+      minExtent != old.minExtent ||
       maxExtent != old.maxExtent ||
       showBackButton != old.showBackButton ||
       header != old.header;
