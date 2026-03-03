@@ -39,6 +39,14 @@
   "forgotPasswordNoAccount": "Não tem uma conta?\n",
   "forgotPasswordSignup": "Cadastre-se",
 
+  "home": "Início",
+  
+  "ranking": "Classificação",
+  
+  "history": "Histório",
+  
+  "profile": "Perfil",
+
   "validatorRequired": "Este campo é obrigatório",
   "validatorMinLength": "Mínimo de {min} caracteres.",
   "@validatorMinLength": {
@@ -65,5 +73,21 @@
   "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
   "authErrorWeakPassword": "Senha muito fraca",
   "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
-  "authErrorUnknown": "Erro inesperado. Tente novamente"
+  "authErrorUnknown": "Erro inesperado. Tente novamente",
+
+  "fabAddTask": "Adicionar tarefa",
+
+  "categoryStudy": "Estudo",
+  "categoryWork": "Trabalho",
+  "categoryHealth": "Saúde",
+  "categoryPersonal": "Pessoal",
+  "categoryHome": "Casa",
+  "categorySocial": "Social",
+
+  "deleteAccountButton": "Excluir conta",
+  "deleteAccountTitle": "Excluir conta",
+  "deleteAccountMessage": "Essa ação é irreversível. Digite sua senha para confirmar.",
+  "deleteAccountConfirm": "Excluir",
+  "deleteAccountCancel": "Cancelar",
+  "signoutButton": "Sair do app"
 }
