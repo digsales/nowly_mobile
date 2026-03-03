@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/models/category.dart';
+import 'package:nowly/core/theme/app_palette.dart';
 import 'package:nowly/l10n/app_localizations.dart';
 
 class CategoryRepository {
@@ -21,14 +22,40 @@ class CategoryRepository {
     }
   }
 
+  Future<void> updateCategory(Category category) async {
+    try {
+      await _categories.doc(category.id).update(category.toJson());
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Future<void> deleteCategory(String categoryId) async {
+    try {
+      await _categories.doc(categoryId).delete();
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Stream<List<Category>> watchCategories(String userId) {
+    return _categories
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Category.fromJson(doc.id, doc.data()))
+            .toList());
+  }
+
   Future<void> seedDefaultCategories(String userId, AppLocalizations l10n) async {
+    const colors = AppPalette.categoryColors;
     final defaults = [
-      _DefaultCategory(l10n.categoryStudy,    const Color(0xFF5C8DFF), 'book_outline'),
-      _DefaultCategory(l10n.categoryWork,     const Color(0xFFE05A5A), 'briefcase_outline'),
-      _DefaultCategory(l10n.categoryHealth,   const Color(0xFF4CAF7D), 'heart_outline'),
-      _DefaultCategory(l10n.categoryPersonal, const Color(0xFF9C6ADE), 'person_outline'),
-      _DefaultCategory(l10n.categoryHome,     const Color(0xFFFFB74D), 'home_outline'),
-      _DefaultCategory(l10n.categorySocial,   const Color(0xFF4DD0C8), 'people_outline'),
+      _DefaultCategory(l10n.categoryStudy, colors[0], 'book_outline'),
+      _DefaultCategory(l10n.categoryWork, colors[1], 'briefcase_outline'),
+      _DefaultCategory(l10n.categoryHealth, colors[2], 'heart_outline'),
+      _DefaultCategory(l10n.categoryPersonal, colors[3], 'person_outline'),
+      _DefaultCategory(l10n.categoryHome, colors[4], 'home_outline'),
+      _DefaultCategory(l10n.categorySocial, colors[5], 'people_outline'),
     ];
 
     final batch = _firestore.batch();
