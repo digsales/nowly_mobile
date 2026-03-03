@@ -45,7 +45,8 @@ class AppSettingTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 color: context.colorScheme.surfaceContainerHighest,
               ),
               child: Icon(
@@ -61,7 +62,7 @@ class AppSettingTile extends StatelessWidget {
                 style: context.textTheme.bodyLarge,
               ),
             ),
-            if (trailing != null) trailing!,
+            trailing ?? const SizedBox.shrink(),
           ],
         ),
       ),

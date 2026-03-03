@@ -39,7 +39,7 @@ class AppAvatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: context.colorScheme.primary,
+        color: context.colorScheme.inversePrimary,
         image: imageUrl != null
             ? DecorationImage(
                 image: NetworkImage(imageUrl!),
