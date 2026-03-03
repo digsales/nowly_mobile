@@ -24,6 +24,34 @@ class UserRepository {
     return User.fromJson(doc.id, doc.data()!);
   }
 
+  Future<void> deleteAllUserData(String uid) async {
+    final batch = _firestore.batch();
+
+    batch.delete(_users.doc(uid));
+
+    final categories = await _firestore
+        .collection('categories')
+        .where('userId', isEqualTo: uid)
+        .get();
+    for (final doc in categories.docs) {
+      batch.delete(doc.reference);
+    }
+
+    final tasks = await _firestore
+        .collection('tasks')
+        .where('userId', isEqualTo: uid)
+        .get();
+    for (final doc in tasks.docs) {
+      batch.delete(doc.reference);
+    }
+
+    try {
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
   Stream<User?> watchUser(String uid) {
     return _users.doc(uid).snapshots().map((doc) {
       if (!doc.exists || doc.data() == null) return null;

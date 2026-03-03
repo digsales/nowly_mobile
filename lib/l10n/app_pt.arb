@@ -82,5 +82,12 @@
   "categoryHealth": "Saúde",
   "categoryPersonal": "Pessoal",
   "categoryHome": "Casa",
-  "categorySocial": "Social"
+  "categorySocial": "Social",
+
+  "deleteAccountButton": "Excluir conta",
+  "deleteAccountTitle": "Excluir conta",
+  "deleteAccountMessage": "Essa ação é irreversível. Digite sua senha para confirmar.",
+  "deleteAccountConfirm": "Excluir",
+  "deleteAccountCancel": "Cancelar",
+  "signoutButton": "Sair do app"
 }
