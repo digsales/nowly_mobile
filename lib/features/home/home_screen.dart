@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      headerText: context.l10n.home,
+      headerText: context.l10n.appName,
       body: Center(child: Text(context.l10n.home)),
     );
   }

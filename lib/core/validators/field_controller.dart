@@ -29,8 +29,8 @@ class FieldController {
   String? _error;
   bool _submitted = false;
 
-  /// Current text value of the field.
-  String get text => controller.text;
+  /// Current text value of the field, trimmed.
+  String get text => controller.text.trim();
 
   /// Current error message, or `null` if the field is valid.
   String? get error => _error;
