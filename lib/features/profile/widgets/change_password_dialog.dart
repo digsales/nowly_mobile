@@ -66,7 +66,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
             prefixIcon: Ionicons.lock_closed_outline,
             isPassword: true,
             onChanged: (_) => setState(() {
-              _currentPassword.validate();
+              if (_currentPassword.error != null) _currentPassword.validate();
               _error = null;
             }),
             errorText: _currentPassword.error ?? _error,
@@ -79,8 +79,8 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
             prefixIcon: Ionicons.key_outline,
             isPassword: true,
             onChanged: (_) => setState(() {
-              _confirmPassword.validate();
-              _newPassword.validate();
+              if (_confirmPassword.error != null) _confirmPassword.validate();
+              if (_newPassword.error != null) _newPassword.validate();
             }),
             errorText: _newPassword.error,
           ),
@@ -92,7 +92,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
             prefixIcon: Ionicons.key_outline,
             isPassword: true,
             onChanged: (_) => setState(() {
-              _confirmPassword.validate();
+              if (_confirmPassword.error != null) _confirmPassword.validate();
             }),
             errorText: _confirmPassword.error,
           ),
