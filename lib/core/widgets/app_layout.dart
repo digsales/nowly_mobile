@@ -42,22 +42,27 @@ class AppLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.colorScheme.primary,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, _) => [
-          SliverPersistentHeader(
-            pinned: true,
-            floating: true,
-            delegate: _AppHeaderDelegate(
-              minExtent: context.paddingTop,
-              maxExtent: math.max(20.h, context.paddingTop + kToolbarHeight * 2),
-              showBackButton: showBackButton,
-              header: _buildHeader(context),
+      body: Padding(
+        padding: EdgeInsetsGeometry.only(
+          top: context.paddingTop > 0
+            ? context.paddingTop
+            : 16,
+        ),
+        child: NestedScrollView(
+          physics: const BouncingScrollPhysics(),
+          headerSliverBuilder: (context, _) => [
+            SliverPersistentHeader(
+              pinned: false,
+              floating: false,
+              delegate: _AppHeaderDelegate(
+                minExtent: context.paddingTop + kToolbarHeight,
+                maxExtent: math.max(20.h, context.paddingTop + kToolbarHeight * 2),
+                showBackButton: showBackButton,
+                header: _buildHeader(context),
+              ),
             ),
-          ),
-        ],
-        body: Padding(
-          padding: EdgeInsets.only(top: context.paddingTop),
-          child: Container(
+          ],
+          body: Container(
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -76,7 +81,7 @@ class AppLayout extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      )
     );
   }
 
@@ -106,43 +111,59 @@ class _AppHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   final double minExtent;
+
   @override
   final double maxExtent;
+
   final bool showBackButton;
   final Widget header;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return ClipRect(
-        child: Transform.translate(
-          offset: Offset(0, -shrinkOffset),
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: context.paddingLeft + 16,
-              right: context.paddingRight + 32,
-              top: context.paddingTop,
-            ),
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final progress = (shrinkOffset / (maxExtent - minExtent))
+        .clamp(0.0, 1.0);
+
+    final currentHeight =
+        math.max(minExtent, maxExtent - shrinkOffset);
+
+    return Container(
+      height: currentHeight,
+      color: context.colorScheme.primary,
+      padding: EdgeInsets.only(
+        left: context.paddingLeft + 16,
+        right: context.paddingRight + 32,
+      ),
+      child: Opacity(
+        opacity: 1 - progress,
+        child: Transform.scale(
+          scale: 1 - (progress * 0.2),
+          alignment: Alignment.bottomLeft,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (showBackButton)
                 const Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 16),
+                  padding: EdgeInsets.only(top: 16),
                   child: AppBackButton(),
                 )
               else
-                const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: header,
-              ),
-              const SizedBox(height: 0),
+                const SizedBox.shrink(),
+
+              /// Header animando tamanho + opacidade
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: header,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
-        ),
-      );
+      ),
+    );
   }
 
   @override
@@ -152,3 +173,4 @@ class _AppHeaderDelegate extends SliverPersistentHeaderDelegate {
       showBackButton != old.showBackButton ||
       header != old.header;
 }
+
