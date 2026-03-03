@@ -39,6 +39,14 @@
   "forgotPasswordNoAccount": "Não tem uma conta?\n",
   "forgotPasswordSignup": "Cadastre-se",
 
+  "home": "Início",
+  
+  "ranking": "Classificação",
+  
+  "history": "Histório",
+  
+  "profile": "Perfil",
+
   "validatorRequired": "Este campo é obrigatório",
   "validatorMinLength": "Mínimo de {min} caracteres.",
   "@validatorMinLength": {
