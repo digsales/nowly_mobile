@@ -111,6 +111,7 @@ class _AppLayoutState extends State<AppLayout> {
             ),
           ],
           body: Container(
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
               borderRadius: const BorderRadius.only(
