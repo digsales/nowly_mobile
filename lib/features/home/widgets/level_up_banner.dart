@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:sizer/sizer.dart';
 
 
 class LevelUpBanner extends StatefulWidget {
@@ -74,55 +75,63 @@ class _LevelUpBannerState extends State<LevelUpBanner>
 
     return Positioned(
       top: context.paddingTop + 12,
-      left: 24,
-      right: 24,
-      child: SlideTransition(
-        position: _slide,
-        child: FadeTransition(
-          opacity: _fade,
-          child: GestureDetector(
-            onTap: _dismiss,
-            child: Material(
-              elevation: 8,
-              borderRadius: BorderRadius.circular(20),
-              color: context.colorScheme.surface,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: context.colorScheme.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Ionicons.trophy_outline,
-                        color: context.colorScheme.onPrimary,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      left: 0,
+      right: 0,
+      child: Align(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 600 > 50.w ? 600 : 50.w),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: SlideTransition(
+              position: _slide,
+              child: FadeTransition(
+                opacity: _fade,
+                child: GestureDetector(
+                  onTap: _dismiss,
+                  child: Material(
+                    elevation: 8,
+                    borderRadius: BorderRadius.circular(20),
+                    color: context.colorScheme.surface,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      child: Row(
                         children: [
-                          Text(
-                            widget.title,
-                            style: context.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: context.colorScheme.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Ionicons.trophy_outline,
+                              color: context.colorScheme.onPrimary,
+                              size: 24,
                             ),
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            subtitles[_subtitleIndex],
-                            style: context.textTheme.bodySmall,
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.title,
+                                  style: context.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  subtitles[_subtitleIndex],
+                                  style: context.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
