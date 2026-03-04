@@ -109,6 +109,7 @@ class SignupNotifier extends Notifier<SignupState> {
           totalPoints: 0,
           totalCompleted: 0,
           totalExpired: 0,
+          totalCanceled: 0,
           currentStreak: 0,
         );
         await _userRepository.createUser(user);
