@@ -126,5 +126,22 @@
       "points": { "type": "int" },
       "nextLevel": { "type": "int" }
     }
-  }
+  },
+
+  "levelUpTitle": "Nível {level} desbloqueado!",
+  "@levelUpTitle": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  },
+  "levelUpSubtitle1": "Continue assim, você está arrasando!",
+  "levelUpSubtitle2": "Cada nível te deixa mais perto do topo!",
+  "levelUpSubtitle3": "Imparável! Bora pro próximo?",
+  "levelUpSubtitle4": "Você está evoluindo muito!",
+  "levelUpSubtitle5": "Nada te para! Continue focado.",
+  "levelUpSubtitle6": "Missão cumprida. E o próximo?",
+  "levelUpSubtitle7": "Você está em chamas!",
+  "levelUpSubtitle8": "Consistência é a chave do sucesso!",
+  "levelUpSubtitle9": "Mais um nível acima da média!",
+  "levelUpSubtitle10": "Seu esforço está valendo a pena!"
 }
