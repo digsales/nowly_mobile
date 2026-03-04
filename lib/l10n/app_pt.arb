@@ -102,6 +102,8 @@
   "settingsChangePasswordSuccess": "Senha alterada com sucesso",
   "settingsLanguage": "Idioma",
   "settingsRestoreDefaults": "Restaurar padrão",
+  "settingsRestoreDefaultsMessage": "As preferências de tema serão redefinidas para os padrões do dispositivo.",
+  "settingsRestoreDefaultsConfirm": "Restaurar",
 
   "deleteAccountButton": "Excluir conta",
   "deleteAccountTitle": "Excluir conta",

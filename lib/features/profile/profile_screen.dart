@@ -12,6 +12,7 @@ import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:nowly/features/profile/widgets/delete_account_dialog.dart';
+import 'package:nowly/features/profile/widgets/reset_preferences_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_password_dialog.dart';
 import 'package:nowly/features/profile/widgets/edit_name_dialog.dart';
 import 'package:sizer/sizer.dart';
@@ -174,7 +175,10 @@ class ProfileScreen extends ConsumerWidget {
         Align(
           alignment: Alignment.centerRight,
           child: TouchableOpacity(
-            onTap: () => resetThemeDefaults(ref),
+            onTap: () => showDialog(
+              context: context,
+              builder: (_) => const ResetPreferencesDialog(),
+            ),
             child: Text(
               l10n.settingsRestoreDefaults,
               style: context.textTheme.labelSmall?.copyWith(
