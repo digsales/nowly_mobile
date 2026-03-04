@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/utils/level_utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -53,14 +54,21 @@ class UserLevelBar extends StatelessWidget {
           children: [
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
-              child: Text(
-                context.l10n.profileLevel(level),
-                key: ValueKey(level),
-                style: context.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: resolvedTextColor,
-                ),
+              child: Row(
+                children: [
+                  Icon(Ionicons.sparkles, size: context.textTheme.titleMedium!.fontSize, color: resolvedTextColor),
+                  const SizedBox(width: 4),
+                  Text(
+                    context.l10n.profileLevel(level),
+                    key: ValueKey(level),
+                    style: context.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: resolvedTextColor,
+                    ),
+                  ),
+                ],
               ),
+              
             ),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),

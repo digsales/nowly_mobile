@@ -97,8 +97,8 @@ class _LevelUpBannerState extends State<LevelUpBanner>
                       child: Row(
                         children: [
                           Container(
-                            width: 48,
-                            height: 48,
+                            width: context.textTheme.displayMedium!.fontSize! * 1.71,
+                            height: context.textTheme.displayMedium!.fontSize! * 1.71,
                             decoration: BoxDecoration(
                               color: context.colorScheme.primary,
                               shape: BoxShape.circle,
@@ -106,7 +106,7 @@ class _LevelUpBannerState extends State<LevelUpBanner>
                             child: Icon(
                               Ionicons.trophy_outline,
                               color: context.colorScheme.onPrimary,
-                              size: 24,
+                              size: context.textTheme.displayMedium!.fontSize,
                             ),
                           ),
                           const SizedBox(width: 14),
