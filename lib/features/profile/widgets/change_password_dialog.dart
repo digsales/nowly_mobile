@@ -33,36 +33,34 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     _currentPassword.validator = Validators.combine([
-      Validators.required(l10n.validatorRequired),
+      Validators.required(context.l10n.validatorRequired),
     ]);
 
     _newPassword.validator = Validators.combine([
-      Validators.required(l10n.validatorRequired),
-      Validators.minLength(8, l10n.validatorPasswordMin),
-      Validators.hasUppercase(l10n.validatorPasswordUppercase),
-      Validators.hasLowercase(l10n.validatorPasswordLowercase),
-      Validators.hasDigit(l10n.validatorPasswordDigit),
-      Validators.hasSpecialChar(l10n.validatorPasswordSpecial),
+      Validators.required(context.l10n.validatorRequired),
+      Validators.minLength(8, context.l10n.validatorPasswordMin),
+      Validators.hasUppercase(context.l10n.validatorPasswordUppercase),
+      Validators.hasLowercase(context.l10n.validatorPasswordLowercase),
+      Validators.hasDigit(context.l10n.validatorPasswordDigit),
+      Validators.hasSpecialChar(context.l10n.validatorPasswordSpecial),
     ]);
 
     _confirmPassword.validator = Validators.combine([
-      Validators.required(l10n.validatorRequired),
-      Validators.match(_newPassword.controller, l10n.validatorPasswordMatch),
+      Validators.required(context.l10n.validatorRequired),
+      Validators.match(_newPassword.controller, context.l10n.validatorPasswordMatch),
     ]);
 
     return AppDialog(
       icon: Ionicons.lock_closed_outline,
-      title: l10n.settingsChangePasswordTitle,
+      title: context.l10n.settingsChangePasswordTitle,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           AppTextField(
             controller: _currentPassword.controller,
-            hintText: l10n.settingsCurrentPasswordHint,
-            label: l10n.settingsCurrentPassword,
+            hintText: context.l10n.settingsCurrentPasswordHint,
+            label: context.l10n.settingsCurrentPassword,
             prefixIcon: Ionicons.lock_closed_outline,
             isPassword: true,
             onChanged: (_) => setState(() {
@@ -74,8 +72,8 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
           const SizedBox(height: 16),
           AppTextField(
             controller: _newPassword.controller,
-            hintText: l10n.settingsNewPasswordHint,
-            label: l10n.settingsNewPassword,
+            hintText: context.l10n.settingsNewPasswordHint,
+            label: context.l10n.settingsNewPassword,
             prefixIcon: Ionicons.key_outline,
             isPassword: true,
             onChanged: (_) => setState(() {
@@ -87,8 +85,8 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
           const SizedBox(height: 16),
           AppTextField(
             controller: _confirmPassword.controller,
-            hintText: l10n.settingsConfirmNewPasswordHint,
-            label: l10n.settingsConfirmNewPassword,
+            hintText: context.l10n.settingsConfirmNewPasswordHint,
+            label: context.l10n.settingsConfirmNewPassword,
             prefixIcon: Ionicons.key_outline,
             isPassword: true,
             onChanged: (_) => setState(() {
@@ -98,7 +96,7 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
           ),
         ],
       ),
-      buttonText: l10n.settingsChangePasswordButton,
+      buttonText: context.l10n.settingsChangePasswordButton,
       isProcessing: _isLoading,
       onPressed: () async {
         final valid = validateAll([_currentPassword, _newPassword, _confirmPassword]);
@@ -123,19 +121,19 @@ class _ChangePasswordDialogState extends ConsumerState<ChangePasswordDialog> {
           if (mounted) {
             setState(() {
               _isLoading = false;
-              _error = e.message(l10n);
+              _error = e.message(context.l10n);
             });
           }
         } on Exception {
           if (mounted) {
             setState(() {
               _isLoading = false;
-              _error = l10n.authErrorUnknown;
+              _error = context.l10n.authErrorUnknown;
             });
           }
         }
       },
-      cancelText: l10n.deleteAccountCancel,
+      cancelText: context.l10n.deleteAccountCancel,
       onCancel: () => Navigator.of(context).pop(),
     );
   }

@@ -74,13 +74,11 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildAccountSettings(BuildContext context, WidgetRef ref, User user) {
-    final l10n = context.l10n;
-
     return Column(
       children: [
         AppSettingTile(
           icon: Ionicons.person_outline,
-          label: l10n.settingsName,
+          label: context.l10n.settingsName,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -101,7 +99,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         AppSettingTile(
           icon: Ionicons.lock_closed_outline,
-          label: l10n.settingsChangePassword,
+          label: context.l10n.settingsChangePassword,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -127,12 +125,11 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildPreferenceSettings(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
     final highContrast = ref.watch(highContrastProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
     final languageLabel = locale == null
-        ? l10n.settingsLanguageSystem
+        ? context.l10n.settingsLanguageSystem
         : AppLanguage.supported
             .firstWhere(
               (lang) =>
@@ -146,7 +143,7 @@ class ProfileScreen extends ConsumerWidget {
       children: [
         AppSettingTile(
           icon: Ionicons.moon_outline,
-          label: l10n.settingsDarkMode,
+          label: context.l10n.settingsDarkMode,
           trailing: Switch(
             value: context.isDark,
             onChanged: (value) => ref.read(themeModeProvider.notifier).set(
@@ -156,7 +153,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         AppSettingTile(
           icon: Ionicons.contrast_outline,
-          label: l10n.settingsHighContrast,
+          label: context.l10n.settingsHighContrast,
           trailing: Switch(
             value: highContrast,
             onChanged: (value) => ref.read(highContrastProvider.notifier).set(value),
@@ -164,7 +161,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         AppSettingTile(
           icon: Ionicons.text_outline,
-          label: l10n.settingsFontSize,
+          label: context.l10n.settingsFontSize,
           trailing: SizedBox(
             width: 140,
             child: Slider(
@@ -178,7 +175,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         AppSettingTile(
           icon: Ionicons.language_outline,
-          label: l10n.settingsLanguage,
+          label: context.l10n.settingsLanguage,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -206,7 +203,7 @@ class ProfileScreen extends ConsumerWidget {
               builder: (_) => const ResetPreferencesDialog(),
             ),
             child: Text(
-              l10n.settingsRestoreDefaults,
+              context.l10n.settingsRestoreDefaults,
               style: context.textTheme.labelSmall?.copyWith(
                 color: context.colorScheme.onSurfaceVariant,
               ),
@@ -218,12 +215,10 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildActions(BuildContext context, ProfileNotifier notifier) {
-    final l10n = context.l10n;
-
     return Column(
       children: [
         AppButton(
-          text: l10n.signoutButton,
+          text: context.l10n.signoutButton,
           variant: AppButtonVariant.outlined,
           detailColor: context.colorScheme.onSurfaceVariant,
           textColor: context.colorScheme.onSurfaceVariant,
@@ -233,7 +228,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         AppButton(
-          text: l10n.deleteAccountButton,
+          text: context.l10n.deleteAccountButton,
           detailColor: context.colorScheme.error,
           textColor: context.colorScheme.onError,
           onPressed: () => showDialog(

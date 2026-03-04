@@ -13,16 +13,15 @@ class LanguageDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeProvider);
-    final l10n = context.l10n;
 
     return AppDialog(
       icon: Ionicons.language_outline,
-      title: l10n.settingsLanguageDialogTitle,
+      title: context.l10n.settingsLanguageDialogTitle,
       body: Column(
         children: [
           _LanguageTile(
             flag: '🌐',
-            label: l10n.settingsLanguageSystem,
+            label: context.l10n.settingsLanguageSystem,
             selected: currentLocale == null,
             onTap: () {
               ref.read(localeProvider.notifier).set(null);
@@ -43,7 +42,7 @@ class LanguageDialog extends ConsumerWidget {
           ),
         ],
       ),
-      cancelText: l10n.deleteAccountCancel,
+      cancelText: context.l10n.deleteAccountCancel,
       onCancel: () => Navigator.of(context).pop(),
     );
   }

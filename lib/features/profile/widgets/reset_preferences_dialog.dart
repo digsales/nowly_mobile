@@ -10,14 +10,13 @@ class ResetPreferencesDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
 
     return AppDialog(
       icon: Ionicons.refresh_outline,
-      title: l10n.settingsRestoreDefaults,
-      subtitle: l10n.settingsRestoreDefaultsMessage,
-      buttonText: l10n.settingsRestoreDefaultsConfirm,
-      cancelText: l10n.deleteAccountCancel,
+      title: context.l10n.settingsRestoreDefaults,
+      subtitle: context.l10n.settingsRestoreDefaultsMessage,
+      buttonText: context.l10n.settingsRestoreDefaultsConfirm,
+      cancelText: context.l10n.deleteAccountCancel,
       onPressed: () {
         resetThemeDefaults(ref);
         Navigator.of(context).pop();

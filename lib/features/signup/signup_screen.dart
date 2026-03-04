@@ -39,7 +39,6 @@ class SignupPage extends ConsumerWidget {
   Widget _signupForm(BuildContext context, WidgetRef ref) {
     final state = ref.watch(signupProvider);
     final notifier = ref.read(signupProvider.notifier);
-    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,8 +46,8 @@ class SignupPage extends ConsumerWidget {
         const SizedBox(height: 32),
         AppTextField(
           controller: notifier.name.controller,
-          label: l10n.textFieldLabelName,
-          hintText: l10n.textFieldHintName,
+          label: context.l10n.textFieldLabelName,
+          hintText: context.l10n.textFieldHintName,
           prefixIcon: Ionicons.person_outline,
           textCapitalization: TextCapitalization.words,
           errorText: notifier.name.error,
@@ -57,8 +56,8 @@ class SignupPage extends ConsumerWidget {
         const SizedBox(height: 16),
         AppTextField(
           controller: notifier.email.controller,
-          label: l10n.textFieldLabelEmail,
-          hintText: l10n.textFieldHintEmail,
+          label: context.l10n.textFieldLabelEmail,
+          hintText: context.l10n.textFieldHintEmail,
           prefixIcon: Ionicons.mail_outline,
           keyboardType: TextInputType.emailAddress,
           errorText: notifier.email.error,
@@ -67,8 +66,8 @@ class SignupPage extends ConsumerWidget {
         const SizedBox(height: 16),
         AppTextField(
           controller: notifier.confirmEmail.controller,
-          label: l10n.textFieldLabelConfirmEmail,
-          hintText: l10n.textFieldHintConfirmEmail,
+          label: context.l10n.textFieldLabelConfirmEmail,
+          hintText: context.l10n.textFieldHintConfirmEmail,
           prefixIcon: Ionicons.mail_outline,
           keyboardType: TextInputType.emailAddress,
           errorText: notifier.confirmEmail.error,
@@ -77,8 +76,8 @@ class SignupPage extends ConsumerWidget {
         const SizedBox(height: 16),
         AppTextField(
           controller: notifier.password.controller,
-          label: l10n.textFieldLabelPassword,
-          hintText: l10n.textFieldHintPassword,
+          label: context.l10n.textFieldLabelPassword,
+          hintText: context.l10n.textFieldHintPassword,
           prefixIcon: Ionicons.lock_closed_outline,
           isPassword: true,
           errorText: notifier.password.error,
@@ -87,8 +86,8 @@ class SignupPage extends ConsumerWidget {
         const SizedBox(height: 16),
         AppTextField(
           controller: notifier.confirmPassword.controller,
-          label: l10n.textFieldLabelPasswordConfirm,
-          hintText: l10n.textFieldHintPasswordConfirm,
+          label: context.l10n.textFieldLabelPasswordConfirm,
+          hintText: context.l10n.textFieldHintPasswordConfirm,
           prefixIcon: Ionicons.lock_closed_outline,
           isPassword: true,
           errorText: notifier.confirmPassword.error,
@@ -96,8 +95,8 @@ class SignupPage extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
         AppButton(
-          text: l10n.signupButton,
-          onPressed: () => notifier.signup(l10n),
+          text: context.l10n.signupButton,
+          onPressed: () => notifier.signup(context.l10n),
           isProcessing: state.isLoading,
         ),
       ],

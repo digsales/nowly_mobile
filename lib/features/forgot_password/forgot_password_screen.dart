@@ -50,7 +50,6 @@ class ForgotPasswordPage extends ConsumerWidget {
   Widget _form(BuildContext context, WidgetRef ref) {
     final state = ref.watch(forgotPasswordProvider);
     final notifier = ref.read(forgotPasswordProvider.notifier);
-    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +57,8 @@ class ForgotPasswordPage extends ConsumerWidget {
         const SizedBox(height: 32),
         AppTextField(
           controller: notifier.email.controller,
-          label: l10n.textFieldLabelEmail,
-          hintText: l10n.textFieldHintEmail,
+          label: context.l10n.textFieldLabelEmail,
+          hintText: context.l10n.textFieldHintEmail,
           prefixIcon: Ionicons.mail_outline,
           keyboardType: TextInputType.emailAddress,
           errorText: notifier.email.error,
@@ -67,8 +66,8 @@ class ForgotPasswordPage extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
         AppButton(
-          text: l10n.forgotPasswordButton,
-          onPressed: () => notifier.sendResetEmail(l10n),
+          text: context.l10n.forgotPasswordButton,
+          onPressed: () => notifier.sendResetEmail(context.l10n),
           isProcessing: state.isLoading,
         ),
       ],

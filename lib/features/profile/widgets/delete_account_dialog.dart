@@ -13,28 +13,27 @@ class DeleteAccountDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(profileProvider);
     final notifier = ref.read(profileProvider.notifier);
-    final l10n = context.l10n;
 
     return AppDialog(
       icon: Ionicons.trash_outline,
       color: context.colorScheme.error,
       onColor: context.colorScheme.onError,
-      title: l10n.deleteAccountTitle,
-      subtitle: l10n.deleteAccountMessage,
-      buttonText: l10n.deleteAccountConfirm,
+      title: context.l10n.deleteAccountTitle,
+      subtitle: context.l10n.deleteAccountMessage,
+      buttonText: context.l10n.deleteAccountConfirm,
       isProcessing: state.isLoading,
       onPressed: () async {
-        final success = await notifier.deleteAccount(l10n);
+        final success = await notifier.deleteAccount(context.l10n);
         if (context.mounted && success) {
           Navigator.of(context).pop();
         }
       },
-      cancelText: l10n.deleteAccountCancel,
+      cancelText: context.l10n.deleteAccountCancel,
       onCancel: () => Navigator.of(context).pop(),
       body: AppTextField(
         controller: notifier.password.controller,
-        hintText: l10n.textFieldHintPassword,
-        label: l10n.textFieldLabelPassword,
+        hintText: context.l10n.textFieldHintPassword,
+        label: context.l10n.textFieldLabelPassword,
         prefixIcon: Ionicons.lock_closed_outline,
         isPassword: true,
         onChanged: notifier.onPasswordChanged,

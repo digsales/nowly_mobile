@@ -36,20 +36,18 @@ class _EditNameDialogState extends ConsumerState<EditNameDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
     _name.validator = Validators.combine([
-      Validators.required(l10n.validatorRequired),
-      Validators.minLength(3, l10n.validatorMinLength(3)),
+      Validators.required(context.l10n.validatorRequired),
+      Validators.minLength(3, context.l10n.validatorMinLength(3)),
     ]);
 
     return AppDialog(
       icon: Ionicons.person_outline,
-      title: l10n.settingsEditNameTitle,
+      title: context.l10n.settingsEditNameTitle,
       body: AppTextField(
         controller: _name.controller,
-        hintText: l10n.textFieldHintName,
-        label: l10n.textFieldLabelName,
+        hintText: context.l10n.textFieldHintName,
+        label: context.l10n.textFieldLabelName,
         prefixIcon: Ionicons.person_outline,
         textCapitalization: TextCapitalization.words,
         onChanged: (_) => setState(() {
@@ -58,7 +56,7 @@ class _EditNameDialogState extends ConsumerState<EditNameDialog> {
         }),
         errorText: _name.error ?? _error,
       ),
-      buttonText: l10n.settingsEditNameButton,
+      buttonText: context.l10n.settingsEditNameButton,
       isProcessing: _isLoading,
       onPressed: () async {
         if (!_name.validate()) {
@@ -76,11 +74,11 @@ class _EditNameDialogState extends ConsumerState<EditNameDialog> {
         } else if (mounted) {
           setState(() {
             _isLoading = false;
-            _error = l10n.authErrorUnknown;
+            _error = context.l10n.authErrorUnknown;
           });
         }
       },
-      cancelText: l10n.deleteAccountCancel,
+      cancelText: context.l10n.deleteAccountCancel,
       onCancel: () => Navigator.of(context).pop(),
     );
   }

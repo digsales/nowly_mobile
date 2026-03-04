@@ -39,7 +39,6 @@ class SigninPage extends ConsumerWidget {
   Widget _loginForm(BuildContext context, WidgetRef ref) {
     final state = ref.watch(signinProvider);
     final notifier = ref.read(signinProvider.notifier);
-    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,8 +46,8 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 32),
         AppTextField(
           controller: notifier.email.controller,
-          label: l10n.textFieldLabelEmail,
-          hintText: l10n.textFieldHintEmail,
+          label: context.l10n.textFieldLabelEmail,
+          hintText: context.l10n.textFieldHintEmail,
           prefixIcon: Ionicons.person_outline,
           keyboardType: TextInputType.emailAddress,
           errorText: notifier.email.error,
@@ -57,8 +56,8 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 16),
         AppTextField(
           controller: notifier.password.controller,
-          label: l10n.textFieldLabelPassword,
-          hintText: l10n.textFieldHintPassword,
+          label: context.l10n.textFieldLabelPassword,
+          hintText: context.l10n.textFieldHintPassword,
           prefixIcon: Ionicons.lock_closed_outline,
           isPassword: true,
           errorText: notifier.password.error,
@@ -80,7 +79,7 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 24),
         AppButton(
           text: context.l10n.signinButton,
-          onPressed: () => notifier.signin(l10n),
+          onPressed: () => notifier.signin(context.l10n),
           isProcessing: state.isLoading,
         ),
       ],
