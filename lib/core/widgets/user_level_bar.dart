@@ -3,16 +3,39 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/utils/level_utils.dart';
 
 class UserLevelBar extends StatelessWidget {
-  const UserLevelBar({super.key, required this.totalPoints});
+  const UserLevelBar({
+    super.key,
+    required this.totalPoints,
+    this.textColor,
+    this.subtitleColor,
+    this.trackColor,
+    this.indicatorColor,
+  });
 
   final int totalPoints;
+
+  /// Color for "Nível X" text. Defaults to onSurface.
+  final Color? textColor;
+
+  /// Color for "X pts para o Nível Y" text. Defaults to onSurfaceVariant.
+  final Color? subtitleColor;
+
+  /// Progress bar track (background) color. Defaults to surfaceContainerHighest.
+  final Color? trackColor;
+
+  /// Progress bar filled color. Defaults to primary.
+  final Color? indicatorColor;
 
   @override
   Widget build(BuildContext context) {
     final level = calculateLevel(totalPoints);
     final progress = levelProgress(totalPoints);
     final remaining = pointsToNextLevel(totalPoints);
-    final l10n = context.l10n;
+
+    final resolvedTextColor = textColor ?? context.colorScheme.onSurface;
+    final resolvedSubtitleColor = subtitleColor ?? context.colorScheme.onSurfaceVariant;
+    final resolvedTrackColor = trackColor ?? context.colorScheme.surfaceContainerHighest;
+    final resolvedIndicatorColor = indicatorColor ?? context.colorScheme.primary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,20 +46,21 @@ class UserLevelBar extends StatelessWidget {
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
               child: Text(
-                l10n.profileLevel(level),
+                context.l10n.profileLevel(level),
                 key: ValueKey(level),
                 style: context.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
+                  color: resolvedTextColor,
                 ),
               ),
             ),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
               child: Text(
-                l10n.profileLevelProgress(remaining, level + 1),
+                context.l10n.profileLevelProgress(remaining, level + 1),
                 key: ValueKey(remaining),
                 style: context.textTheme.labelMedium?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
+                  color: resolvedSubtitleColor,
                 ),
               ),
             ),
@@ -52,8 +76,8 @@ class UserLevelBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: value,
               minHeight: 8,
-              backgroundColor: context.colorScheme.surfaceContainerHighest,
-              valueColor: AlwaysStoppedAnimation(context.colorScheme.primary),
+              backgroundColor: resolvedTrackColor,
+              valueColor: AlwaysStoppedAnimation(resolvedIndicatorColor),
             ),
           ),
         ),

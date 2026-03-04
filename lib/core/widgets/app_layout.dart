@@ -51,7 +51,6 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.colorScheme.primary,
       body: Padding(
         padding: EdgeInsetsGeometry.only(
           top: context.paddingTop > 0
@@ -93,11 +92,11 @@ class _AppLayoutState extends State<AppLayout> {
                       children: [
                         if (widget.showBackButton)
                           const Padding(
-                            padding: EdgeInsets.only(top: 16, bottom: 16),
+                            padding: EdgeInsets.only(bottom: 16),
                             child: AppBackButton(),
                           )
                         else
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 0),
                         Padding(
                           padding: const EdgeInsets.only(left: 16),
                           child: _buildHeader(context),
