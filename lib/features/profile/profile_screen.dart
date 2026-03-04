@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
@@ -12,6 +13,7 @@ import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:nowly/features/profile/widgets/delete_account_dialog.dart';
+import 'package:nowly/features/profile/widgets/language_dialog.dart';
 import 'package:nowly/features/profile/widgets/reset_preferences_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_password_dialog.dart';
 import 'package:nowly/features/profile/widgets/edit_name_dialog.dart';
@@ -128,6 +130,17 @@ class ProfileScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final highContrast = ref.watch(highContrastProvider);
     final fontScale = ref.watch(fontScaleProvider);
+    final locale = ref.watch(localeProvider);
+    final languageLabel = locale == null
+        ? l10n.settingsLanguageSystem
+        : AppLanguage.supported
+            .firstWhere(
+              (lang) =>
+                  lang.locale.languageCode == locale.languageCode &&
+                  lang.locale.countryCode == locale.countryCode,
+              orElse: () => AppLanguage.supported.first,
+            )
+            .nativeName;
 
     return Column(
       children: [
@@ -166,10 +179,23 @@ class ProfileScreen extends ConsumerWidget {
         AppSettingTile(
           icon: Ionicons.language_outline,
           label: l10n.settingsLanguage,
-          trailing: const Icon(Ionicons.chevron_forward_outline, size: 18),
-          onTap: () {
-            // TODO: navigate to language selection
-          },
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                languageLabel,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Ionicons.chevron_forward_outline, size: 18),
+            ],
+          ),
+          onTap: () => showDialog(
+            context: context,
+            builder: (_) => const LanguageDialog(),
+          ),
         ),
         const SizedBox(height: 8),
         Align(

@@ -7,6 +7,7 @@ import '../providers/shared_preferences_provider.dart';
 const _kThemeMode = 'theme_mode';
 const _kHighContrast = 'high_contrast';
 const _kFontScale = 'font_scale';
+const _kLocale = 'locale';
 
 // ─── ThemeMode ───────────────────────────────────────────────────────────────
 
@@ -97,10 +98,33 @@ final localeProvider =
     NotifierProvider<LocaleNotifier, Locale?>(LocaleNotifier.new);
 
 class LocaleNotifier extends Notifier<Locale?> {
-  @override
-  Locale? build() => null;
+  late final SharedPreferences _prefs;
 
-  void set(Locale? locale) => state = locale;
+  @override
+  Locale? build() {
+    _prefs = ref.read(sharedPreferencesProvider);
+    final saved = _prefs.getString(_kLocale);
+    if (saved == null) return null;
+    final parts = saved.split('_');
+    return Locale(parts[0], parts.length > 1 ? parts[1] : null);
+  }
+
+  void set(Locale? locale) {
+    state = locale;
+    if (locale == null) {
+      _prefs.remove(_kLocale);
+    } else {
+      final tag = locale.countryCode != null
+          ? '${locale.languageCode}_${locale.countryCode}'
+          : locale.languageCode;
+      _prefs.setString(_kLocale, tag);
+    }
+  }
+
+  void reset() {
+    _prefs.remove(_kLocale);
+    state = null;
+  }
 }
 
 // ─── Reset all ───────────────────────────────────────────────────────────────
@@ -110,4 +134,5 @@ void resetThemeDefaults(WidgetRef ref) {
   ref.read(themeModeProvider.notifier).reset();
   ref.read(highContrastProvider.notifier).reset();
   ref.read(fontScaleProvider.notifier).reset();
+  ref.read(localeProvider.notifier).reset();
 }
