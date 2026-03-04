@@ -101,6 +101,7 @@
   "settingsConfirmNewPasswordHint": "Confirme a nova senha",
   "settingsChangePasswordSuccess": "Senha alterada com sucesso",
   "settingsLanguage": "Idioma",
+  "settingsRestoreDefaults": "Restaurar padrão",
 
   "deleteAccountButton": "Excluir conta",
   "deleteAccountTitle": "Excluir conta",

@@ -9,6 +9,7 @@ import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_loading.dart';
 import 'package:nowly/core/widgets/app_setting_tile.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:nowly/features/profile/widgets/delete_account_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_password_dialog.dart';
@@ -124,7 +125,6 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildPreferenceSettings(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final themeMode = ref.watch(themeModeProvider);
     final highContrast = ref.watch(highContrastProvider);
     final fontScale = ref.watch(fontScaleProvider);
 
@@ -134,7 +134,7 @@ class ProfileScreen extends ConsumerWidget {
           icon: Ionicons.moon_outline,
           label: l10n.settingsDarkMode,
           trailing: Switch(
-            value: themeMode == ThemeMode.dark,
+            value: context.isDark,
             onChanged: (value) => ref.read(themeModeProvider.notifier).set(
               value ? ThemeMode.dark : ThemeMode.light,
             ),
@@ -169,6 +169,19 @@ class ProfileScreen extends ConsumerWidget {
           onTap: () {
             // TODO: navigate to language selection
           },
+        ),
+        const SizedBox(height: 8),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TouchableOpacity(
+            onTap: () => resetThemeDefaults(ref),
+            child: Text(
+              l10n.settingsRestoreDefaults,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
         ),
       ],
     );
