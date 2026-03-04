@@ -20,28 +20,41 @@ class AppLevelBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              l10n.profileLevel(level),
-              style: context.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              child: Text(
+                l10n.profileLevel(level),
+                key: ValueKey(level),
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-            Text(
-              l10n.profileLevelProgress(remaining, level + 1),
-              style: context.textTheme.labelMedium?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              child: Text(
+                l10n.profileLevelProgress(remaining, level + 1),
+                key: ValueKey(remaining),
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: LinearProgressIndicator(
-            value: progress,
-            minHeight: 8,
-            backgroundColor: context.colorScheme.surfaceContainerHighest,
-            valueColor: AlwaysStoppedAnimation(context.colorScheme.primary),
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: progress),
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, _) => ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: LinearProgressIndicator(
+              value: value,
+              minHeight: 8,
+              backgroundColor: context.colorScheme.surfaceContainerHighest,
+              valueColor: AlwaysStoppedAnimation(context.colorScheme.primary),
+            ),
           ),
         ),
       ],
