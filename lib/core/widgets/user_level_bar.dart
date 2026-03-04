@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/utils/level_utils.dart';
 
-class AppLevelBar extends StatelessWidget {
-  const AppLevelBar({super.key, required this.totalPoints});
+class UserLevelBar extends StatelessWidget {
+  const UserLevelBar({super.key, required this.totalPoints});
 
   final int totalPoints;
 
