@@ -20,17 +20,17 @@ class HomeShell extends ConsumerWidget {
       extendBody: true,
       body: Column(
         children: [
-          if (userAsync case AsyncData(:final value) when value != null)
-            Padding(
-              padding: EdgeInsets.fromLTRB(32, context.paddingTop + 12, 32, 20),
-              child: UserLevelBar(
-                totalPoints: value.totalPoints,
-                textColor: context.colorScheme.onPrimary,
-                subtitleColor: context.colorScheme.onPrimary.withValues(alpha: 0.7),
-                trackColor: context.colorScheme.onPrimary.withValues(alpha: 0.3),
-                indicatorColor: context.colorScheme.onPrimary,
-              ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(32, context.paddingTop + 12, 32, 20),
+            child: UserLevelBar(
+              totalPoints: userAsync.asData?.value?.totalPoints ?? 0,
+              isLoading: userAsync is! AsyncData,
+              textColor: context.colorScheme.onPrimary,
+              subtitleColor: context.colorScheme.onPrimary.withValues(alpha: 0.7),
+              trackColor: context.colorScheme.onPrimary.withValues(alpha: 0.3),
+              indicatorColor: context.colorScheme.onPrimary,
             ),
+          ),
           Expanded(child: navigationShell),
         ],
       ),

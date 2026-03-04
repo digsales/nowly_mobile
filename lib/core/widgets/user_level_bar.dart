@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/utils/level_utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UserLevelBar extends StatelessWidget {
   const UserLevelBar({
     super.key,
     required this.totalPoints,
+    this.isLoading = false,
     this.textColor,
     this.subtitleColor,
     this.trackColor,
@@ -13,6 +15,7 @@ class UserLevelBar extends StatelessWidget {
   });
 
   final int totalPoints;
+  final bool isLoading;
 
   /// Color for "Nível X" text. Defaults to onSurface.
   final Color? textColor;
@@ -28,6 +31,11 @@ class UserLevelBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      final boneColor = textColor ?? context.colorScheme.onSurface;
+      return _Skeleton(boneColor: boneColor);
+    }
+
     final level = calculateLevel(totalPoints);
     final progress = levelProgress(totalPoints);
     final remaining = pointsToNextLevel(totalPoints);
@@ -82,6 +90,45 @@ class UserLevelBar extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _Skeleton extends StatelessWidget {
+  const _Skeleton({required this.boneColor});
+
+  final Color boneColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: boneColor.withValues(alpha: 0.2),
+      highlightColor: boneColor.withValues(alpha: 0.5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _bone(width: 72, height: 16),
+              _bone(width: 120, height: 12),
+            ],
+          ),
+          const SizedBox(height: 10),
+          _bone(width: double.infinity, height: 8),
+        ],
+      ),
+    );
+  }
+
+  Widget _bone({required double width, required double height}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: boneColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
     );
   }
 }
