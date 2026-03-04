@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/app_language.dart';
+import 'package:nowly/core/widgets/app_level_bar.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
@@ -32,6 +33,8 @@ class ProfileScreen extends ConsumerWidget {
       body: switch (userAsync) {
         AsyncData(:final value) when value != null => Column(
             children: [
+              AppLevelBar(totalPoints: value.totalPoints),
+              const SizedBox(height: 32),
               _buildUserInfo(context, value),
               const SizedBox(height: 32),
               _buildAccountSettings(context, ref, value),

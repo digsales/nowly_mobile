@@ -112,5 +112,19 @@
   "deleteAccountMessage": "Essa ação é irreversível. Digite sua senha para confirmar.",
   "deleteAccountConfirm": "Excluir",
   "deleteAccountCancel": "Cancelar",
-  "signoutButton": "Sair do app"
+  "signoutButton": "Sair do app",
+
+  "profileLevel": "Nível {level}",
+  "@profileLevel": {
+    "placeholders": {
+      "level": { "type": "int" }
+    }
+  },
+  "profileLevelProgress": "{points} pts para o Nível {nextLevel}",
+  "@profileLevelProgress": {
+    "placeholders": {
+      "points": { "type": "int" },
+      "nextLevel": { "type": "int" }
+    }
+  }
 }
