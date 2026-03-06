@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
-import 'package:sizer/sizer.dart';
 
 /// Reusable dialog with a floating icon badge (half inside, half outside),
 /// a title, scrollable body content, and action buttons.
@@ -121,7 +121,7 @@ class AppDialog extends StatelessWidget {
       padding: EdgeInsets.only(bottom: bottomInset),
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600 > 50.w ? 600 : 50.w),
+          constraints: BoxConstraints(maxWidth: appMaxWidth),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: IntrinsicHeight(

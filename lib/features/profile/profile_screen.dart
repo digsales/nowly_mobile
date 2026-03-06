@@ -4,6 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
+import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
@@ -30,16 +31,44 @@ class ProfileScreen extends ConsumerWidget {
     return AppLayout(
       headerText: context.l10n.profile,
       body: switch (userAsync) {
-        AsyncData(:final value) when value != null => Column(
-            children: [
-              _buildUserInfo(context, value),
-              const SizedBox(height: 32),
-              _buildAccountSettings(context, ref, value),
-              Divider(height: 32, color: context.colorScheme.outlineVariant),
-              _buildPreferenceSettings(context, ref),
-              const SizedBox(height: 32),
-              _buildActions(context, notifier),
-            ],
+        AsyncData(:final value) when value != null => LayoutBuilder(
+            builder: (context, constraints) {
+              final wide = constraints.maxWidth >= 600;
+
+              if (wide) {
+                return Column(
+                  children: [
+                    _buildUserInfo(context, value),
+                    const SizedBox(height: 32),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(child: _buildAccountSettings(context, ref, value)),
+                        const SizedBox(width: 32),
+                        Expanded(child: _buildPreferenceSettings(context, ref)),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: appMaxWidth),
+                      child: _buildActions(context, notifier),
+                    ),
+                  ],
+                );
+              }
+
+              return Column(
+                children: [
+                  _buildUserInfo(context, value),
+                  const SizedBox(height: 32),
+                  _buildAccountSettings(context, ref, value),
+                  Divider(height: 32, color: context.colorScheme.outlineVariant),
+                  _buildPreferenceSettings(context, ref),
+                  const SizedBox(height: 32),
+                  _buildActions(context, notifier),
+                ],
+              );
+            },
           ),
         AsyncError() => const SizedBox.shrink(),
         _ => const Center(child: AppLoading()),

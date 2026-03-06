@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
-import 'package:sizer/sizer.dart';
+import 'package:nowly/core/utils/app_max_width.dart';
 
 
 class LevelUpBanner extends StatefulWidget {
@@ -79,7 +79,7 @@ class _LevelUpBannerState extends State<LevelUpBanner>
       right: 0,
       child: Align(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600 > 50.w ? 600 : 50.w),
+          constraints: BoxConstraints(maxWidth: appMaxWidth),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: SlideTransition(
