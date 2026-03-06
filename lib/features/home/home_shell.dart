@@ -52,7 +52,8 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final userAsync = ref.watch(currentUserProvider);
 
     ref.listen(currentUserProvider, (prev, next) {
-      final prevLevel = calculateLevel(prev?.asData?.value?.totalPoints ?? 0);
+      if (prev == null || prev.asData == null) return;
+      final prevLevel = calculateLevel(prev.asData!.value!.totalPoints);
       final nextLevel = calculateLevel(next.asData?.value?.totalPoints ?? 0);
       if (nextLevel > prevLevel) _showLevelUp(nextLevel);
     });
