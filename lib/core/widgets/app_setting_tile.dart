@@ -42,8 +42,8 @@ class AppSettingTile extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: context.textTheme.bodyLarge!.fontSize! * 2.21,
+              height: context.textTheme.bodyLarge!.fontSize! * 2.21,
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -52,7 +52,7 @@ class AppSettingTile extends StatelessWidget {
               child: Icon(
                 icon,
                 color: context.colorScheme.onSurface,
-                size: 20,
+                size: context.textTheme.bodyLarge!.fontSize! * 1.2,
               ),
             ),
             const SizedBox(width: 16),
