@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:sizer/sizer.dart';
 
 /// Reusable dialog with a floating icon badge (half inside, half outside),
 /// a title, scrollable body content, and action buttons.
@@ -119,76 +120,79 @@ class AppDialog extends StatelessWidget {
       duration: const Duration(milliseconds: 50),
       padding: EdgeInsets.only(bottom: bottomInset),
       child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: IntrinsicHeight(
-            child: Stack(
-              alignment: Alignment.topCenter,
-              clipBehavior: Clip.none,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: _badgeOverlap),
-                  child: Material(
-                    color: context.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(24),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        24, _badgeOverlap + 16, 24, 24,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            title,
-                            style: context.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 600 > 50.w ? 600 : 50.w),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: IntrinsicHeight(
+              child: Stack(
+                alignment: Alignment.topCenter,
+                clipBehavior: Clip.none,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: _badgeOverlap),
+                    child: Material(
+                      color: context.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(24),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          24, _badgeOverlap + 16, 24, 24,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              title,
+                              style: context.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          if (subtitle != null || body != null) ...[
-                            const SizedBox(height: 12),
-                            Flexible(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (subtitle != null)
-                                      Text(
-                                        subtitle!,
-                                        style: context.textTheme.bodyMedium,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    if (body != null) ...[
-                                      if (subtitle != null) const SizedBox(height: 16),
-                                      body!,
+                            if (subtitle != null || body != null) ...[
+                              const SizedBox(height: 12),
+                              Flexible(
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      if (subtitle != null)
+                                        Text(
+                                          subtitle!,
+                                          style: context.textTheme.bodyMedium,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      if (body != null) ...[
+                                        if (subtitle != null) const SizedBox(height: 16),
+                                        body!,
+                                      ],
                                     ],
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
+                            if (actions.isNotEmpty) ...[
+                              const SizedBox(height: 24),
+                              ...actions,
+                            ],
                           ],
-                          if (actions.isNotEmpty) ...[
-                            const SizedBox(height: 24),
-                            ...actions,
-                          ],
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 0,
-                  child: Container(
-                    width: _badgeSize,
-                    height: _badgeSize,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: accent,
+                  Positioned(
+                    top: 0,
+                    child: Container(
+                      width: _badgeSize,
+                      height: _badgeSize,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: accent,
+                      ),
+                      child: Icon(icon, color: onAccent, size: 38),
                     ),
-                    child: Icon(icon, color: onAccent, size: 38),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
