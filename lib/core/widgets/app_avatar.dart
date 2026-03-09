@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nowly/core/models/app_badge.dart';
+import 'package:nowly/core/models/user_badge.dart';
 
 import '../extensions/context_extensions.dart';
 
@@ -7,7 +7,7 @@ import '../extensions/context_extensions.dart';
 /// to the user's initials on a primary-colored background.
 ///
 /// When [imageUrl] starts with `badge:`, it resolves the matching
-/// [AppBadge] asset. Otherwise it loads a network image.
+/// [UserBadge] asset. Otherwise it loads a network image.
 ///
 /// ```dart
 /// AppAvatar(name: 'Diogo Sales', imageUrl: user.avatarUrl, size: 80)
@@ -42,7 +42,7 @@ class AppAvatar extends StatelessWidget {
 
     if (url.startsWith('badge:')) {
       final key = url.substring(6);
-      final badge = AppBadges.values.where((b) => b.key == key).firstOrNull;
+      final badge = UserBadges.values.where((b) => b.key == key).firstOrNull;
       if (badge != null) return AssetImage(badge.assetPath);
       return null;
     }
@@ -59,7 +59,7 @@ class AppAvatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: context.colorScheme.inversePrimary,
+        color: context.colorScheme.primary,
         image: image != null
             ? DecorationImage(image: image, fit: BoxFit.cover)
             : null,
@@ -70,6 +70,7 @@ class AppAvatar extends StatelessWidget {
                 _initials,
                 style: TextStyle(
                   color: context.colorScheme.onPrimary,
+                  fontFamily: "ultra",
                   fontSize: size * 0.35,
                   fontWeight: FontWeight.w600,
                 ),

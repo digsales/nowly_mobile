@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
-import 'package:nowly/core/models/app_badge.dart';
+import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
@@ -116,7 +116,7 @@ class ProfileScreen extends ConsumerWidget {
       spacing: 12,
       runSpacing: 12,
       alignment: WrapAlignment.center,
-      children: AppBadges.values.map((badge) {
+      children: UserBadges.values.map((badge) {
         final unlocked = badge.isUnlocked(user);
         final isSelected = currentAvatarUrl == 'badge:${badge.key}';
 
@@ -131,13 +131,13 @@ class ProfileScreen extends ConsumerWidget {
           child: Opacity(
             opacity: unlocked ? 1.0 : 0.3,
             child: Container(
-              width: 48,
-              height: 48,
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: isSelected
                     ? Border.all(
-                        color: context.colorScheme.primary,
+                        color: context.colorScheme.onSurface,
                         width: 3,
                       )
                     : null,
