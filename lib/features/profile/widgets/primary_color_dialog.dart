@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
 
@@ -10,7 +11,7 @@ class PrimaryColorDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentKey = ref.read(primaryColorProvider.notifier).currentKey;
+    final current = ref.watch(primaryColorProvider);
 
     return AppDialog(
       icon: Ionicons.color_palette_outline,
@@ -20,18 +21,18 @@ class PrimaryColorDialog extends ConsumerWidget {
         spacing: 12,
         runSpacing: 12,
         alignment: WrapAlignment.center,
-        children: PrimaryColorNotifier.options.entries.map((entry) {
-          final isSelected = entry.key == currentKey;
+        children: AppPrimaryColors.values.map((colors) {
+          final isSelected = colors.key == current.key;
           return GestureDetector(
             onTap: () {
-              ref.read(primaryColorProvider.notifier).set(entry.key);
+              ref.read(primaryColorProvider.notifier).set(colors);
               Navigator.of(context).pop();
             },
             child: Container(
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: entry.value.primary,
+                color: colors.primary,
                 shape: BoxShape.circle,
                 border: isSelected
                     ? Border.all(

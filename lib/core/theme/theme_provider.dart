@@ -80,41 +80,30 @@ final primaryColorProvider =
 class PrimaryColorNotifier extends Notifier<PrimaryColors> {
   late final SharedPreferences _prefs;
 
-  static const options = {
-    'purple': AppPrimaryColors.purple,
-    'blue': AppPrimaryColors.blue,
-    'green': AppPrimaryColors.green,
-    'red': AppPrimaryColors.red,
-    'yellow': AppPrimaryColors.yellow,
-    'pink': AppPrimaryColors.pink,
-    'gray': AppPrimaryColors.gray,
-  };
+  PrimaryColors _findByKey(String? key) =>
+      AppPrimaryColors.values.firstWhere(
+        (color) => color.key == key,
+        orElse: () => AppPrimaryColors.purple,
+      );
 
   @override
   PrimaryColors build() {
     _prefs = ref.read(sharedPreferencesProvider);
-    final saved = _prefs.getString(_kPrimaryColor);
-    final colors = options[saved] ?? AppPrimaryColors.purple;
+    final colors = _findByKey(_prefs.getString(_kPrimaryColor));
     AppPalette.applyPrimaryColors(colors);
     return colors;
   }
 
-  void set(String key) {
-    final colors = options[key] ?? AppPrimaryColors.purple;
+  void set(PrimaryColors colors) {
     state = colors;
     AppPalette.applyPrimaryColors(colors);
-    _prefs.setString(_kPrimaryColor, key);
+    _prefs.setString(_kPrimaryColor, colors.key);
   }
 
   void reset() {
     _prefs.remove(_kPrimaryColor);
     AppPalette.applyPrimaryColors(AppPrimaryColors.purple);
     state = AppPrimaryColors.purple;
-  }
-
-  String get currentKey {
-    final saved = _prefs.getString(_kPrimaryColor);
-    return saved ?? 'purple';
   }
 }
 
