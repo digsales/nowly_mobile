@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
 
 abstract final class AppPalette {
   // Brand
-  static const Color primary = Color(0xFF7A5FA6);
-  static const Color primaryLight = Color(0xFF4B3A6A);
-  static const Color primaryDark = Color(0xFFA996C7);
+  static Color primary = AppPrimaryColors.purple.primary;
+  static Color primaryLight = AppPrimaryColors.purple.light;
+  static Color primaryDark = AppPrimaryColors.purple.dark;
 
   // Light theme
   static const Color backgroundLight = Color(0xFFF1EDF8);
@@ -22,12 +23,10 @@ abstract final class AppPalette {
 
   // High contrast light theme
   static const Color highContrastWhite = Color(0xFFFFFFFF);
-  static const Color highContrastPrimaryLight = Color(0xFF3E2A5F);
   static const Color inputFillHighContrastLight = Color(0xFFE0E0E0);
 
   // High contrast dark theme
   static const Color highContrastBlack = Color(0xFF000000);
-  static const Color highContrastPrimaryDark = Color(0xFFD6C8F2);
   static const Color inputFillHighContrastDark = Color(0xFF333333);
 
   // Category colors
