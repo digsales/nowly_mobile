@@ -29,6 +29,13 @@ abstract final class AppPrimaryColors {
     dark: Color(0xFF2A4A75),
   );
 
+  static const PrimaryColors green = PrimaryColors(
+    key: 'green',
+    primary: Color(0xFF3D8B5E),
+    light: Color(0xFFA8D4B8),
+    dark: Color(0xFF245438),
+  );
+
   static const PrimaryColors yellow = PrimaryColors(
     key: 'yellow',
     primary: Color(0xFFB8962E),
@@ -36,11 +43,11 @@ abstract final class AppPrimaryColors {
     dark: Color(0xFF6E5A1B),
   );
 
-  static const PrimaryColors green = PrimaryColors(
-    key: 'green',
-    primary: Color(0xFF3D8B5E),
-    light: Color(0xFFA8D4B8),
-    dark: Color(0xFF245438),
+  static const PrimaryColors orange = PrimaryColors(
+    key: 'orange',
+    primary: Color(0xFFC07030),
+    light: Color(0xFFE6C4A8),
+    dark: Color(0xFF754320),
   );
 
   static const PrimaryColors red = PrimaryColors(
@@ -65,6 +72,6 @@ abstract final class AppPrimaryColors {
   );
 
   static const List<PrimaryColors> values = [
-    purple, blue, green, yellow, red, pink, gray,
+    purple, blue, green, yellow, orange, red, pink, gray,
   ];
 }
