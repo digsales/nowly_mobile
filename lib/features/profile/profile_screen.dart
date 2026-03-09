@@ -18,6 +18,7 @@ import 'package:nowly/features/profile/widgets/language_dialog.dart';
 import 'package:nowly/features/profile/widgets/reset_preferences_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_password_dialog.dart';
 import 'package:nowly/features/profile/widgets/edit_name_dialog.dart';
+import 'package:nowly/features/profile/widgets/primary_color_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -155,6 +156,7 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildPreferenceSettings(BuildContext context, WidgetRef ref) {
     final highContrast = ref.watch(highContrastProvider);
+    final currentColor = ref.watch(primaryColorProvider).primary;
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
     final languageLabel = locale == null
@@ -186,6 +188,29 @@ class ProfileScreen extends ConsumerWidget {
           trailing: Switch(
             value: highContrast,
             onChanged: (value) => ref.read(highContrastProvider.notifier).set(value),
+          ),
+        ),
+        AppSettingTile(
+          icon: Ionicons.color_palette_outline,
+          label: context.l10n.settingsPrimaryColor,
+          onTap: () => showDialog(
+            context: context,
+            builder: (_) => const PrimaryColorDialog(),
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: currentColor,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Ionicons.chevron_forward_outline, size: 18),
+            ],
           ),
         ),
         AppSettingTile(

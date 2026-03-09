@@ -4,10 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/shared_preferences_provider.dart';
 
+import 'package:nowly/core/theme/app_palette.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
+
 const _kThemeMode = 'theme_mode';
 const _kHighContrast = 'high_contrast';
 const _kFontScale = 'font_scale';
 const _kLocale = 'locale';
+const _kPrimaryColor = 'primary_color';
 
 // ─── ThemeMode ───────────────────────────────────────────────────────────────
 
@@ -64,6 +68,53 @@ class HighContrastNotifier extends Notifier<bool> {
   void reset() {
     _prefs.remove(_kHighContrast);
     state = false;
+  }
+}
+
+// ─── Primary Color ────────────────────────────────────────────────────────────
+
+final primaryColorProvider =
+    NotifierProvider<PrimaryColorNotifier, PrimaryColors>(
+        PrimaryColorNotifier.new);
+
+class PrimaryColorNotifier extends Notifier<PrimaryColors> {
+  late final SharedPreferences _prefs;
+
+  static const options = {
+    'purple': AppPrimaryColors.purple,
+    'blue': AppPrimaryColors.blue,
+    'green': AppPrimaryColors.green,
+    'red': AppPrimaryColors.red,
+    'yellow': AppPrimaryColors.yellow,
+    'pink': AppPrimaryColors.pink,
+    'gray': AppPrimaryColors.gray,
+  };
+
+  @override
+  PrimaryColors build() {
+    _prefs = ref.read(sharedPreferencesProvider);
+    final saved = _prefs.getString(_kPrimaryColor);
+    final colors = options[saved] ?? AppPrimaryColors.purple;
+    AppPalette.applyPrimaryColors(colors);
+    return colors;
+  }
+
+  void set(String key) {
+    final colors = options[key] ?? AppPrimaryColors.purple;
+    state = colors;
+    AppPalette.applyPrimaryColors(colors);
+    _prefs.setString(_kPrimaryColor, key);
+  }
+
+  void reset() {
+    _prefs.remove(_kPrimaryColor);
+    AppPalette.applyPrimaryColors(AppPrimaryColors.purple);
+    state = AppPrimaryColors.purple;
+  }
+
+  String get currentKey {
+    final saved = _prefs.getString(_kPrimaryColor);
+    return saved ?? 'purple';
   }
 }
 
@@ -133,6 +184,7 @@ class LocaleNotifier extends Notifier<Locale?> {
 void resetThemeDefaults(WidgetRef ref) {
   ref.read(themeModeProvider.notifier).reset();
   ref.read(highContrastProvider.notifier).reset();
+  ref.read(primaryColorProvider.notifier).reset();
   ref.read(fontScaleProvider.notifier).reset();
   ref.read(localeProvider.notifier).reset();
 }

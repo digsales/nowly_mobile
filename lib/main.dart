@@ -47,6 +47,7 @@ class MyApp extends ConsumerWidget {
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
     final highContrast = ref.watch(highContrastProvider);
+    ref.watch(primaryColorProvider);
     final fontSize = _baseFontSize * fontScale;
     final router = ref.watch(routerProvider);
 

@@ -7,6 +7,12 @@ abstract final class AppPalette {
   static Color primaryLight = AppPrimaryColors.purple.light;
   static Color primaryDark = AppPrimaryColors.purple.dark;
 
+  static void applyPrimaryColors(PrimaryColors colors) {
+    primary = colors.primary;
+    primaryLight = colors.light;
+    primaryDark = colors.dark;
+  }
+
   // Light theme
   static const Color backgroundLight = Color(0xFFF1EDF8);
   static const Color cardLight = Color(0xFFFFFFFF);
