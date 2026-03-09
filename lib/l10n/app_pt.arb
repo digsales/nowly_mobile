@@ -104,6 +104,7 @@
   "settingsLanguageSystem": "Padrão do sistema",
   "settingsLanguageDialogTitle": "Escolher idioma",
   "settingsPrimaryColor": "Cor do tema",
+  "settingsPrimaryColorSubtitle": "Altere a cor principal do seu aplicativo.",
   "settingsRestoreDefaults": "Restaurar padrão",
   "settingsRestoreDefaultsMessage": "As preferências de tema serão redefinidas para os padrões do dispositivo.",
   "settingsRestoreDefaultsConfirm": "Restaurar",
