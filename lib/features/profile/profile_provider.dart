@@ -110,6 +110,18 @@ class ProfileNotifier extends Notifier<ProfileState> {
     state = state.copyWith();
   }
 
+  Future<bool> updateAvatar(String? avatarUrl) async {
+    final uid = _authService.currentUser?.uid;
+    if (uid == null) return false;
+
+    try {
+      await _userRepository.updateUser(uid, {'avatarUrl': avatarUrl});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
   Future<bool> updateName(String name) async {
     final uid = _authService.currentUser?.uid;
     if (uid == null || name.trim().isEmpty) return false;

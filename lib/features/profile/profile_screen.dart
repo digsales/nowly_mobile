@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/models/app_badge.dart';
 import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
@@ -40,6 +41,8 @@ class ProfileScreen extends ConsumerWidget {
                 return Column(
                   children: [
                     _buildUserInfo(context, value),
+                    const SizedBox(height: 24),
+                    _buildBadges(context, ref, value),
                     const SizedBox(height: 32),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +64,9 @@ class ProfileScreen extends ConsumerWidget {
               return Column(
                 children: [
                   _buildUserInfo(context, value),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
+                  _buildBadges(context, ref, value),
+                  Divider(height: 32, color: context.colorScheme.outlineVariant),
                   _buildAccountSettings(context, ref, value),
                   Divider(height: 32, color: context.colorScheme.outlineVariant),
                   _buildPreferenceSettings(context, ref),
@@ -100,6 +105,51 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildBadges(BuildContext context, WidgetRef ref, User user) {
+    final currentAvatarUrl = user.avatarUrl;
+    final notifier = ref.read(profileProvider.notifier);
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      alignment: WrapAlignment.center,
+      children: AppBadges.values.map((badge) {
+        final unlocked = badge.isUnlocked(user);
+        final isSelected = currentAvatarUrl == 'badge:${badge.key}';
+
+        return GestureDetector(
+          onTap: unlocked
+              ? () {
+                  final newValue =
+                      isSelected ? null : 'badge:${badge.key}';
+                  notifier.updateAvatar(newValue);
+                }
+              : null,
+          child: Opacity(
+            opacity: unlocked ? 1.0 : 0.3,
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: isSelected
+                    ? Border.all(
+                        color: context.colorScheme.primary,
+                        width: 3,
+                      )
+                    : null,
+                image: DecorationImage(
+                  image: AssetImage(badge.assetPath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
