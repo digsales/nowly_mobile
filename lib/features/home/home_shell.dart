@@ -7,6 +7,7 @@ import 'package:nowly/core/utils/level_utils.dart';
 import 'package:nowly/features/home/widgets/level_up_banner.dart';
 import 'package:nowly/features/home/widgets/user_level_bar.dart';
 import 'package:nowly/features/home/widgets/home_bottom_nav_bar.dart';
+import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 
 
@@ -54,8 +55,16 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     ref.listen(currentUserProvider, (prev, next) {
       if (prev == null || prev.asData == null) return;
       final prevLevel = calculateLevel(prev.asData!.value!.totalPoints);
-      final nextLevel = calculateLevel(next.asData?.value?.totalPoints ?? 0);
-      if (nextLevel > prevLevel) _showLevelUp(nextLevel);
+      final nextUser = next.asData?.value;
+      final nextLevel = calculateLevel(nextUser?.totalPoints ?? 0);
+
+      if (nextLevel > prevLevel) {
+        _showLevelUp(nextLevel);
+
+        if (nextUser != null && nextLevel > nextUser.highestLevel) {
+          ref.read(userRepositoryProvider).updateUser(nextUser.id, {'highestLevel': nextLevel});
+        }
+      }
     });
 
     return Scaffold(

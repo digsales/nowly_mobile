@@ -9,6 +9,7 @@ class User {
   final int totalExpired;
   final int totalCanceled;
   final int currentStreak;
+  final int highestLevel;
 
   const User({
     required this.id,
@@ -21,6 +22,7 @@ class User {
     this.totalExpired = 0,
     this.totalCanceled = 0,
     this.currentStreak = 0,
+    this.highestLevel = 0,
   });
 
   factory User.fromJson(String id, Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class User {
       totalExpired: json['totalExpired'] as int? ?? 0,
       totalCanceled: json['totalCanceled'] as int? ?? 0,
       currentStreak: json['currentStreak'] as int? ?? 0,
+      highestLevel: json['highestLevel'] as int? ?? 0,
     );
   }
 
@@ -49,6 +52,7 @@ class User {
       'totalExpired': totalExpired,
       'totalCanceled': totalCanceled,
       'currentStreak': currentStreak,
+      'highestLevel': highestLevel,
     };
   }
 
@@ -62,6 +66,7 @@ class User {
     int? totalExpired,
     int? totalCanceled,
     int? currentStreak,
+    int? highestLevel,
   }) {
     return User(
       id: id,
@@ -74,6 +79,7 @@ class User {
       totalExpired: totalExpired ?? this.totalExpired,
       totalCanceled: totalCanceled ?? this.totalCanceled,
       currentStreak: currentStreak ?? this.currentStreak,
+      highestLevel: highestLevel ?? this.highestLevel,
     );
   }
 }

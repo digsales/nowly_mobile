@@ -111,6 +111,7 @@ class SignupNotifier extends Notifier<SignupState> {
           totalExpired: 0,
           totalCanceled: 0,
           currentStreak: 0,
+          highestLevel: 0,
         );
         await _userRepository.createUser(user);
         await _categoryRepository.seedDefaultCategories(uid, l10n);
