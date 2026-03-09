@@ -196,8 +196,8 @@ class ProfileScreen extends ConsumerWidget {
             child: Slider(
               value: fontScale,
               min: 0.8,
-              max: 1.4,
-              divisions: 3,
+              max: 1.2,
+              divisions: 2,
               onChanged: (value) => ref.read(fontScaleProvider.notifier).set(value),
             ),
           ),
