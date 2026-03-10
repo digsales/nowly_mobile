@@ -341,10 +341,13 @@ class ProfileScreen extends ConsumerWidget {
           text: context.l10n.deleteAccountButton,
           detailColor: context.colorScheme.error,
           textColor: context.colorScheme.onError,
-          onPressed: () => showDialog(
-            context: context,
-            builder: (_) => const DeleteAccountDialog(),
-          ),
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            showDialog(
+              context: context,
+              builder: (_) => const DeleteAccountDialog(),
+            );
+          }
         ),
       ],
     );
