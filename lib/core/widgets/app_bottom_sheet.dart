@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:sizer/sizer.dart';
 
 /// Reusable bottom sheet with a drag handle, scrollable content,
 /// and consistent padding.
@@ -41,7 +42,12 @@ class AppBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: context.paddingScreen.copyWith(top: 0, bottom: context.paddingBottom + 32),
+      padding: EdgeInsets.fromLTRB(
+        Device.orientation == Orientation.portrait ? context.paddingLeft + 32 : 32,
+        0,
+        Device.orientation == Orientation.portrait ? context.paddingLeft + 32 : 32,
+        context.paddingBottom + 32
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

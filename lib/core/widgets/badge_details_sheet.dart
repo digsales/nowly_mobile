@@ -12,15 +12,26 @@ class BadgeDetailsSheet extends ConsumerWidget {
     super.key,
     required this.badge,
     required this.user,
+    this.showActions = true,
   });
 
   final UserBadge badge;
   final User user;
+  final bool showActions;
 
-  static void show(BuildContext context, {required UserBadge badge, required User user}) {
+  static void show(
+    BuildContext context, {
+    required UserBadge badge,
+    required User user,
+    bool showActions = true,
+  }) {
     AppBottomSheet.show(
       context: context,
-      builder: (_) => BadgeDetailsSheet(badge: badge, user: user),
+      builder: (_) => BadgeDetailsSheet(
+        badge: badge,
+        user: user,
+        showActions: showActions,
+      ),
     );
   }
 
@@ -109,7 +120,7 @@ class BadgeDetailsSheet extends ConsumerWidget {
           const SizedBox(height: 20),
           _buildProgressBar(context),
         ],
-        if (unlocked) ...[
+        if (showActions && unlocked) ...[
           const SizedBox(height: 24),
           AppButton(
             text: isSelected

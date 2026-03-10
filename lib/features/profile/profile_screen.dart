@@ -10,7 +10,7 @@ import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_loading.dart';
-import 'package:nowly/features/profile/widgets/badge_details_sheet.dart';
+import 'package:nowly/core/widgets/badge_details_sheet.dart';
 import 'package:nowly/core/widgets/app_setting_tile.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
