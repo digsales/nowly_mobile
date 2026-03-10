@@ -1,23 +1,25 @@
 import 'package:nowly/core/models/user.dart';
+import 'package:nowly/l10n/app_localizations.dart';
 
 enum BadgeType { defaultBadge, completed, canceled, expired, level }
 
+typedef _L10nGetter = String Function(AppLocalizations l10n);
+
 class UserBadge {
   final String key;
-  final String name;
-  final String description;
   final String assetPath;
   final BadgeType type;
   final int threshold;
 
   const UserBadge({
     required this.key,
-    required this.name,
-    required this.description,
     required this.assetPath,
     this.type = BadgeType.defaultBadge,
     this.threshold = 0,
   });
+
+  String name(AppLocalizations l10n) => _names[key]!(l10n);
+  String description(AppLocalizations l10n) => _descs[key]!(l10n);
 
   bool isUnlocked(User user) => user.unlockedBadges.contains(key);
 
@@ -55,6 +57,54 @@ class UserBadge {
       BadgeType.level => user.highestLevel >= threshold,
     };
   }
+
+  static final Map<String, _L10nGetter> _names = {
+    'nowly_hourglass': (l10n) => l10n.badgeNowlyHourglassName,
+    'nowly_letter': (l10n) => l10n.badgeNowlyLetterName,
+    'completed_01': (l10n) => l10n.badgeCompleted01Name,
+    'completed_10': (l10n) => l10n.badgeCompleted10Name,
+    'canceled_10': (l10n) => l10n.badgeCanceled10Name,
+    'expired_10': (l10n) => l10n.badgeExpired10Name,
+    'level_0001': (l10n) => l10n.badgeLevel0001Name,
+    'level_0005': (l10n) => l10n.badgeLevel0005Name,
+    'level_0010': (l10n) => l10n.badgeLevel0010Name,
+    'level_0025': (l10n) => l10n.badgeLevel0025Name,
+    'level_0050': (l10n) => l10n.badgeLevel0050Name,
+    'level_0075': (l10n) => l10n.badgeLevel0075Name,
+    'level_0100': (l10n) => l10n.badgeLevel0100Name,
+    'level_0250': (l10n) => l10n.badgeLevel0250Name,
+    'level_0400': (l10n) => l10n.badgeLevel0400Name,
+    'level_0600': (l10n) => l10n.badgeLevel0600Name,
+    'level_0800': (l10n) => l10n.badgeLevel0800Name,
+    'level_0900': (l10n) => l10n.badgeLevel0900Name,
+    'level_0999': (l10n) => l10n.badgeLevel0999Name,
+    'level_1000': (l10n) => l10n.badgeLevel1000Name,
+    'level_2000': (l10n) => l10n.badgeLevel2000Name,
+  };
+
+  static final Map<String, _L10nGetter> _descs = {
+    'nowly_hourglass': (l10n) => l10n.badgeNowlyHourglassDesc,
+    'nowly_letter': (l10n) => l10n.badgeNowlyLetterDesc,
+    'completed_01': (l10n) => l10n.badgeCompleted01Desc,
+    'completed_10': (l10n) => l10n.badgeCompleted10Desc,
+    'canceled_10': (l10n) => l10n.badgeCanceled10Desc,
+    'expired_10': (l10n) => l10n.badgeExpired10Desc,
+    'level_0001': (l10n) => l10n.badgeLevel0001Desc,
+    'level_0005': (l10n) => l10n.badgeLevel0005Desc,
+    'level_0010': (l10n) => l10n.badgeLevel0010Desc,
+    'level_0025': (l10n) => l10n.badgeLevel0025Desc,
+    'level_0050': (l10n) => l10n.badgeLevel0050Desc,
+    'level_0075': (l10n) => l10n.badgeLevel0075Desc,
+    'level_0100': (l10n) => l10n.badgeLevel0100Desc,
+    'level_0250': (l10n) => l10n.badgeLevel0250Desc,
+    'level_0400': (l10n) => l10n.badgeLevel0400Desc,
+    'level_0600': (l10n) => l10n.badgeLevel0600Desc,
+    'level_0800': (l10n) => l10n.badgeLevel0800Desc,
+    'level_0900': (l10n) => l10n.badgeLevel0900Desc,
+    'level_0999': (l10n) => l10n.badgeLevel0999Desc,
+    'level_1000': (l10n) => l10n.badgeLevel1000Desc,
+    'level_2000': (l10n) => l10n.badgeLevel2000Desc,
+  };
 }
 
 abstract final class UserBadges {
@@ -75,30 +125,22 @@ abstract final class UserBadges {
     // Default
     UserBadge(
       key: 'nowly_hourglass',
-      name: 'Ampulheta Nowly',
-      description: 'Bem-vindo ao Nowly!',
       assetPath: 'assets/images/badges/nowly_hourglass.jpg',
     ),
     UserBadge(
       key: 'nowly_letter',
-      name: 'N Nowly',
-      description: 'Bem-vindo ao Nowly!',
       assetPath: 'assets/images/badges/nowly_letter.jpg',
     ),
 
     // Completed
     UserBadge(
       key: 'completed_01',
-      name: 'Primeira Conquista',
-      description: 'Complete sua primeira tarefa.',
       assetPath: 'assets/images/badges/completed_01.jpg',
       type: BadgeType.completed,
       threshold: 1,
     ),
     UserBadge(
       key: 'completed_10',
-      name: 'Dedicação Total',
-      description: 'Complete 10 tarefas.',
       assetPath: 'assets/images/badges/completed_10.jpg',
       type: BadgeType.completed,
       threshold: 10,
@@ -107,8 +149,6 @@ abstract final class UserBadges {
     // Canceled
     UserBadge(
       key: 'canceled_10',
-      name: 'Mudança de Planos',
-      description: 'Cancele 10 tarefas.',
       assetPath: 'assets/images/badges/canceled_10.jpg',
       type: BadgeType.canceled,
       threshold: 10,
@@ -117,8 +157,6 @@ abstract final class UserBadges {
     // Expired
     UserBadge(
       key: 'expired_10',
-      name: 'Tempo Esgotado',
-      description: 'Deixe 10 tarefas expirarem.',
       assetPath: 'assets/images/badges/expired_10.jpg',
       type: BadgeType.expired,
       threshold: 10,
@@ -127,120 +165,90 @@ abstract final class UserBadges {
     // Level
     UserBadge(
       key: 'level_0001',
-      name: 'Primeiro Passo',
-      description: 'Alcance o nível 1.',
       assetPath: 'assets/images/badges/level_0001.jpg',
       type: BadgeType.level,
       threshold: 1,
     ),
     UserBadge(
       key: 'level_0005',
-      name: 'Aquecendo',
-      description: 'Alcance o nível 5.',
       assetPath: 'assets/images/badges/level_0005.jpg',
       type: BadgeType.level,
       threshold: 5,
     ),
     UserBadge(
       key: 'level_0010',
-      name: 'Em Ritmo',
-      description: 'Alcance o nível 10.',
       assetPath: 'assets/images/badges/level_0010.jpg',
       type: BadgeType.level,
       threshold: 10,
     ),
     UserBadge(
       key: 'level_0025',
-      name: 'Focado',
-      description: 'Alcance o nível 25.',
       assetPath: 'assets/images/badges/level_0025.jpg',
       type: BadgeType.level,
       threshold: 25,
     ),
     UserBadge(
       key: 'level_0050',
-      name: 'Meio Caminho',
-      description: 'Alcance o nível 50.',
       assetPath: 'assets/images/badges/level_0050.jpg',
       type: BadgeType.level,
       threshold: 50,
     ),
     UserBadge(
       key: 'level_0075',
-      name: 'Veterano',
-      description: 'Alcance o nível 75.',
       assetPath: 'assets/images/badges/level_0075.jpg',
       type: BadgeType.level,
       threshold: 75,
     ),
     UserBadge(
       key: 'level_0100',
-      name: 'Centurião',
-      description: 'Alcance o nível 100.',
       assetPath: 'assets/images/badges/level_0100.jpg',
       type: BadgeType.level,
       threshold: 100,
     ),
     UserBadge(
       key: 'level_0250',
-      name: 'Elite',
-      description: 'Alcance o nível 250.',
       assetPath: 'assets/images/badges/level_0250.jpg',
       type: BadgeType.level,
       threshold: 250,
     ),
     UserBadge(
       key: 'level_0400',
-      name: 'Mestre',
-      description: 'Alcance o nível 400.',
       assetPath: 'assets/images/badges/level_0400.jpg',
       type: BadgeType.level,
       threshold: 400,
     ),
     UserBadge(
       key: 'level_0600',
-      name: 'Grão-Mestre',
-      description: 'Alcance o nível 600.',
       assetPath: 'assets/images/badges/level_0600.jpg',
       type: BadgeType.level,
       threshold: 600,
     ),
     UserBadge(
       key: 'level_0800',
-      name: 'Lendário',
-      description: 'Alcance o nível 800.',
       assetPath: 'assets/images/badges/level_0800.jpg',
       type: BadgeType.level,
       threshold: 800,
     ),
     UserBadge(
       key: 'level_0900',
-      name: 'Mítico',
-      description: 'Alcance o nível 900.',
       assetPath: 'assets/images/badges/level_0900.jpg',
       type: BadgeType.level,
       threshold: 900,
     ),
     UserBadge(
       key: 'level_0999',
-      name: 'Quase Lá',
-      description: 'Alcance o nível 999.',
       assetPath: 'assets/images/badges/level_0999.jpg',
       type: BadgeType.level,
       threshold: 999,
     ),
     UserBadge(
       key: 'level_1000',
-      name: 'Milênio',
-      description: 'Alcance o nível 1000.',
       assetPath: 'assets/images/badges/level_1000.jpg',
       type: BadgeType.level,
       threshold: 1000,
     ),
     UserBadge(
       key: 'level_2000',
-      name: 'Transcendente',
-      description: 'Alcance o nível 2000.',
       assetPath: 'assets/images/badges/level_2000.jpg',
       type: BadgeType.level,
       threshold: 2000,

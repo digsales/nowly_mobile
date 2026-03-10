@@ -104,13 +104,13 @@ class BadgeDetailsSheet extends ConsumerWidget {
         ),
         const SizedBox(height: 20),
         Text(
-          badge.name,
+          badge.name(context.l10n),
           style: context.textTheme.titleLarge,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
         Text(
-          badge.description,
+          badge.description(context.l10n),
           style: context.textTheme.bodyMedium?.copyWith(
             color: context.colorScheme.onSurface,
           ),
