@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/utils/level_utils.dart';
 import 'package:nowly/features/home/widgets/level_up_banner.dart';
 import 'package:nowly/features/home/widgets/user_level_bar.dart';
@@ -63,6 +64,15 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
         if (nextUser != null && nextLevel > nextUser.highestLevel) {
           ref.read(userRepositoryProvider).updateUser(nextUser.id, {'highestLevel': nextLevel});
+        }
+      }
+
+      if (nextUser != null) {
+        final pending = UserBadges.pendingUnlocks(nextUser);
+        if (pending.isNotEmpty) {
+          ref.read(userRepositoryProvider).updateUser(nextUser.id, {
+            'unlockedBadges': [...nextUser.unlockedBadges, ...pending],
+          });
         }
       }
     });

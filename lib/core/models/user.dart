@@ -10,6 +10,7 @@ class User {
   final int totalCanceled;
   final int currentStreak;
   final int highestLevel;
+  final List<String> unlockedBadges;
 
   const User({
     required this.id,
@@ -23,6 +24,7 @@ class User {
     this.totalCanceled = 0,
     this.currentStreak = 0,
     this.highestLevel = 0,
+    this.unlockedBadges = const [],
   });
 
   factory User.fromJson(String id, Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class User {
       totalCanceled: json['totalCanceled'] as int? ?? 0,
       currentStreak: json['currentStreak'] as int? ?? 0,
       highestLevel: json['highestLevel'] as int? ?? 0,
+      unlockedBadges: (json['unlockedBadges'] as List<dynamic>?)?.cast<String>() ?? const [],
     );
   }
 
@@ -53,6 +56,7 @@ class User {
       'totalCanceled': totalCanceled,
       'currentStreak': currentStreak,
       'highestLevel': highestLevel,
+      'unlockedBadges': unlockedBadges,
     };
   }
 
@@ -67,6 +71,7 @@ class User {
     int? totalCanceled,
     int? currentStreak,
     int? highestLevel,
+    List<String>? unlockedBadges,
   }) {
     return User(
       id: id,
@@ -80,6 +85,7 @@ class User {
       totalCanceled: totalCanceled ?? this.totalCanceled,
       currentStreak: currentStreak ?? this.currentStreak,
       highestLevel: highestLevel ?? this.highestLevel,
+      unlockedBadges: unlockedBadges ?? this.unlockedBadges,
     );
   }
 }
