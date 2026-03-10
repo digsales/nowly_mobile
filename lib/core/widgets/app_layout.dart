@@ -20,6 +20,7 @@ class AppLayout extends StatefulWidget {
     this.headerText,
     this.headerBuilder,
     this.showBackButton = false,
+    this.onRefresh,
     required this.body,
   });
 
@@ -31,6 +32,10 @@ class AppLayout extends StatefulWidget {
 
   /// Show back button to return to previous route
   final bool showBackButton;
+
+  /// Pull-to-refresh callback. When non-null, wraps the scroll view
+  /// in a [RefreshIndicator].
+  final RefreshCallback? onRefresh;
 
   /// Main content
   final Widget body;
@@ -50,8 +55,7 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: NestedScrollView(
+    Widget scrollView = NestedScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         headerSliverBuilder: (context, _) => [
@@ -103,27 +107,45 @@ class _AppLayoutState extends State<AppLayout> {
             ),
           ),
         ],
-        body: Container(
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: context.colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50),
-              topRight: Radius.circular(50),
-            ),
-          ),
-          child: SingleChildScrollView(
+        body: _buildBody(context),
+    );
+
+    return Scaffold(body: scrollView);
+  }
+
+  Widget _buildBody(BuildContext context) {
+    final content = Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
+        ),
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
             padding: EdgeInsets.only(
               top: 32,
               left: context.paddingLeft + 32,
               right: context.paddingRight + 32,
               bottom: context.paddingBottom + 50,
             ),
-            child: widget.body,
+            sliver: SliverToBoxAdapter(child: widget.body),
           ),
-        ),
+        ],
       ),
     );
+
+    if (widget.onRefresh != null) {
+      return RefreshIndicator(
+        onRefresh: widget.onRefresh!,
+        child: content,
+      );
+    }
+
+    return content;
   }
 
   Widget _buildHeader(BuildContext context) {
