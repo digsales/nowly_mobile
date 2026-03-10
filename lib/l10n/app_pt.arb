@@ -145,5 +145,11 @@
   "levelUpSubtitle7": "Você está em chamas!",
   "levelUpSubtitle8": "Consistência é a chave do sucesso!",
   "levelUpSubtitle9": "Mais um nível acima da média!",
-  "levelUpSubtitle10": "Seu esforço está valendo a pena!"
+  "levelUpSubtitle10": "Seu esforço está valendo a pena!",
+
+  "badgeDetailsTitle": "Badge",
+  "badgeUnlocked": "Desbloqueado",
+  "badgeLocked": "Bloqueado",
+  "badgeUseAsAvatar": "Usar como avatar",
+  "badgeRemove": "Remover avatar"
 }
