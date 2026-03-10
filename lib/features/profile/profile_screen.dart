@@ -134,6 +134,10 @@ class ProfileScreen extends ConsumerWidget {
                 HapticFeedback.mediumImpact();
                 BadgeDetailsSheet.show(context, badge: badge, user: user);
               },
+          onSecondaryTap: () {
+                HapticFeedback.mediumImpact();
+                BadgeDetailsSheet.show(context, badge: badge, user: user);
+              },
           child: Opacity(
             opacity: unlocked ? 1.0 : 0.3,
             child: Container(
