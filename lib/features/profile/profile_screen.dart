@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
@@ -129,7 +130,10 @@ class ProfileScreen extends ConsumerWidget {
                   notifier.updateAvatar(newValue);
                 }
               : () => BadgeDetailsSheet.show(context, badge: badge, user: user),
-          onLongPress: () => BadgeDetailsSheet.show(context, badge: badge, user: user),
+          onLongPress: () {
+                HapticFeedback.mediumImpact();
+                BadgeDetailsSheet.show(context, badge: badge, user: user);
+              },
           child: Opacity(
             opacity: unlocked ? 1.0 : 0.3,
             child: Container(
