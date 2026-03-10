@@ -148,8 +148,7 @@
   "levelUpSubtitle10": "Seu esforço está valendo a pena!",
 
   "badgeDetailsTitle": "Badge",
-  "badgeUnlocked": "Desbloqueado",
-  "badgeLocked": "Bloqueado",
+  "badgeYourProgress": "Seu progresso:",
   "badgeUseAsAvatar": "Usar como avatar",
   "badgeRemove": "Remover avatar"
 }

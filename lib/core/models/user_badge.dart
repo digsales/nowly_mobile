@@ -21,6 +21,30 @@ class UserBadge {
 
   bool isUnlocked(User user) => user.unlockedBadges.contains(key);
 
+  /// Returns a value between 0.0 and 1.0 representing the user's progress.
+  double progress(User user) {
+    if (threshold <= 0) return 1.0;
+    final current = switch (type) {
+      BadgeType.defaultBadge => threshold,
+      BadgeType.completed => user.totalCompleted,
+      BadgeType.canceled => user.totalCanceled,
+      BadgeType.expired => user.totalExpired,
+      BadgeType.level => user.highestLevel,
+    };
+    return (current / threshold).clamp(0.0, 1.0);
+  }
+
+  /// Returns the current value for this badge's criteria.
+  int currentValue(User user) {
+    return switch (type) {
+      BadgeType.defaultBadge => threshold,
+      BadgeType.completed => user.totalCompleted,
+      BadgeType.canceled => user.totalCanceled,
+      BadgeType.expired => user.totalExpired,
+      BadgeType.level => user.highestLevel,
+    };
+  }
+
   /// Checks if the user meets the criteria to earn this badge.
   bool shouldUnlock(User user) {
     return switch (type) {
@@ -83,7 +107,7 @@ abstract final class UserBadges {
     // Canceled
     UserBadge(
       key: 'canceled_10',
-      name: 'Planos Mudaram',
+      name: 'Mudança de Planos',
       description: 'Cancele 10 tarefas.',
       assetPath: 'assets/images/badges/canceled_10.jpg',
       type: BadgeType.canceled,
