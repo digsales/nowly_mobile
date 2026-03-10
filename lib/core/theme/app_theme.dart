@@ -28,8 +28,9 @@ abstract final class AppTheme {
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
         pageTransitionsTheme: _pageTransitionsTheme,
-        bottomSheetTheme: const BottomSheetThemeData(
+        bottomSheetTheme: BottomSheetThemeData(
           showDragHandle: true,
+          dragHandleColor: AppPalette.primary,
           backgroundColor: AppPalette.backgroundLight,
         ),
       );
@@ -51,8 +52,9 @@ abstract final class AppTheme {
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
         pageTransitionsTheme: _pageTransitionsTheme,
-        bottomSheetTheme: const BottomSheetThemeData(
+        bottomSheetTheme: BottomSheetThemeData(
           showDragHandle: true,
+          dragHandleColor: AppPalette.primary,
           backgroundColor: AppPalette.backgroundDark,
         ),
       );
@@ -74,8 +76,9 @@ abstract final class AppTheme {
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
         pageTransitionsTheme: _pageTransitionsTheme,
-        bottomSheetTheme: const BottomSheetThemeData(
+        bottomSheetTheme: BottomSheetThemeData(
           showDragHandle: true,
+          dragHandleColor: AppPalette.primary,
           backgroundColor: AppPalette.highContrastWhite,
         ),
       );
@@ -97,8 +100,9 @@ abstract final class AppTheme {
         fontFamily: 'Poppins',
         textTheme: AppTypography.textTheme(baseFontSize),
         pageTransitionsTheme: _pageTransitionsTheme,
-        bottomSheetTheme: const BottomSheetThemeData(
+        bottomSheetTheme: BottomSheetThemeData(
           showDragHandle: true,
+          dragHandleColor: AppPalette.primary,
           backgroundColor: AppPalette.highContrastBlack,
         ),
       );
