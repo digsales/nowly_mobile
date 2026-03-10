@@ -10,7 +10,7 @@ import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
-import 'package:nowly/core/widgets/app_loading.dart';
+import 'package:nowly/features/profile/widgets/profile_skeleton.dart';
 import 'package:nowly/core/widgets/badge_details_sheet.dart';
 import 'package:nowly/core/widgets/app_setting_tile.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
@@ -79,7 +79,7 @@ class ProfileScreen extends ConsumerWidget {
             },
           ),
         AsyncError() => const SizedBox.shrink(),
-        _ => const Center(child: AppLoading()),
+        _ => const ProfileSkeleton(),
       },
     );
   }
