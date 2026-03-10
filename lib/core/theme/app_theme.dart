@@ -78,7 +78,7 @@ abstract final class AppTheme {
         pageTransitionsTheme: _pageTransitionsTheme,
         bottomSheetTheme: BottomSheetThemeData(
           showDragHandle: true,
-          dragHandleColor: AppPalette.primary,
+          dragHandleColor: AppPalette.primaryDark,
           backgroundColor: AppPalette.highContrastWhite,
         ),
       );
@@ -102,7 +102,7 @@ abstract final class AppTheme {
         pageTransitionsTheme: _pageTransitionsTheme,
         bottomSheetTheme: BottomSheetThemeData(
           showDragHandle: true,
-          dragHandleColor: AppPalette.primary,
+          dragHandleColor: AppPalette.primaryLight,
           backgroundColor: AppPalette.highContrastBlack,
         ),
       );
