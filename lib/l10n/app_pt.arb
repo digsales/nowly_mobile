@@ -150,5 +150,9 @@
   "badgeDetailsTitle": "Badge",
   "badgeYourProgress": "Seu progresso:",
   "badgeUseAsAvatar": "Usar como avatar",
-  "badgeRemove": "Remover avatar"
+  "badgeRemove": "Remover avatar",
+
+  "errorTitle": "Algo deu errado",
+  "errorMessage": "Não foi possível carregar os dados.",
+  "errorRetry": "Tentar novamente"
 }

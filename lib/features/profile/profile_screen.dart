@@ -9,6 +9,7 @@ import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
+import 'package:nowly/core/widgets/app_error_state.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/features/profile/widgets/profile_skeleton.dart';
 import 'package:nowly/core/widgets/badge_details_sheet.dart';
@@ -78,7 +79,9 @@ class ProfileScreen extends ConsumerWidget {
               );
             },
           ),
-        AsyncError() => const SizedBox.shrink(),
+        AsyncError() => AppErrorState(
+            onRetry: () => ref.invalidate(currentUserProvider),
+          ),
         _ => const ProfileSkeleton(),
       },
     );
