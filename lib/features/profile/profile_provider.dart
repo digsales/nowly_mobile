@@ -134,6 +134,19 @@ class ProfileNotifier extends Notifier<ProfileState> {
     }
   }
 
+  Future<void> changeEmail({
+    required String currentPassword,
+    required String newEmail,
+  }) async {
+    final uid = _authService.currentUser?.uid;
+    final email = _authService.currentUser?.email;
+    if (uid == null || email == null) throw AuthException('user-not-found');
+
+    await _authService.reauthenticate(email: email, password: currentPassword);
+    await _authService.updateEmail(newEmail);
+    await _userRepository.updateUser(uid, {'email': newEmail});
+  }
+
   Future<void> changePassword({
     required String currentPassword,
     required String newPassword,

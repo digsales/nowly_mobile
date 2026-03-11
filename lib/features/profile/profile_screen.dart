@@ -11,6 +11,7 @@ import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_error_state.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
+import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/features/profile/widgets/profile_skeleton.dart';
 import 'package:nowly/core/widgets/badge_details_sheet.dart';
 import 'package:nowly/core/widgets/app_setting_tile.dart';
@@ -20,6 +21,7 @@ import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:nowly/features/profile/widgets/delete_account_dialog.dart';
 import 'package:nowly/features/profile/widgets/language_dialog.dart';
 import 'package:nowly/features/profile/widgets/reset_preferences_dialog.dart';
+import 'package:nowly/features/profile/widgets/change_email_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_password_dialog.dart';
 import 'package:nowly/features/profile/widgets/edit_name_dialog.dart';
 import 'package:nowly/features/profile/widgets/primary_color_dialog.dart';
@@ -189,6 +191,36 @@ class ProfileScreen extends ConsumerWidget {
             context: context,
             builder: (_) => EditNameDialog(currentName: user.name),
           ),
+        ),
+        AppSettingTile(
+          icon: Ionicons.mail_outline,
+          label: context.l10n.settingsChangeEmail,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                user.email,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(Ionicons.chevron_forward_outline, size: 18),
+            ],
+          ),
+          onTap: () async {
+            final result = await showDialog<bool>(
+              context: context,
+              builder: (_) => ChangeEmailDialog(currentEmail: user.email),
+            );
+            if (result == true && context.mounted) {
+              AppSnackBar.show(
+                context,
+                context.l10n.settingsChangeEmailSuccess,
+                type: SnackBarType.success,
+              );
+            }
+          },
         ),
         AppSettingTile(
           icon: Ionicons.lock_closed_outline,
