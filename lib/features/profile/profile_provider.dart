@@ -144,6 +144,9 @@ class ProfileNotifier extends Notifier<ProfileState> {
     final email = _authService.currentUser?.email;
     if (email == null) throw AuthException('user-not-found');
 
+    final exists = await _userRepository.emailExists(newEmail);
+    if (exists) throw AuthException('email-already-in-use');
+
     await _authService.reauthenticate(email: email, password: currentPassword);
     await _authService.updateEmail(newEmail);
     await _authService.signout();

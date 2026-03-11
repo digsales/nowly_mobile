@@ -64,9 +64,8 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
             isPassword: true,
             onChanged: (_) => setState(() {
               if (_currentPassword.error != null) _currentPassword.validate();
-              _error = null;
             }),
-            errorText: _currentPassword.error ?? _error,
+            errorText: _currentPassword.error,
           ),
           const SizedBox(height: 16),
           AppTextField(
@@ -78,8 +77,9 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
             onChanged: (_) => setState(() {
               if (_confirmEmail.error != null) _confirmEmail.validate();
               if (_newEmail.error != null) _newEmail.validate();
+              _error = null;
             }),
-            errorText: _newEmail.error,
+            errorText: _newEmail.error ?? _error,
           ),
           const SizedBox(height: 16),
           AppTextField(
