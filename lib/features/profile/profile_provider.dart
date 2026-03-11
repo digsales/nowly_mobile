@@ -15,16 +15,6 @@ final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {
 
   final repo = ref.watch(userRepositoryProvider);
 
-  // Sync Auth email → Firestore on provider creation (e.g. after login)
-  final authEmail = authService.currentUser?.email;
-  if (authEmail != null) {
-    repo.getUser(uid).then((user) {
-      if (user != null && user.email != authEmail) {
-        repo.updateUser(uid, {'email': authEmail});
-      }
-    });
-  }
-
   return repo.watchUser(uid);
 });
 

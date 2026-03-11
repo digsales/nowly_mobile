@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/core/services/auth_service.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 import 'package:nowly/core/validators/field_controller.dart';
@@ -27,12 +28,14 @@ class SigninState {
 
 class SigninNotifier extends Notifier<SigninState> {
   late final AuthService _authService;
+  late final UserRepository _userRepository;
   final email = FieldController();
   final password = FieldController();
 
   @override
   SigninState build() {
     _authService = ref.read(authServiceProvider);
+    _userRepository = ref.read(userRepositoryProvider);
     ref.onDispose(() {
       email.dispose();
       password.dispose();
@@ -58,10 +61,20 @@ class SigninNotifier extends Notifier<SigninState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      await _authService.signin(
+      final credential = await _authService.signin(
         email: email.text,
         password: password.text,
       );
+
+      // Sync Auth email → Firestore
+      final uid = credential.user?.uid;
+      final authEmail = credential.user?.email;
+      if (uid != null && authEmail != null) {
+        final user = await _userRepository.getUser(uid);
+        if (user != null && user.email != authEmail) {
+          await _userRepository.updateUser(uid, {'email': authEmail});
+        }
+      }
     } on AuthException catch (e) {
       state = state.copyWith(
         isLoading: false,
