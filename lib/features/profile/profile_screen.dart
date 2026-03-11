@@ -11,7 +11,6 @@ import 'package:nowly/core/widgets/app_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_error_state.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
-import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/features/profile/widgets/profile_skeleton.dart';
 import 'package:nowly/core/widgets/badge_details_sheet.dart';
 import 'package:nowly/core/widgets/app_setting_tile.dart';
@@ -208,19 +207,10 @@ class ProfileScreen extends ConsumerWidget {
               const Icon(Ionicons.chevron_forward_outline, size: 18),
             ],
           ),
-          onTap: () async {
-            final result = await showDialog<bool>(
-              context: context,
-              builder: (_) => ChangeEmailDialog(currentEmail: user.email),
-            );
-            if (result == true && context.mounted) {
-              AppSnackBar.show(
-                context,
-                context.l10n.settingsChangeEmailSuccess,
-                type: SnackBarType.success,
-              );
-            }
-          },
+          onTap: () => showDialog(
+            context: context,
+            builder: (_) => ChangeEmailDialog(currentEmail: user.email),
+          ),
         ),
         AppSettingTile(
           icon: Ionicons.lock_closed_outline,

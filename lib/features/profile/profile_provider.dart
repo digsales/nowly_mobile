@@ -12,7 +12,20 @@ final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {
   final authService = ref.watch(authServiceProvider);
   final uid = authService.currentUser?.uid;
   if (uid == null) return Stream.value(null);
-  return ref.watch(userRepositoryProvider).watchUser(uid);
+
+  final repo = ref.watch(userRepositoryProvider);
+
+  // Sync Auth email → Firestore on provider creation (e.g. after login)
+  final authEmail = authService.currentUser?.email;
+  if (authEmail != null) {
+    repo.getUser(uid).then((user) {
+      if (user != null && user.email != authEmail) {
+        repo.updateUser(uid, {'email': authEmail});
+      }
+    });
+  }
+
+  return repo.watchUser(uid);
 });
 
 final profileProvider =
@@ -138,13 +151,12 @@ class ProfileNotifier extends Notifier<ProfileState> {
     required String currentPassword,
     required String newEmail,
   }) async {
-    final uid = _authService.currentUser?.uid;
     final email = _authService.currentUser?.email;
-    if (uid == null || email == null) throw AuthException('user-not-found');
+    if (email == null) throw AuthException('user-not-found');
 
     await _authService.reauthenticate(email: email, password: currentPassword);
     await _authService.updateEmail(newEmail);
-    await _userRepository.updateUser(uid, {'email': newEmail});
+    await _authService.signout();
   }
 
   Future<void> changePassword({

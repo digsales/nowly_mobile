@@ -52,6 +52,7 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
     return AppDialog(
       icon: Ionicons.mail_outline,
       title: context.l10n.settingsChangeEmailTitle,
+      subtitle: context.l10n.settingsChangeEmailMessage,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -114,7 +115,6 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
             currentPassword: _currentPassword.text,
             newEmail: _newEmail.text,
           );
-          if (context.mounted) Navigator.of(context).pop(true);
         } on AuthException catch (e) {
           if (mounted) {
             setState(() {
