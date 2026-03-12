@@ -11,6 +11,7 @@ import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/category_tile.dart';
 import 'package:nowly/features/category/category_form_provider.dart';
+import 'package:nowly/features/category/widgets/delete_category_dialog.dart';
 
 class CategoryFormScreen extends ConsumerStatefulWidget {
   const CategoryFormScreen({super.key, this.category});
@@ -196,36 +197,17 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
             const SizedBox(height: 16),
             AppButton(
               text: context.l10n.categoryFormDelete,
-              variant: AppButtonVariant.outlined,
               detailColor: context.colorScheme.error,
-              textColor: context.colorScheme.error,
-              isProcessing: formState.isLoading,
+              textColor: context.colorScheme.onError,
               onPressed: () async {
-                final confirmed = await showDialog<bool>(
+                final deleted = await showDialog<bool>(
                   context: context,
-                  builder: (_) => AlertDialog(
-                    title: Text(context.l10n.categoryFormDelete),
-                    content: Text(context.l10n.categoryFormDeleteMessage),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: Text(context.l10n.deleteAccountCancel),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: Text(
-                          context.l10n.categoryFormDelete,
-                          style: TextStyle(color: context.colorScheme.error),
-                        ),
-                      ),
-                    ],
+                  builder: (_) => DeleteCategoryDialog(
+                    category: widget.category!,
                   ),
                 );
-                if (confirmed == true && context.mounted) {
-                  final success = await notifier.delete(widget.category!);
-                  if (success && context.mounted) {
-                    Navigator.of(context).pop();
-                  }
+                if (deleted == true && context.mounted) {
+                  Navigator.of(context).pop();
                 }
               },
             ),
