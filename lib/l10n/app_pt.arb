@@ -77,6 +77,8 @@
 
   "fabAddTask": "Adicionar tarefa",
 
+  "addCategory": "Adicionar",
+
   "categoryStudy": "Estudo",
   "categoryWork": "Trabalho",
   "categoryHealth": "Saúde",
