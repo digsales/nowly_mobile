@@ -24,7 +24,7 @@ abstract class AppRoutes {
 
   // authenticated routes
   static const String home = '/home';
-  static const String categoryForm = '/category-form';
+  static const String categoryForm = '/home/category-form';
   static const String ranking = '/ranking';
   static const String history = '/history';
   static const String profile = '/profile';
@@ -164,17 +164,6 @@ final routerProvider = Provider<GoRouter>((ref) {
             _buildPage(state, const ForgotPasswordPage()),
       ),
 
-      GoRoute(
-        path: AppRoutes.categoryForm,
-        pageBuilder: (context, state) {
-          final category = state.extra as models.Category?;
-          return _buildPage(
-            state,
-            CategoryFormScreen(category: category),
-          );
-        },
-      ),
-
       // authenticated shell
       StatefulShellRoute(
         builder: (context, state, navigationShell) =>
@@ -191,6 +180,18 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.home,
                 pageBuilder: (context, state) =>
                     _buildPage(state, const HomeScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'category-form',
+                    pageBuilder: (context, state) {
+                      final category = state.extra as models.Category?;
+                      return _buildPage(
+                        state,
+                        CategoryFormScreen(category: category),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nowly/core/router/app_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/user_badge.dart';
@@ -77,8 +78,16 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       }
     });
 
+    final location = GoRouterState.of(context).uri.path;
+    final isRootTab = const [
+      AppRoutes.home,
+      AppRoutes.ranking,
+      AppRoutes.history,
+      AppRoutes.profile,
+    ].contains(location);
+
     return Scaffold(
-      extendBody: true,
+      extendBody: isRootTab,
       body: Column(
         children: [
           Padding(
@@ -95,24 +104,28 @@ class _HomeShellState extends ConsumerState<HomeShell> {
           Expanded(child: widget.navigationShell),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: abrir tela de adicionar task
-        },
-        tooltip: context.l10n.fabAddTask,
-        foregroundColor: context.colorScheme.onPrimary,
-        backgroundColor: context.colorScheme.primary,
-        shape: const CircleBorder(),
-        child: const Icon(Ionicons.add),
-      ),
+      floatingActionButton: isRootTab
+          ? FloatingActionButton(
+              onPressed: () {
+                // TODO: abrir tela de adicionar task
+              },
+              tooltip: context.l10n.fabAddTask,
+              foregroundColor: context.colorScheme.onPrimary,
+              backgroundColor: context.colorScheme.primary,
+              shape: const CircleBorder(),
+              child: const Icon(Ionicons.add),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: HomeBottomNavBar(
-        activeIndex: widget.navigationShell.currentIndex,
-        onTap: (index) => widget.navigationShell.goBranch(
-          index,
-          initialLocation: index == widget.navigationShell.currentIndex,
-        ),
-      ),
+      bottomNavigationBar: isRootTab
+          ? HomeBottomNavBar(
+              activeIndex: widget.navigationShell.currentIndex,
+              onTap: (index) => widget.navigationShell.goBranch(
+                index,
+                initialLocation: index == widget.navigationShell.currentIndex,
+              ),
+            )
+          : null,
     );
   }
 }
