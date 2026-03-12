@@ -4,6 +4,10 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 /// A settings list tile with a circular icon on the left,
 /// a label, and an optional trailing widget (toggle, chevron, etc.).
 ///
+/// Use [trailingText] for a simple text + chevron trailing layout that
+/// handles overflow automatically. Use [trailing] for custom widgets
+/// (Switch, Slider, etc.).
+///
 /// ```dart
 /// AppSettingTile(
 ///   icon: Icons.dark_mode_outlined,
@@ -17,6 +21,7 @@ class AppSettingTile extends StatelessWidget {
     required this.icon,
     required this.label,
     this.trailing,
+    this.trailingText,
     this.onTap,
   });
 
@@ -28,6 +33,10 @@ class AppSettingTile extends StatelessWidget {
 
   /// Trailing widget (Switch, Icon, Slider, etc.).
   final Widget? trailing;
+
+  /// Optional trailing text displayed with a chevron.
+  /// Handles overflow with ellipsis automatically.
+  final String? trailingText;
 
   /// Tap callback for the entire row. Ignored if null.
   final VoidCallback? onTap;
@@ -59,10 +68,27 @@ class AppSettingTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
                 style: context.textTheme.bodyLarge,
               ),
             ),
-            trailing ?? const SizedBox.shrink(),
+            if (trailingText != null)
+            Expanded(
+              child: Text(
+                trailingText!,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+            if (trailing != null) ...[
+              const SizedBox(width: 4),
+              trailing!,
+            ],
           ],
         ),
       ),

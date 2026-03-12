@@ -173,19 +173,8 @@ class ProfileScreen extends ConsumerWidget {
         AppSettingTile(
           icon: Ionicons.person_outline,
           label: context.l10n.settingsName,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                user.name,
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Ionicons.chevron_forward_outline, size: 18),
-            ],
-          ),
+          trailingText: user.name,
+          trailing: const Icon(Ionicons.chevron_forward_outline, size: 18),
           onTap: () => showDialog(
             context: context,
             builder: (_) => EditNameDialog(currentName: user.name),
@@ -194,19 +183,8 @@ class ProfileScreen extends ConsumerWidget {
         AppSettingTile(
           icon: Ionicons.mail_outline,
           label: context.l10n.settingsChangeEmail,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                user.email,
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Ionicons.chevron_forward_outline, size: 18),
-            ],
-          ),
+          trailingText: user.email,
+          trailing: const Icon(Ionicons.chevron_forward_outline, size: 18),
           onTap: () => showDialog(
             context: context,
             builder: (_) => ChangeEmailDialog(currentEmail: user.email),
@@ -215,19 +193,8 @@ class ProfileScreen extends ConsumerWidget {
         AppSettingTile(
           icon: Ionicons.lock_closed_outline,
           label: context.l10n.settingsChangePassword,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "********",
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Ionicons.chevron_forward_outline, size: 18),
-            ],
-          ),
+          trailingText: "••••••••",
+          trailing: const Icon(Ionicons.chevron_forward_outline, size: 18),
           onTap: () {
             showDialog(
               context: context,
@@ -315,19 +282,8 @@ class ProfileScreen extends ConsumerWidget {
         AppSettingTile(
           icon: Ionicons.language_outline,
           label: context.l10n.settingsLanguage,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                languageLabel,
-                style: context.textTheme.bodyMedium?.copyWith(
-                  color: context.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Ionicons.chevron_forward_outline, size: 18),
-            ],
-          ),
+          trailingText: languageLabel,
+          trailing: const Icon(Ionicons.chevron_forward_outline, size: 18),
           onTap: () => showDialog(
             context: context,
             builder: (_) => const LanguageDialog(),
