@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/providers/shared_preferences_provider.dart';
 import 'package:nowly/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 import 'core/router/app_router.dart';
@@ -15,7 +17,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
+  final prefs = await SharedPreferences.getInstance();
+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -23,7 +26,14 @@ Future<void> main() async {
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarContrastEnforced: false,
   ));
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {
@@ -37,6 +47,7 @@ class MyApp extends ConsumerWidget {
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
     final highContrast = ref.watch(highContrastProvider);
+    ref.watch(primaryColorProvider);
     final fontSize = _baseFontSize * fontScale;
     final router = ref.watch(routerProvider);
 

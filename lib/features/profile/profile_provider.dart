@@ -1,11 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/core/services/auth_service.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 import 'package:nowly/core/validators/field_controller.dart';
 import 'package:nowly/core/validators/validators.dart';
 import 'package:nowly/l10n/app_localizations.dart';
+
+final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {
+  final authService = ref.watch(authServiceProvider);
+  final uid = authService.currentUser?.uid;
+  if (uid == null) return Stream.value(null);
+
+  final repo = ref.watch(userRepositoryProvider);
+
+  return repo.watchUser(uid);
+});
 
 final profileProvider =
     NotifierProvider.autoDispose<ProfileNotifier, ProfileState>(
@@ -65,11 +76,15 @@ class ProfileNotifier extends Notifier<ProfileState> {
     }
 
     try {
-      await _userRepository.deleteAllUserData(uid);
-      await _authService.deleteAccount(
+      // 1. Verify password first (fails fast if wrong)
+      await _authService.reauthenticate(
         email: email,
         password: password.text,
       );
+      // 2. Delete Firestore data (user is authenticated)
+      await _userRepository.deleteAllUserData(uid);
+      // 3. Delete Auth account (already re-authenticated)
+      await _authService.deleteCurrentUser();
     } on AuthException catch (e) {
       debugPrint('AuthException code: ${e.code}');
       if (!ref.mounted) return false;
@@ -96,6 +111,56 @@ class ProfileNotifier extends Notifier<ProfileState> {
   void onPasswordChanged(String value) {
     password.onChanged(value);
     state = state.copyWith();
+  }
+
+  Future<bool> updateAvatar(String? avatarUrl) async {
+    final uid = _authService.currentUser?.uid;
+    if (uid == null) return false;
+
+    try {
+      await _userRepository.updateUser(uid, {'avatarUrl': avatarUrl});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
+  Future<bool> updateName(String name) async {
+    final uid = _authService.currentUser?.uid;
+    if (uid == null || name.trim().isEmpty) return false;
+
+    try {
+      await _userRepository.updateUser(uid, {'name': name.trim()});
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
+  Future<void> changeEmail({
+    required String currentPassword,
+    required String newEmail,
+  }) async {
+    final email = _authService.currentUser?.email;
+    if (email == null) throw AuthException('user-not-found');
+
+    final exists = await _userRepository.emailExists(newEmail);
+    if (exists) throw AuthException('email-already-in-use');
+
+    await _authService.reauthenticate(email: email, password: currentPassword);
+    await _authService.updateEmail(newEmail);
+    await _authService.signout();
+  }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final email = _authService.currentUser?.email;
+    if (email == null) throw AuthException('user-not-found');
+
+    await _authService.reauthenticate(email: email, password: currentPassword);
+    await _authService.updatePassword(newPassword);
   }
 
   Future<void> signout() async {
