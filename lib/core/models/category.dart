@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 
 class Category {
@@ -49,6 +50,18 @@ class Category {
       iconName: iconName ?? this.iconName,
     );
   }
+
+  static const _iconMap = <String, IconData>{
+    'book_outline': Ionicons.book_outline,
+    'briefcase_outline': Ionicons.briefcase_outline,
+    'heart_outline': Ionicons.heart_outline,
+    'person_outline': Ionicons.person_outline,
+    'home_outline': Ionicons.home_outline,
+    'people_outline': Ionicons.people_outline,
+  };
+
+  /// Resolves the icon from [iconName].
+  IconData get icon => _iconMap[iconName] ?? Ionicons.ellipse_outline;
 
   /// Resolves the display color based on theme brightness and high contrast.
   Color resolveColor({
