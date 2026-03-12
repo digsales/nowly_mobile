@@ -4,6 +4,7 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_help_sheet.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:nowly/features/home/widgets/badge_progress_carousel.dart';
 import 'package:nowly/features/home/widgets/category_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -44,6 +45,17 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           const CategoryList(),
+          const SizedBox(height: 32),
+          Text(
+            context.l10n.homeSectionBadges,
+            style: context.textTheme.displayMedium?.copyWith(
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Ultra',
+              color: context.colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 32),
+          const BadgeProgressCarousel(),
           const SizedBox(height: 32),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
