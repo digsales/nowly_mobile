@@ -28,7 +28,7 @@ abstract final class AppHelpSheet {
               Icon(
                 Ionicons.help_circle_outline,
                 color: context.colorScheme.primary,
-                size: context.textTheme.titleMedium!.fontSize,
+                size: context.textTheme.titleMedium!.fontSize! * 1.5,
               ),
               const SizedBox(width: 8),
               Expanded(
