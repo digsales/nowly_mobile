@@ -39,7 +39,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   Widget build(BuildContext context) {
     ref.listen(categoryFormProvider, (prev, next) {
       if (next.errorMessage != null && prev?.errorMessage != next.errorMessage) {
-        AppSnackBar.show(context, next.errorMessage!);
+        AppSnackBar.show(context, next.errorMessage!, type: SnackBarType.error);
       }
     });
 
