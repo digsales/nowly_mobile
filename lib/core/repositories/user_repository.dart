@@ -18,6 +18,19 @@ class UserRepository {
     }
   }
 
+  Future<void> updateUser(String uid, Map<String, dynamic> data) async {
+    try {
+      await _users.doc(uid).update(data);
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Future<bool> emailExists(String email) async {
+    final query = await _users.where('email', isEqualTo: email).limit(1).get();
+    return query.docs.isNotEmpty;
+  }
+
   Future<User?> getUser(String uid) async {
     final doc = await _users.doc(uid).get();
     if (!doc.exists || doc.data() == null) return null;

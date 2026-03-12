@@ -20,6 +20,7 @@ class AppLayout extends StatefulWidget {
     this.headerText,
     this.headerBuilder,
     this.showBackButton = false,
+    this.onRefresh,
     required this.body,
   });
 
@@ -31,6 +32,10 @@ class AppLayout extends StatefulWidget {
 
   /// Show back button to return to previous route
   final bool showBackButton;
+
+  /// Pull-to-refresh callback. When non-null, wraps the scroll view
+  /// in a [RefreshIndicator].
+  final RefreshCallback? onRefresh;
 
   /// Main content
   final Widget body;
@@ -50,88 +55,97 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colorScheme.primary,
-      body: Padding(
-        padding: EdgeInsetsGeometry.only(
-          top: context.paddingTop > 0
-            ? context.paddingTop
-            : 16,
-        ),
-        child: NestedScrollView(
-          controller: _scrollController,
-          physics: const BouncingScrollPhysics(),
-          headerSliverBuilder: (context, _) => [
-            SliverToBoxAdapter(
-              child: AnimatedBuilder(
-                animation: _scrollController,
-                builder: (context, child) {
-                  final offset = _scrollController.hasClients
-                      ? _scrollController.offset
-                      : 0.0;
-                  final progress = (offset / 20.h).clamp(0.0, 1.0);
+    Widget scrollView = NestedScrollView(
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
+        headerSliverBuilder: (context, _) => [
+          SliverToBoxAdapter(
+            child: AnimatedBuilder(
+              animation: _scrollController,
+              builder: (context, child) {
+                final offset = _scrollController.hasClients
+                    ? _scrollController.offset
+                    : 0.0;
+                final progress = (offset / 20.h).clamp(0.0, 1.0);
 
-                  return Opacity(
-                    opacity: 1 - progress,
-                    child: Transform.scale(
-                      scale: 1 - (progress * 0.7),
-                      alignment: Alignment.bottomLeft,
-                      child: child,
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: context.paddingLeft + 16,
-                    right: context.paddingRight + 32,
+                return Opacity(
+                  opacity: 1 - progress,
+                  child: Transform.scale(
+                    scale: 1 - (progress * 0.7),
+                    alignment: Alignment.bottomLeft,
+                    child: child,
                   ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: 10.h),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (widget.showBackButton)
-                          const Padding(
-                            padding: EdgeInsets.only(top: 16, bottom: 16),
-                            child: AppBackButton(),
-                          )
-                        else
-                          const SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: _buildHeader(context),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: context.paddingLeft + 16,
+                  right: context.paddingRight + 32,
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: 10.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.showBackButton)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: AppBackButton(),
+                        )
+                      else
+                        const SizedBox(height: 0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: _buildHeader(context),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-          body: Container(
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: context.colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-            ),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(
-                top: 32,
-                left: context.paddingLeft + 32,
-                right: context.paddingRight + 32,
-                bottom: context.paddingBottom + 50,
-              ),
-              child: widget.body,
-            ),
           ),
+        ],
+        body: _buildBody(context),
+    );
+
+    return Scaffold(body: scrollView);
+  }
+
+  Widget _buildBody(BuildContext context) {
+    final content = Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
         ),
       ),
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: 32,
+              left: context.paddingLeft + 32,
+              right: context.paddingRight + 32,
+              bottom: context.paddingBottom + 50,
+            ),
+            sliver: SliverToBoxAdapter(child: widget.body),
+          ),
+        ],
+      ),
     );
+
+    if (widget.onRefresh != null) {
+      return RefreshIndicator(
+        onRefresh: widget.onRefresh!,
+        child: content,
+      );
+    }
+
+    return content;
   }
 
   Widget _buildHeader(BuildContext context) {

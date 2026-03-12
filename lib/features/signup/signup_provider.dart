@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/models/user.dart';
+import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/repositories/category_repository.dart';
 import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/core/services/auth_service.dart';
@@ -109,7 +110,10 @@ class SignupNotifier extends Notifier<SignupState> {
           totalPoints: 0,
           totalCompleted: 0,
           totalExpired: 0,
+          totalCanceled: 0,
           currentStreak: 0,
+          highestLevel: 0,
+          unlockedBadges: UserBadges.defaultKeys,
         );
         await _userRepository.createUser(user);
         await _categoryRepository.seedDefaultCategories(uid, l10n);

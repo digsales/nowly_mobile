@@ -7,7 +7,10 @@ class User {
   final int totalPoints;
   final int totalCompleted;
   final int totalExpired;
+  final int totalCanceled;
   final int currentStreak;
+  final int highestLevel;
+  final List<String> unlockedBadges;
 
   const User({
     required this.id,
@@ -15,10 +18,13 @@ class User {
     required this.email,
     this.avatarUrl,
     required this.createdAt,
-    required this.totalPoints,
-    required this.totalCompleted,
-    required this.totalExpired,
-    required this.currentStreak,
+    this.totalPoints = 0,
+    this.totalCompleted = 0,
+    this.totalExpired = 0,
+    this.totalCanceled = 0,
+    this.currentStreak = 0,
+    this.highestLevel = 0,
+    this.unlockedBadges = const [],
   });
 
   factory User.fromJson(String id, Map<String, dynamic> json) {
@@ -28,10 +34,13 @@ class User {
       email: json['email'] as String,
       avatarUrl: json['avatarUrl'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      totalPoints: json['totalPoints'] as int,
-      totalCompleted: json['totalCompleted'] as int,
-      totalExpired: json['totalExpired'] as int,
-      currentStreak: json['currentStreak'] as int,
+      totalPoints: json['totalPoints'] as int? ?? 0,
+      totalCompleted: json['totalCompleted'] as int? ?? 0,
+      totalExpired: json['totalExpired'] as int? ?? 0,
+      totalCanceled: json['totalCanceled'] as int? ?? 0,
+      currentStreak: json['currentStreak'] as int? ?? 0,
+      highestLevel: json['highestLevel'] as int? ?? 0,
+      unlockedBadges: (json['unlockedBadges'] as List<dynamic>?)?.cast<String>() ?? const [],
     );
   }
 
@@ -44,7 +53,10 @@ class User {
       'totalPoints': totalPoints,
       'totalCompleted': totalCompleted,
       'totalExpired': totalExpired,
+      'totalCanceled': totalCanceled,
       'currentStreak': currentStreak,
+      'highestLevel': highestLevel,
+      'unlockedBadges': unlockedBadges,
     };
   }
 
@@ -56,7 +68,10 @@ class User {
     int? totalPoints,
     int? totalCompleted,
     int? totalExpired,
+    int? totalCanceled,
     int? currentStreak,
+    int? highestLevel,
+    List<String>? unlockedBadges,
   }) {
     return User(
       id: id,
@@ -67,7 +82,10 @@ class User {
       totalPoints: totalPoints ?? this.totalPoints,
       totalCompleted: totalCompleted ?? this.totalCompleted,
       totalExpired: totalExpired ?? this.totalExpired,
+      totalCanceled: totalCanceled ?? this.totalCanceled,
       currentStreak: currentStreak ?? this.currentStreak,
+      highestLevel: highestLevel ?? this.highestLevel,
+      unlockedBadges: unlockedBadges ?? this.unlockedBadges,
     );
   }
 }

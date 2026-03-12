@@ -23,6 +23,8 @@ dependencies:
   firebase_auth: ^6.1.4
   cloud_firestore: ^6.1.0
   animated_bottom_navigation_bar: ^1.4.0
+  shared_preferences: ^2.5.4
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +42,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/svg/
+    - assets/images/badges/
 
   fonts:
     - family: Poppins
