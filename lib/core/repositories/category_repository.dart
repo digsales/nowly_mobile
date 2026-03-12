@@ -28,9 +28,20 @@ class CategoryRepository {
     }
   }
 
-  Future<void> deleteCategory(String categoryId) async {
+  Future<void> deleteCategory(String categoryId, {required String userId}) async {
     try {
-      await _categories.doc(categoryId).delete();
+      final tasks = await _firestore
+          .collection('tasks')
+          .where('userId', isEqualTo: userId)
+          .where('categoryId', isEqualTo: categoryId)
+          .get();
+
+      final batch = _firestore.batch();
+      for (final doc in tasks.docs) {
+        batch.update(doc.reference, {'categoryId': null});
+      }
+      batch.delete(_categories.doc(categoryId));
+      await batch.commit();
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }

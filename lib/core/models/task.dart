@@ -23,7 +23,7 @@ extension TaskStatusX on TaskStatus {
 class Task {
   final String id;
   final String userId;
-  final String categoryId;
+  final String? categoryId;
   final String title;
   final String? description;
   final DateTime startDate;
@@ -37,7 +37,7 @@ class Task {
   const Task({
     required this.id,
     required this.userId,
-    required this.categoryId,
+    this.categoryId,
     required this.title,
     this.description,
     required this.startDate,
@@ -53,7 +53,7 @@ class Task {
     return Task(
       id: id,
       userId: json['userId'] as String,
-      categoryId: json['categoryId'] as String,
+      categoryId: json['categoryId'] as String?,
       title: json['title'] as String,
       description: json['description'] as String?,
       startDate: DateTime.parse(json['startDate'] as String),

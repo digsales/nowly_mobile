@@ -116,15 +116,4 @@ class CategoryFormNotifier extends Notifier<CategoryFormState> {
     }
   }
 
-  Future<bool> delete(Category category) async {
-    state = state.copyWith(isLoading: true);
-    try {
-      await _categoryRepository.deleteCategory(category.id);
-      return true;
-    } on Exception catch (e) {
-      debugPrint('Category delete error: $e');
-      state = state.copyWith(isLoading: false);
-      return false;
-    }
-  }
 }

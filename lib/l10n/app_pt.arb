@@ -78,6 +78,7 @@
   "fabAddTask": "Adicionar tarefa",
 
   "addCategory": "Adicionar",
+  "emptyCategoryHint": "Crie uma categoria e comece",
   "categoryFormTitleAdd": "Nova categoria",
   "categoryFormTitleEdit": "Editar categoria",
   "categoryFormName": "Nome",

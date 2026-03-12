@@ -56,6 +56,31 @@ class CategoryList extends ConsumerWidget {
             ],
           ),
         ),
+      AsyncData(:final value) when value.isEmpty => Row(
+          children: [
+            CategoryTile(
+              icon: Ionicons.add,
+              label: context.l10n.addCategory,
+              backgroundColor: context.colorScheme.surface,
+              iconColor: context.colorScheme.onSurface,
+              border: Border.all(
+                color: context.colorScheme.onSurface,
+                width: 2,
+              ),
+              textColor: context.colorScheme.onSurface,
+              onTap: () => context.push(AppRoutes.categoryForm),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                context.l10n.emptyCategoryHint,
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
       AsyncLoading() => const CategorySkeleton(),
       _ => const SizedBox.shrink(),
     };
