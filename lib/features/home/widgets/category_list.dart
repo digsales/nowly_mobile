@@ -15,10 +15,7 @@ class CategoryList extends ConsumerWidget {
 
     return switch (categoriesAsync) {
       AsyncData(:final value) when value.isNotEmpty => SingleChildScrollView(
-          padding: EdgeInsets.only(
-              left: context.paddingLeft + 32,
-              right: context.paddingRight + 32,
-            ),
+          clipBehavior: Clip.none,
           scrollDirection: Axis.horizontal,
           child: Row(
             spacing: 16,

@@ -11,64 +11,59 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppLayout(
       headerText: context.l10n.appName,
-      mainContainerPadding: EdgeInsets.only(
-        top: 32,
-        bottom: context.paddingBottom + 50,
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-              left: context.paddingLeft + 32,
-              right: context.paddingRight + 32,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Categorias",
-                    style: context.textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Ultra',
-                      color: context.colorScheme.onPrimary,
-                    ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text(
+                  "Categorias",
+                  style: context.textTheme.displayMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Ultra',
+                    color: context.colorScheme.onPrimary,
                   ),
                 ),
-                TouchableOpacity(
-                  child: Text(
-                    "Editar",
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
+              ),
+              TouchableOpacity(
+                child: Text(
+                  "Editar",
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
                   ),
-                  onTap: () {},
                 ),
-              ],
-            ),
+                onTap: () {},
+              ),
+            ],
           ),
           const SizedBox(height: 32),
           const CategoryList(),
           const SizedBox(height: 32),
-          Padding(
-            padding: EdgeInsets.only(
-              left: context.paddingLeft + 32,
-              right: context.paddingRight + 32,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Tarefas",
-                    style: context.textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Ultra',
-                      color: context.colorScheme.onPrimary,
-                    ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text(
+                  "Tarefas",
+                  style: context.textTheme.displayMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Ultra',
+                    color: context.colorScheme.onPrimary,
                   ),
                 ),
-              ],
-            ),
+              ),
+              TouchableOpacity(
+                child: Text(
+                  "Editar",
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                onTap: () {},
+              ),
+            ],
           ),
         ],
       ),
