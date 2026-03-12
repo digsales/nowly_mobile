@@ -7,6 +7,7 @@ import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
+import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/category_tile.dart';
 import 'package:nowly/features/category/category_form_provider.dart';
@@ -36,6 +37,12 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(categoryFormProvider, (prev, next) {
+      if (next.errorMessage != null && prev?.errorMessage != next.errorMessage) {
+        AppSnackBar.show(context, next.errorMessage!);
+      }
+    });
+
     final formState = ref.watch(categoryFormProvider);
     final notifier = ref.read(categoryFormProvider.notifier);
     final isEditing = widget.category != null;

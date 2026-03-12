@@ -107,6 +107,7 @@ class CategoryFormNotifier extends Notifier<CategoryFormState> {
         );
         await _categoryRepository.createCategory(category);
       }
+      state = state.copyWith(isLoading: false);
       return true;
     } on Exception catch (e) {
       debugPrint('Category save error: $e');

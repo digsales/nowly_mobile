@@ -13,7 +13,8 @@ class CategoryRepository {
 
   Future<void> createCategory(Category category) async {
     try {
-      await _categories.doc(category.id).set(category.toJson());
+      final doc = category.id.isEmpty ? _categories.doc() : _categories.doc(category.id);
+      await doc.set(category.toJson());
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
