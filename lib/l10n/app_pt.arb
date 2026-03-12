@@ -82,7 +82,7 @@
   "homeSectionBadges": "Insígnias",
   "homeSectionTasks": "Tarefas",
   "homeEdit": "Editar",
-  "badgeProgressLabel": "{current}/{total}",
+  "badgeProgressLabel": "{current} / {total}",
   "@badgeProgressLabel": {
     "placeholders": {
       "current": { "type": "int" },
