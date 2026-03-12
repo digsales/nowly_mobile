@@ -14,7 +14,7 @@ final categoryFormProvider =
 class CategoryFormState {
   const CategoryFormState({
     this.selectedColorKey = 'purple',
-    this.selectedIconName = 'book_outline',
+    this.selectedIconName = 'briefcase_outline',
     this.isLoading = false,
     this.errorMessage,
   });
