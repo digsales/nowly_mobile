@@ -9,5 +9,8 @@ final categoriesProvider = StreamProvider.autoDispose<List<Category>>((ref) {
   if (uid == null) return Stream.value([]);
 
   final repo = ref.watch(categoryRepositoryProvider);
-  return repo.watchCategories(uid);
+  return repo.watchCategories(uid).map((list) {
+    list.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    return list;
+  });
 });

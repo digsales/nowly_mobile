@@ -14,29 +14,13 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(
-                  "Categorias",
-                  style: context.textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Ultra',
-                    color: context.colorScheme.onSurface,
-                  ),
-                ),
-              ),
-              TouchableOpacity(
-                child: Text(
-                  "Editar",
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                onTap: () {},
-              ),
-            ],
+          Text(
+            "Categorias",
+            style: context.textTheme.displayMedium?.copyWith(
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Ultra',
+              color: context.colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 32),
           const CategoryList(),
