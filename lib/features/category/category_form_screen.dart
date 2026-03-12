@@ -5,6 +5,7 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
+import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
@@ -70,114 +71,186 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       headerText: isEditing
           ? context.l10n.categoryFormTitleEdit
           : context.l10n.categoryFormTitleAdd,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Live preview
-          Center(
-            child: CategoryTile(
-              icon: previewCategory.icon,
-              label: previewCategory.name,
-              backgroundColor: previewColor,
-              iconColor: context.colorScheme.onPrimary,
-              size: 100,
-            ),
-          ),
-          const SizedBox(height: 32),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = constraints.maxWidth >= 600;
 
-          // Name field
-          AppTextField(
-            controller: notifier.name.controller,
-            label: context.l10n.categoryFormName,
-            hintText: context.l10n.categoryFormNameHint,
-            prefixIcon: Ionicons.text_outline,
-            textCapitalization: TextCapitalization.sentences,
-            errorText: notifier.name.error,
-            onChanged: notifier.onNameChanged,
-          ),
-          const SizedBox(height: 24),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildPreview(previewCategory, previewColor),
+              const SizedBox(height: 32),
+              if (wide) ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildNameField(notifier),
+                          const SizedBox(height: 24),
+                          _buildColorPicker(formState, notifier),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 32),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildIconPicker(formState, notifier),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                _buildNameField(notifier),
+                const SizedBox(height: 24),
+                _buildColorPicker(formState, notifier),
+                const SizedBox(height: 24),
+                _buildIconPicker(formState, notifier),
+              ],
+              const SizedBox(height: 32),
+              Center(child: _buildActions(formState, notifier, isEditing)),
+            ],
+          );
+        },
+      ),
+    );
+  }
 
-          // Color picker
-          Text(
-            context.l10n.categoryFormColor,
-            style: context.textTheme.labelLarge?.copyWith(
-              color: context.colorScheme.primary,
-              fontWeight: FontWeight.w600,
-            ),
+  Widget _buildPreview(models.Category category, Color color) {
+    return Center(
+      child: CategoryTile(
+        icon: category.icon,
+        label: category.name,
+        backgroundColor: color,
+        iconColor: context.colorScheme.onPrimary,
+        size: 100,
+      ),
+    );
+  }
+
+  Widget _buildNameField(CategoryFormNotifier notifier) {
+    return AppTextField(
+      controller: notifier.name.controller,
+      label: context.l10n.categoryFormName,
+      hintText: context.l10n.categoryFormNameHint,
+      prefixIcon: Ionicons.text_outline,
+      textCapitalization: TextCapitalization.sentences,
+      errorText: notifier.name.error,
+      onChanged: notifier.onNameChanged,
+    );
+  }
+
+  Widget _buildColorPicker(
+    CategoryFormState formState,
+    CategoryFormNotifier notifier,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.categoryFormColor,
+          style: context.textTheme.labelLarge?.copyWith(
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w600,
           ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: AppPrimaryColors.values.map((colors) {
-              final isSelected = colors.key == formState.selectedColorKey;
-              return GestureDetector(
-                onTap: () => notifier.selectColor(colors.key),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: colors.primary,
-                    shape: BoxShape.circle,
-                    border: isSelected
-                        ? Border.all(
-                            color: context.colorScheme.onSurface,
-                            width: 3,
-                          )
-                        : null,
-                  ),
-                  child: isSelected
-                      ? Icon(
-                          Ionicons.checkmark,
-                          size: 20,
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: AppPrimaryColors.values.map((colors) {
+            final isSelected = colors.key == formState.selectedColorKey;
+            return GestureDetector(
+              onTap: () => notifier.selectColor(colors.key),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: colors.primary,
+                  shape: BoxShape.circle,
+                  border: isSelected
+                      ? Border.all(
                           color: context.colorScheme.onSurface,
+                          width: 3,
                         )
                       : null,
                 ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 24),
+                child: isSelected
+                    ? Icon(
+                        Ionicons.checkmark,
+                        size: 20,
+                        color: context.colorScheme.onSurface,
+                      )
+                    : null,
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
 
-          // Icon picker
-          Text(
-            context.l10n.categoryFormIcon,
-            style: context.textTheme.labelLarge?.copyWith(
-              color: context.colorScheme.primary,
-              fontWeight: FontWeight.w600,
-            ),
+  Widget _buildIconPicker(
+    CategoryFormState formState,
+    CategoryFormNotifier notifier,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.categoryFormIcon,
+          style: context.textTheme.labelLarge?.copyWith(
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w600,
           ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: models.Category.iconMap.entries.map((entry) {
-              final isSelected = entry.key == formState.selectedIconName;
-              return GestureDetector(
-                onTap: () => notifier.selectIcon(entry.key),
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? context.colorScheme.primary
-                        : context.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    entry.value,
-                    size: 24,
-                    color: isSelected
-                        ? context.colorScheme.onPrimary
-                        : context.colorScheme.onSurface,
-                  ),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: models.Category.iconMap.entries.map((entry) {
+            final isSelected = entry.key == formState.selectedIconName;
+            return GestureDetector(
+              onTap: () => notifier.selectIcon(entry.key),
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? context.colorScheme.primary
+                      : context.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 32),
+                child: Icon(
+                  entry.value,
+                  size: 24,
+                  color: isSelected
+                      ? context.colorScheme.onPrimary
+                      : context.colorScheme.onSurface,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
 
-          // Save button
+  Widget _buildActions(
+    CategoryFormState formState,
+    CategoryFormNotifier notifier,
+    bool isEditing,
+  ) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: appMaxWidth),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
           AppButton(
             text: context.l10n.categoryFormSave,
             isProcessing: formState.isLoading,
@@ -186,13 +259,11 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 context.l10n,
                 existing: widget.category,
               );
-              if (success && context.mounted) {
+              if (success && mounted) {
                 Navigator.of(context).pop();
               }
             },
           ),
-
-          // Delete button (only when editing)
           if (isEditing) ...[
             const SizedBox(height: 16),
             AppButton(
@@ -206,7 +277,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                     category: widget.category!,
                   ),
                 );
-                if (deleted == true && context.mounted) {
+                if (deleted == true && mounted) {
                   Navigator.of(context).pop();
                 }
               },
