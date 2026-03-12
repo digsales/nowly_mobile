@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/features/ranking/ranking_screen.dart';
+import 'package:nowly/core/models/category.dart' as models;
+import 'package:nowly/features/category/category_form_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
 import 'package:nowly/features/profile/profile_screen.dart';
@@ -22,6 +24,7 @@ abstract class AppRoutes {
 
   // authenticated routes
   static const String home = '/home';
+  static const String categoryForm = '/category-form';
   static const String ranking = '/ranking';
   static const String history = '/history';
   static const String profile = '/profile';
@@ -33,7 +36,7 @@ enum PageTransitionType {
 }
 
 CustomTransitionPage _buildPage(GoRouterState state, Widget child) {
-  final transition = state.extra as PageTransitionType?;
+  final transition = state.extra is PageTransitionType ? state.extra as PageTransitionType : null;
   return CustomTransitionPage(
     key: state.pageKey,
     child: child,
@@ -159,6 +162,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.forgotPassword,
         pageBuilder: (context, state) =>
             _buildPage(state, const ForgotPasswordPage()),
+      ),
+
+      GoRoute(
+        path: AppRoutes.categoryForm,
+        pageBuilder: (context, state) {
+          final category = state.extra as models.Category?;
+          return _buildPage(
+            state,
+            CategoryFormScreen(category: category),
+          );
+        },
       ),
 
       // authenticated shell

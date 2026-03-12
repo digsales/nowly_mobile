@@ -78,6 +78,15 @@
   "fabAddTask": "Adicionar tarefa",
 
   "addCategory": "Adicionar",
+  "categoryFormTitleAdd": "Nova categoria",
+  "categoryFormTitleEdit": "Editar categoria",
+  "categoryFormName": "Nome",
+  "categoryFormNameHint": "Nome da categoria",
+  "categoryFormColor": "Cor",
+  "categoryFormIcon": "Ícone",
+  "categoryFormSave": "Salvar",
+  "categoryFormDelete": "Excluir categoria",
+  "categoryFormDeleteMessage": "Tem certeza que deseja excluir esta categoria?",
 
   "categoryStudy": "Estudo",
   "categoryWork": "Trabalho",
