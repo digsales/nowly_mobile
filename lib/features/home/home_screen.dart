@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
                   style: context.textTheme.displayMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Ultra',
-                    color: context.colorScheme.onPrimary,
+                    color: context.colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   style: context.textTheme.displayMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Ultra',
-                    color: context.colorScheme.onPrimary,
+                    color: context.colorScheme.onSurface,
                   ),
                 ),
               ),

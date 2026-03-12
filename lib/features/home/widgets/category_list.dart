@@ -7,6 +7,7 @@ import 'package:nowly/core/router/app_router.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/widgets/category_tile.dart';
 import 'package:nowly/features/home/home_provider.dart';
+import 'package:nowly/features/home/widgets/category_skeleton.dart';
 
 class CategoryList extends ConsumerWidget {
   const CategoryList({super.key});
@@ -55,6 +56,7 @@ class CategoryList extends ConsumerWidget {
             ],
           ),
         ),
+      AsyncLoading() => const CategorySkeleton(),
       _ => const SizedBox.shrink(),
     };
   }
