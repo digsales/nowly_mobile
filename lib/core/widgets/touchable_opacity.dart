@@ -34,7 +34,9 @@ class _TouchableOpacityState extends State<TouchableOpacity> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) => setState(() => _isPressed = false),
       onTapCancel: () => setState(() => _isPressed = false),
@@ -43,6 +45,7 @@ class _TouchableOpacityState extends State<TouchableOpacity> {
         duration: const Duration(milliseconds: 100),
         opacity: _isPressed ? widget.activeOpacity : 1.0,
         child: widget.child,
+      ),
       ),
     );
   }
