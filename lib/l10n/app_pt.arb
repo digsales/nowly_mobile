@@ -77,6 +77,11 @@
 
   "fabAddTask": "Adicionar tarefa",
 
+  "homeSectionCategories": "Categorias",
+  "homeCategoryHelpText": "Organize suas tarefas por categoria para melhor acompanhamento.\n\nGerencie-as por nome, cor e ícone.\n\nToque em \"Adicionar\" para criar ou em uma existente para editá-la.",
+  "homeSectionTasks": "Tarefas",
+  "homeEdit": "Editar",
+
   "addCategory": "Adicionar",
   "emptyCategoryHint": "Crie uma categoria e comece",
   "categoryFormTitleAdd": "Nova categoria",
