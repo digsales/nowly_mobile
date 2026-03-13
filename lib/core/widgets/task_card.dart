@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
@@ -164,16 +166,70 @@ class TaskCard extends ConsumerWidget {
   }
 }
 
-class _StatusLabel extends StatelessWidget {
+class _StatusLabel extends StatefulWidget {
   const _StatusLabel({required this.task, required this.isExpired});
 
   final Task task;
   final bool isExpired;
 
   @override
+  State<_StatusLabel> createState() => _StatusLabelState();
+}
+
+class _StatusLabelState extends State<_StatusLabel> {
+  Timer? _timer;
+
+  bool get _needsLiveCountdown {
+    if (widget.task.status != TaskStatus.pending || widget.isExpired) {
+      return false;
+    }
+    final remaining = widget.task.endDate.difference(DateTime.now());
+    return remaining.inHours < 5 && !remaining.isNegative;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimerIfNeeded();
+  }
+
+  @override
+  void didUpdateWidget(_StatusLabel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.task.id != widget.task.id ||
+        oldWidget.task.endDate != widget.task.endDate ||
+        oldWidget.task.status != widget.task.status) {
+      _timer?.cancel();
+      _startTimerIfNeeded();
+    }
+  }
+
+  void _startTimerIfNeeded() {
+    if (_needsLiveCountdown) {
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+        (_) {
+          if (!_needsLiveCountdown) {
+            _timer?.cancel();
+            _timer = null;
+          }
+          if (mounted) setState(() {});
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final text = _resolveText(context);
-    final color = isExpired
+    final isUrgent = _needsLiveCountdown;
+    final color = widget.isExpired || isUrgent
         ? context.colorScheme.error
         : context.colorScheme.onSurfaceVariant;
 
@@ -186,17 +242,26 @@ class _StatusLabel extends StatelessWidget {
   }
 
   String _resolveText(BuildContext context) {
-    if (task.status == TaskStatus.completed) {
+    if (widget.task.status == TaskStatus.completed) {
       return context.l10n.taskCompleted;
     }
-    if (task.status == TaskStatus.cancelled) {
+    if (widget.task.status == TaskStatus.cancelled) {
       return context.l10n.taskCancelled;
     }
-    if (task.status == TaskStatus.expired || isExpired) {
+    if (widget.task.status == TaskStatus.expired || widget.isExpired) {
       return context.l10n.taskExpired;
     }
 
-    final remaining = task.endDate.difference(DateTime.now());
+    final remaining = widget.task.endDate.difference(DateTime.now());
+
+    if (remaining.inHours < 5 && !remaining.isNegative) {
+      final hours = remaining.inHours;
+      final minutes = remaining.inMinutes.remainder(60);
+      final seconds = remaining.inSeconds.remainder(60);
+      return '${hours.toString().padLeft(2, '0')}:'
+          '${minutes.toString().padLeft(2, '0')}:'
+          '${seconds.toString().padLeft(2, '0')}';
+    }
 
     if (remaining.inDays > 0) {
       return context.l10n.taskTimeRemainingDays(remaining.inDays);
