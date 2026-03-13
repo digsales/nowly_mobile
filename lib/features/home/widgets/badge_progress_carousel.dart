@@ -237,7 +237,7 @@ class _ScrollIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     if (count <= 1) return const SizedBox.shrink();
 
-    double trackWidth = 100.w - context.paddingLeft - context.paddingRight - 96;
+    double trackWidth = 80.w;
     const height = 4.0;
 
     return Padding(
