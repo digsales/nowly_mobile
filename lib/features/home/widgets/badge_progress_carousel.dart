@@ -7,6 +7,7 @@ import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/widgets/badge_details_sheet.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:nowly/features/home/widgets/badge_carousel_skeleton.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 
@@ -79,6 +80,7 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
 
     return switch (userAsync) {
       AsyncData(:final value) when value != null => _buildCarousel(value),
+      AsyncLoading() => const BadgeCarouselSkeleton(),
       _ => const SizedBox.shrink(),
     };
   }
