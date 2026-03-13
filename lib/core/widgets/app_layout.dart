@@ -19,6 +19,8 @@ class AppLayout extends StatefulWidget {
   const AppLayout({
     super.key,
     this.headerText,
+    this.headerHelpTitle,
+    this.headerHelpText,
     this.headerBuilder,
     this.showBackButton = false,
     this.onRefresh,
@@ -28,6 +30,13 @@ class AppLayout extends StatefulWidget {
 
   /// Simple text header (styled with Ultra font)
   final String? headerText;
+
+  /// Custom title for the help sheet. Defaults to [headerText] when omitted.
+  final String? headerHelpTitle;
+
+  /// Help text shown in the help sheet. When non-null, a help icon
+  /// appears next to the header title.
+  final String? headerHelpText;
 
   /// Custom header builder (takes priority over headerText)
   final WidgetBuilder? headerBuilder;
@@ -160,7 +169,9 @@ class _AppLayoutState extends State<AppLayout> {
     if (widget.headerText != null) {
       return AppTitle(
         title: widget.headerText!,
-        titleColor: context.colorScheme.onPrimary
+        titleColor: context.colorScheme.onPrimary,
+        helpTitle: widget.headerHelpTitle,
+        helpText: widget.headerHelpText,
       );
     }
     return const SizedBox.shrink();

@@ -62,7 +62,7 @@ class AppTitle extends StatelessWidget {
             ),
             child: Icon(
                 Ionicons.help_circle_outline,
-                color: context.colorScheme.onSurface,
+                color: titleColor ?? context.colorScheme.onSurface,
                 size: context.textTheme.displaySmall!.fontSize,
               ),
           )
