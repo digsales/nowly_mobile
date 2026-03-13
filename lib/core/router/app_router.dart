@@ -6,6 +6,7 @@ import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/features/ranking/ranking_screen.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/features/category/category_form_screen.dart';
+import 'package:nowly/features/task/task_form_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
 import 'package:nowly/features/profile/profile_screen.dart';
@@ -25,6 +26,7 @@ abstract class AppRoutes {
   // authenticated routes
   static const String home = '/home';
   static const String categoryForm = '/home/category-form';
+  static const String taskForm = '/home/task-form';
   static const String ranking = '/ranking';
   static const String history = '/history';
   static const String profile = '/profile';
@@ -190,6 +192,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                         CategoryFormScreen(category: category),
                       );
                     },
+                  ),
+                  GoRoute(
+                    path: 'task-form',
+                    pageBuilder: (context, state) => _buildPage(
+                      state,
+                      const TaskFormScreen(),
+                    ),
                   ),
                 ],
               ),

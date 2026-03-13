@@ -106,9 +106,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       ),
       floatingActionButton: isRootTab
           ? FloatingActionButton(
-              onPressed: () {
-                // TODO: abrir tela de adicionar task
-              },
+              onPressed: () => context.push(AppRoutes.taskForm, extra: PageTransitionType.bottomToTop),
               tooltip: context.l10n.fabAddTask,
               foregroundColor: context.colorScheme.onPrimary,
               backgroundColor: context.colorScheme.primary,
