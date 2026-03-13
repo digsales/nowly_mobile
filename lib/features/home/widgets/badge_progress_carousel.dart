@@ -198,15 +198,20 @@ class _BadgeCard extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: LinearProgressIndicator(
-                              value: progress,
-                              minHeight: 6,
-                              backgroundColor:
-                                  context.colorScheme.onSurface.withValues(alpha: 0.12),
-                              valueColor: AlwaysStoppedAnimation(
-                                context.colorScheme.primary,
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 0, end: progress),
+                            duration: const Duration(milliseconds: 600),
+                            curve: Curves.easeOutCubic,
+                            builder: (context, value, _) => ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: LinearProgressIndicator(
+                                value: value,
+                                minHeight: 6,
+                                backgroundColor:
+                                    context.colorScheme.onSurface.withValues(alpha: 0.12),
+                                valueColor: AlwaysStoppedAnimation(
+                                  context.colorScheme.primary,
+                                ),
                               ),
                             ),
                           ),
