@@ -86,6 +86,15 @@ class CategoryList extends ConsumerWidget {
           ],
         ),
       AsyncLoading() => const CategorySkeleton(),
+      AsyncError() => Padding(
+          padding: horizontalPadding,
+          child: Text(
+            context.l10n.errorMessage,
+            style: context.textTheme.labelSmall?.copyWith(
+              color: context.colorScheme.error,
+            ),
+          ),
+        ),
       _ => const SizedBox.shrink(),
     };
   }
