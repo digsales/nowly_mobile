@@ -36,6 +36,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     return AppLayout(
       showBackButton: true,
       headerText: context.l10n.taskFormTitleAdd,
+      headerHelpText: context.l10n.taskFormInfo,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= 600;
@@ -80,6 +81,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 _buildCategoryPicker(formState, notifier),
                 const SizedBox(height: 24),
                 _buildDeadlinePicker(formState, notifier),
+                const SizedBox(height: 24),
               ],
               const SizedBox(height: 32),
               Center(
@@ -125,7 +127,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TaskCard(task: previewTask),
+      child: TaskCard(task: previewTask, showDetails: false),
     );
   }
 
@@ -149,8 +151,8 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       prefixIcon: Ionicons.document_text_outline,
       textCapitalization: TextCapitalization.sentences,
       multiline: true,
-      minLines: 2,
-      maxLines: 4,
+      minLines: 4,
+      maxLines: 6,
       onChanged: notifier.onDescriptionChanged,
     );
   }
