@@ -7,17 +7,19 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
+import 'package:nowly/core/widgets/task_details_sheet.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
 
 class TaskCard extends ConsumerWidget {
   const TaskCard({
     super.key,
     required this.task,
-    this.onTap,
+    this.showDetails = true,
   });
 
   final Task task;
-  final VoidCallback? onTap;
+  final bool showDetails;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,9 +32,10 @@ class TaskCard extends ConsumerWidget {
       highContrast: ref.watch(highContrastProvider),
     );
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+    return TouchableOpacity(
+      onTap: showDetails
+          ? () => TaskDetailsSheet.show(context, task: task)
+          : () {},
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

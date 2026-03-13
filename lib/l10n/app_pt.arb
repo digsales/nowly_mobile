@@ -122,6 +122,41 @@
   "taskFormInfo": "Concluir uma tarefa adiciona +5 pontos à sua pontuação.\n\nCancelar uma tarefa remove 1 ponto.\n\nTarefas expiradas removem 3 pontos.\n\nO nome, a descrição e a categoria da tarefa podem ser editados.\n\nAo criar uma tarefa, você terá 30 minutos para excluí-la sem perder sua pontuação.\n\nAs tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem.",
   "taskFormSave": "Criar tarefa",
   "taskFormPreviewTitle": "Minha tarefa",
+  "taskDetailsTitle": "Detalhes da tarefa",
+  "taskDetailsDescription": "Sem descrição",
+  "taskDetailsCategory": "Categoria",
+  "taskDetailsDeadline": "Prazo",
+  "taskDetailsCreatedAt": "Criada em",
+  "taskDetailsPoints": "{points} pts",
+  "@taskDetailsPoints": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "taskDetailsComplete": "Concluir",
+  "taskDetailsCancel": "Cancelar",
+  "taskDetailsUncancel": "Reativar",
+  "taskDetailsEdit": "Editar",
+  "taskDetailsDelete": "Excluir",
+  "taskDetailsDeleteTimer": "Excluir ({minutes}min)",
+  "@taskDetailsDeleteTimer": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "taskDetailsDeleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
+  "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 ponto.",
+  "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} pontos!",
+  "@taskDetailsCompleteConfirm": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 ponto de volta.",
+  "taskDetailsSuccess": "Tarefa atualizada com sucesso!",
+  "taskDetailsDeleteSuccess": "Tarefa excluída com sucesso!",
+  "taskStatusPending": "Pendente",
+
   "badgeDataUnavailable": "Não foi possível coletar dados.",
   "badgeProgressLabel": "{current} / {total}",
   "@badgeProgressLabel": {
