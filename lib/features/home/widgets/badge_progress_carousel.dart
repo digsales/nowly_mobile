@@ -81,12 +81,13 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     return switch (userAsync) {
       AsyncData(:final value) when value != null => _buildCarousel(value),
       AsyncLoading() => const BadgeCarouselSkeleton(),
+      AsyncError() => _buildCarousel(null),
       _ => const SizedBox.shrink(),
     };
   }
 
-  Widget _buildCarousel(User user) {
-    final badges = _sortedBadges(user);
+  Widget _buildCarousel(User? user) {
+    final badges = user != null ? _sortedBadges(user) : UserBadges.values;
     if (badges.isEmpty) return const SizedBox.shrink();
 
     _totalPages = badges.length;
@@ -105,7 +106,7 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
               return TouchableOpacity(
                 onTap: () {
                   _pauseAndResume();
-                  if (isCurrent) {
+                  if (isCurrent && user != null) {
                     BadgeDetailsSheet.show(context, badge: badge, user: user);
                   } else {
                     _controller.animateToPage(
@@ -127,15 +128,16 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
 }
 
 class _BadgeCard extends StatelessWidget {
-  const _BadgeCard({required this.badge, required this.user});
+  const _BadgeCard({required this.badge, this.user});
 
   final UserBadge badge;
-  final User user;
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
-    final progress = badge.progress(user);
-    final current = badge.currentValue(user);
+    final hasUser = user != null;
+    final progress = hasUser ? badge.progress(user!) : 0.0;
+    final current = hasUser ? badge.currentValue(user!) : 0;
     final total = badge.threshold;
 
     return Padding(
@@ -192,32 +194,40 @@ class _BadgeCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: LinearProgressIndicator(
-                            value: progress,
-                            minHeight: 6,
-                            backgroundColor:
-                                context.colorScheme.onSurface.withValues(alpha: 0.12),
-                            valueColor: AlwaysStoppedAnimation(
-                              context.colorScheme.primary,
+                  if (hasUser)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: LinearProgressIndicator(
+                              value: progress,
+                              minHeight: 6,
+                              backgroundColor:
+                                  context.colorScheme.onSurface.withValues(alpha: 0.12),
+                              valueColor: AlwaysStoppedAnimation(
+                                context.colorScheme.primary,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      if (total > 0)
-                        Text(
-                          context.l10n.badgeProgressLabel(current < total ? current : total, total),
-                          style: context.textTheme.labelSmall?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
+                        const SizedBox(width: 8),
+                        if (total > 0)
+                          Text(
+                            context.l10n.badgeProgressLabel(current < total ? current : total, total),
+                            style: context.textTheme.labelSmall?.copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
+                      ],
+                    )
+                  else
+                    Text(
+                      context.l10n.badgeDataUnavailable,
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: context.colorScheme.error,
+                      ),
+                    ),
                 ],
               ),
             ),

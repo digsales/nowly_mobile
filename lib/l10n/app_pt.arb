@@ -83,6 +83,7 @@
   "homeBadgesHelpText": "Conquiste insígnias e personalize seu perfil.\n\nCada insígnia tem seu próprio desafio. Complete-o para desbloqueá-la.\n\nVocê pode acompanhar o progresso e equipá-las aqui ou no seu perfil.",
   "homeSectionTasks": "Tarefas",
   "homeEdit": "Editar",
+  "badgeDataUnavailable": "Não foi possível coletar dados.",
   "badgeProgressLabel": "{current} / {total}",
   "@badgeProgressLabel": {
     "placeholders": {
