@@ -9,7 +9,6 @@ import 'package:nowly/core/widgets/badge_details_sheet.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
-import 'package:sizer/sizer.dart';
 
 class BadgeProgressCarousel extends ConsumerStatefulWidget {
   const BadgeProgressCarousel({super.key});
@@ -237,49 +236,53 @@ class _ScrollIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     if (count <= 1) return const SizedBox.shrink();
 
-    double trackWidth = 80.w;
-    const height = 4.0;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final trackWidth = constraints.maxWidth * 0.80;
+        const height = 4.0;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: AnimatedBuilder(
-        animation: controller,
-        builder: (context, _) {
-          final currentPage = controller.hasClients
-              ? (controller.page ?? 0.0)
-              : 0.0;
-          final progress = currentPage / (count - 1);
-          final thumbWidth = trackWidth / count;
-          final offset = progress * (trackWidth - thumbWidth);
+        return Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              final currentPage =
+                  controller.hasClients ? (controller.page ?? 0.0) : 0.0;
 
-          return Center(
-            child: SizedBox(
-              width: trackWidth,
-              height: height,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: context.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(height / 2),
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Transform.translate(
-                    offset: Offset(offset, 0),
-                    child: Container(
-                      width: thumbWidth,
-                      height: height,
-                      decoration: BoxDecoration(
-                        color: context.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(height / 2),
+              final progress = currentPage / (count - 1);
+              final thumbWidth = trackWidth / count;
+              final offset = progress * (trackWidth - thumbWidth);
+
+              return Center(
+                child: SizedBox(
+                  width: trackWidth,
+                  height: height,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(height / 2),
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Transform.translate(
+                        offset: Offset(offset, 0),
+                        child: Container(
+                          width: thumbWidth,
+                          height: height,
+                          decoration: BoxDecoration(
+                            color: context.colorScheme.primary,
+                            borderRadius: BorderRadius.circular(height / 2),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
