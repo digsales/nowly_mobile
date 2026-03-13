@@ -60,6 +60,6 @@ class CategoryTile extends StatelessWidget {
       ],
     );
 
-    return TouchableOpacity(onTap: onTap!, child: child);
+    return TouchableOpacity(onTap: onTap, child: child);
   }
 }
