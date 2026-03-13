@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/models/user_badge.dart';
+import 'package:nowly/core/widgets/badge_details_sheet.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 
@@ -57,25 +59,27 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     if (badges.isEmpty) return const SizedBox.shrink();
 
     return ExpandablePageView.builder(
-        controller: _controller,
-        itemCount: badges.length,
-        itemBuilder: (context, index) {
-          final badge = badges[index];
-          return MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  _controller.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                child: _BadgeCard(badge: badge, user: user),
-            ),
-          );
-        },
-      );
+      controller: _controller,
+      itemCount: badges.length,
+      itemBuilder: (context, index) {
+        final badge = badges[index];
+        final isCurrent = (_controller.page?.round() ?? 0) == index;
+        return TouchableOpacity(
+          onTap: () {
+            if (isCurrent) {
+              BadgeDetailsSheet.show(context, badge: badge, user: user);
+            } else {
+              _controller.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
+          },
+          child: _BadgeCard(badge: badge, user: user),
+        );
+      },
+    );
   }
 }
 
