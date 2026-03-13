@@ -113,6 +113,7 @@ class HomeScreen extends StatelessWidget {
                 padding: horizontalPadding,
                 child: AppTitle(
                   title: context.l10n.homeSectionTasks,
+                  helpText: context.l10n.homeTasksHelpText,
                 ),
               ),
             ],
