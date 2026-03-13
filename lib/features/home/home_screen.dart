@@ -12,74 +12,92 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = EdgeInsets.only(
+      left: context.paddingLeft + 32,
+      right: context.paddingRight + 32,
+    );
+
     return AppLayout(
       headerText: context.l10n.appName,
+      bodyPadding: EdgeInsets.only(
+        top: 32,
+        bottom: context.paddingBottom + 50,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  context.l10n.homeSectionCategories,
-                  style: context.textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Ultra',
-                    color: context.colorScheme.onSurface,
+          Padding(
+            padding: horizontalPadding,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    context.l10n.homeSectionCategories,
+                    style: context.textTheme.displayMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Ultra',
+                      color: context.colorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-              TouchableOpacity(
-                onTap: () => AppHelpSheet.show(
-                  context: context,
-                  title: context.l10n.homeSectionCategories,
-                  text: context.l10n.homeCategoryHelpText,
-                ),
-                child: Icon(
-                    Ionicons.help_circle_outline,
-                    color: context.colorScheme.onSurface,
-                    size: context.textTheme.displaySmall!.fontSize,
+                TouchableOpacity(
+                  onTap: () => AppHelpSheet.show(
+                    context: context,
+                    title: context.l10n.homeSectionCategories,
+                    text: context.l10n.homeCategoryHelpText,
                   ),
-              )
-            ],
+                  child: Icon(
+                      Ionicons.help_circle_outline,
+                      color: context.colorScheme.onSurface,
+                      size: context.textTheme.displaySmall!.fontSize,
+                    ),
+                )
+              ],
+            ),
           ),
           const SizedBox(height: 32),
           const CategoryList(),
           const SizedBox(height: 32),
-          Text(
-            context.l10n.homeSectionBadges,
-            style: context.textTheme.displayMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Ultra',
-              color: context.colorScheme.onSurface,
+          Padding(
+            padding: horizontalPadding,
+            child: Text(
+              context.l10n.homeSectionBadges,
+              style: context.textTheme.displayMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Ultra',
+                color: context.colorScheme.onSurface,
+              ),
             ),
           ),
           const SizedBox(height: 32),
           const BadgeProgressCarousel(),
           const SizedBox(height: 32),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(
-                  context.l10n.homeSectionTasks,
-                  style: context.textTheme.displayMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Ultra',
-                    color: context.colorScheme.onSurface,
+          Padding(
+            padding: horizontalPadding,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: Text(
+                    context.l10n.homeSectionTasks,
+                    style: context.textTheme.displayMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Ultra',
+                      color: context.colorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-              TouchableOpacity(
-                child: Text(
-                  context.l10n.homeEdit,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
+                TouchableOpacity(
+                  child: Text(
+                    context.l10n.homeEdit,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
                   ),
+                  onTap: () {},
                 ),
-                onTap: () {},
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

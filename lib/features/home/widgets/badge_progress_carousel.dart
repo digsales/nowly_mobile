@@ -20,7 +20,7 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
   @override
   void initState() {
     super.initState();
-    _controller = PageController(viewportFraction: 0.95);
+    _controller = PageController(viewportFraction: 0.85);
   }
 
   @override
@@ -57,12 +57,23 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     if (badges.isEmpty) return const SizedBox.shrink();
 
     return ExpandablePageView.builder(
-        clipBehavior: Clip.none,
         controller: _controller,
         itemCount: badges.length,
         itemBuilder: (context, index) {
           final badge = badges[index];
-          return _BadgeCard(badge: badge, user: user);
+          return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  _controller.animateToPage(
+                    index,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: _BadgeCard(badge: badge, user: user),
+            ),
+          );
         },
       );
   }
@@ -151,12 +162,13 @@ class _BadgeCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        context.l10n.badgeProgressLabel(current, total),
-                        style: context.textTheme.labelSmall?.copyWith(
-                          color: context.colorScheme.onSurfaceVariant,
+                      if (total > 0)
+                        Text(
+                          context.l10n.badgeProgressLabel(current < total ? current : total, total),
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],

@@ -17,11 +17,15 @@ class CategoryList extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
     final highContrast = ref.watch(highContrastProvider);
     final brightness = Theme.of(context).brightness;
+    final horizontalPadding = EdgeInsets.only(
+      left: context.paddingLeft + 32,
+      right: context.paddingRight + 32,
+    );
 
     return switch (categoriesAsync) {
       AsyncData(:final value) when value.isNotEmpty => SingleChildScrollView(
-          clipBehavior: Clip.none,
           scrollDirection: Axis.horizontal,
+          padding: horizontalPadding,
           child: Row(
             spacing: 16,
             children: [

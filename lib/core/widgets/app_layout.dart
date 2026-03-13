@@ -21,6 +21,7 @@ class AppLayout extends StatefulWidget {
     this.headerBuilder,
     this.showBackButton = false,
     this.onRefresh,
+    this.bodyPadding,
     required this.body,
   });
 
@@ -36,6 +37,10 @@ class AppLayout extends StatefulWidget {
   /// Pull-to-refresh callback. When non-null, wraps the scroll view
   /// in a [RefreshIndicator].
   final RefreshCallback? onRefresh;
+
+  /// Custom padding for the body area. When null, uses the default
+  /// (32px horizontal + safe area, 32px top, 50px + safe area bottom).
+  final EdgeInsets? bodyPadding;
 
   /// Main content
   final Widget body;
@@ -126,12 +131,13 @@ class _AppLayoutState extends State<AppLayout> {
       child: CustomScrollView(
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(
-              top: 32,
-              left: context.paddingLeft + 32,
-              right: context.paddingRight + 32,
-              bottom: context.paddingBottom + 50,
-            ),
+            padding: widget.bodyPadding ??
+                EdgeInsets.only(
+                  top: 32,
+                  left: context.paddingLeft + 32,
+                  right: context.paddingRight + 32,
+                  bottom: context.paddingBottom + 50,
+                ),
             sliver: SliverToBoxAdapter(child: widget.body),
           ),
         ],
