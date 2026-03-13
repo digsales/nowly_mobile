@@ -26,44 +26,52 @@ class HomeScreen extends StatelessWidget {
           final wide = constraints.maxWidth >= 600;
 
           if (wide) {
-            return Row(
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: horizontalPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppTitle(
-                          title: context.l10n.homeSectionCategories,
-                          helpText: context.l10n.homeCategoryHelpText,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: context.paddingLeft + 32),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AppTitle(
+                              title: context.l10n.homeSectionCategories,
+                              helpText: context.l10n.homeCategoryHelpText,
+                            ),
+                            const SizedBox(height: 32),
+                            const CategoryList(),
+                          ],
                         ),
-                        const SizedBox(height: 32),
-                        const CategoryList(),
-                        const SizedBox(height: 32),
-                        AppTitle(
-                          title: context.l10n.homeSectionBadges,
-                          helpText: context.l10n.homeBadgesHelpText,
-                        ),
-                        const SizedBox(height: 32),
-                        const BadgeProgressCarousel(),
-                      ],
+                      ),
                     ),
-                  ),
+                    const SizedBox(width: 32),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: context.paddingRight + 32),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AppTitle(
+                              title: context.l10n.homeSectionBadges,
+                              helpText: context.l10n.homeBadgesHelpText,
+                            ),
+                            const SizedBox(height: 32),
+                            const BadgeProgressCarousel(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 32),
-                Expanded(
-                  child: Padding(
-                    padding: horizontalPadding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppTitle(
-                          title: context.l10n.homeSectionTasks,
-                        ),
-                      ],
-                    ),
+                const SizedBox(height: 32),
+                Padding(
+                  padding: horizontalPadding,
+                  child: AppTitle(
+                    title: context.l10n.homeSectionTasks,
                   ),
                 ),
               ],
