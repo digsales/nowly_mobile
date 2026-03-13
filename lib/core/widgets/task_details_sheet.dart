@@ -6,8 +6,9 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
-import 'package:nowly/core/theme/app_palette.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/app_bottom_sheet.dart';
+import 'package:nowly/core/widgets/app_dialog.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/features/home/home_provider.dart';
 
@@ -63,8 +64,12 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Future<void> _completeTask() async {
-    final confirmed = await _showConfirmDialog(
-      context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
+    final confirmed = await _showConfirm(
+      icon: Ionicons.checkmark_circle_outline,
+      color: AppPrimaryColors.green.primary,
+      title: context.l10n.taskDetailsComplete,
+      subtitle: context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
+      buttonText: context.l10n.taskDetailsComplete,
     );
     if (!confirmed || !mounted) return;
 
@@ -84,8 +89,12 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Future<void> _cancelTask() async {
-    final confirmed = await _showConfirmDialog(
-      context.l10n.taskDetailsCancelConfirm,
+    final confirmed = await _showConfirm(
+      icon: Ionicons.close_circle_outline,
+      color: AppPrimaryColors.red.primary,
+      title: context.l10n.taskDetailsCancel,
+      subtitle: context.l10n.taskDetailsCancelConfirm,
+      buttonText: context.l10n.taskDetailsCancel,
     );
     if (!confirmed || !mounted) return;
 
@@ -105,8 +114,12 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Future<void> _uncancelTask() async {
-    final confirmed = await _showConfirmDialog(
-      context.l10n.taskDetailsUncancelConfirm,
+    final confirmed = await _showConfirm(
+      icon: Ionicons.refresh_outline,
+      color: AppPrimaryColors.blue.primary,
+      title: context.l10n.taskDetailsUncancel,
+      subtitle: context.l10n.taskDetailsUncancelConfirm,
+      buttonText: context.l10n.taskDetailsUncancel,
     );
     if (!confirmed || !mounted) return;
 
@@ -126,8 +139,12 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Future<void> _deleteTask() async {
-    final confirmed = await _showConfirmDialog(
-      context.l10n.taskDetailsDeleteConfirm,
+    final confirmed = await _showConfirm(
+      icon: Ionicons.trash_outline,
+      color: context.colorScheme.error,
+      title: context.l10n.taskDetailsDelete,
+      subtitle: context.l10n.taskDetailsDeleteConfirm,
+      buttonText: context.l10n.taskDetailsDelete,
     );
     if (!confirmed || !mounted) return;
 
@@ -146,21 +163,25 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     }
   }
 
-  Future<bool> _showConfirmDialog(String message) async {
+  Future<bool> _showConfirm({
+    required IconData icon,
+    required Color color,
+    required String title,
+    required String subtitle,
+    required String buttonText,
+  }) async {
     return await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(context.l10n.deleteAccountCancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(context.l10n.categoryFormSave),
-          ),
-        ],
+      builder: (ctx) => AppDialog(
+        icon: icon,
+        color: color,
+        onColor: Colors.white,
+        title: title,
+        subtitle: subtitle,
+        buttonText: buttonText,
+        onPressed: () => Navigator.of(ctx).pop(true),
+        cancelText: context.l10n.deleteAccountCancel,
+        onCancel: () => Navigator.of(ctx).pop(false),
       ),
     ) ?? false;
   }
@@ -283,13 +304,13 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           _ActionChip(
             icon: Ionicons.checkmark_circle_outline,
             label: context.l10n.taskDetailsComplete,
-            color: AppPalette.success,
+            color: AppPrimaryColors.green.primary,
             onTap: _completeTask,
           ),
           _ActionChip(
             icon: Ionicons.close_circle_outline,
             label: context.l10n.taskDetailsCancel,
-            color: AppPalette.error,
+            color: AppPrimaryColors.red.primary,
             onTap: _cancelTask,
           ),
         ],
@@ -297,7 +318,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           _ActionChip(
             icon: Ionicons.refresh_outline,
             label: context.l10n.taskDetailsUncancel,
-            color: AppPalette.info,
+            color: AppPrimaryColors.blue.primary,
             onTap: _uncancelTask,
           ),
         if (widget.task.canDelete)
@@ -306,7 +327,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             label: _deleteMinutesLeft > 0
                 ? context.l10n.taskDetailsDeleteTimer(_deleteMinutesLeft)
                 : context.l10n.taskDetailsDelete,
-            color: AppPalette.error,
+            color: AppPrimaryColors.red.primary,
             outlined: true,
             onTap: _deleteTask,
           ),
@@ -325,10 +346,10 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
   Color _statusColor(TaskStatus status) {
     return switch (status) {
-      TaskStatus.pending => AppPalette.warning,
-      TaskStatus.completed => AppPalette.success,
-      TaskStatus.expired => AppPalette.info,
-      TaskStatus.cancelled => AppPalette.error,
+      TaskStatus.pending => AppPrimaryColors.orange.primary,
+      TaskStatus.completed => AppPrimaryColors.green.primary,
+      TaskStatus.expired => AppPrimaryColors.blue.primary,
+      TaskStatus.cancelled => AppPrimaryColors.red.primary,
     };
   }
 
