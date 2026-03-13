@@ -84,6 +84,28 @@
   "homeSectionTasks": "Tarefas",
   "homeTasksHelpText": "Acompanhe as tarefas pendentes e complete-as antes que seus prazos terminem.\n\nTarefas concluídas a tempo darão pontos para subir de nível. Evolua para ganhar novas insígnias e se destacar na classificação.\n\nVocê pode adicionar tarefas através do \"+\" localizado no centro inferior da tela.",
   "homeEdit": "Editar",
+  "emptyTaskHint": "Nenhuma tarefa pendente. Toque no \"+\" para criar.",
+  "taskTimeRemainingDays": "{count} {count, plural, =1{dia} other{dias}} restante{count, plural, =1{} other{s}}",
+  "@taskTimeRemainingDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskTimeRemainingHours": "{count} {count, plural, =1{hora} other{horas}} restante{count, plural, =1{} other{s}}",
+  "@taskTimeRemainingHours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskTimeRemainingMinutes": "{count} {count, plural, =1{minuto} other{minutos}} restante{count, plural, =1{} other{s}}",
+  "@taskTimeRemainingMinutes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskExpired": "Expirada",
+  "taskCompleted": "Concluída",
+  "taskCancelled": "Cancelada",
   "badgeDataUnavailable": "Não foi possível coletar dados.",
   "badgeProgressLabel": "{current} / {total}",
   "@badgeProgressLabel": {

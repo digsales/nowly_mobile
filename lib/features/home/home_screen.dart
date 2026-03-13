@@ -4,6 +4,7 @@ import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_title.dart';
 import 'package:nowly/features/home/widgets/badge_progress_carousel.dart';
 import 'package:nowly/features/home/widgets/category_list.dart';
+import 'package:nowly/features/home/widgets/task_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -80,7 +81,13 @@ class HomeScreen extends StatelessWidget {
                   padding: horizontalPadding,
                   child: AppTitle(
                     title: context.l10n.homeSectionTasks,
+                    helpText: context.l10n.homeTasksHelpText,
                   ),
+                ),
+                const SizedBox(height: 32),
+                Padding(
+                  padding: horizontalPadding,
+                  child: const TaskList(),
                 ),
               ],
             );
@@ -115,6 +122,11 @@ class HomeScreen extends StatelessWidget {
                   title: context.l10n.homeSectionTasks,
                   helpText: context.l10n.homeTasksHelpText,
                 ),
+              ),
+              const SizedBox(height: 32),
+              Padding(
+                padding: horizontalPadding,
+                child: const TaskList(),
               ),
             ],
           );
