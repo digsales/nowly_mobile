@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
@@ -19,6 +21,11 @@ class BadgeProgressCarousel extends ConsumerStatefulWidget {
 
 class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
   late final PageController _controller;
+  Timer? _autoPlayTimer;
+  int _totalPages = 0;
+
+  static const _autoPlayInterval = Duration(seconds: 4);
+  static const _pauseAfterInteraction = Duration(seconds: 4);
 
   @override
   void initState() {
@@ -28,8 +35,30 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
 
   @override
   void dispose() {
+    _autoPlayTimer?.cancel();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _startAutoPlay() {
+    _autoPlayTimer?.cancel();
+    _autoPlayTimer = Timer.periodic(_autoPlayInterval, (_) {
+      if (!_controller.hasClients) return;
+      final current = _controller.page?.round() ?? 0;
+      final next = (current + 1) % _totalPages;
+      _controller.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  void _pauseAndResume() {
+    _autoPlayTimer?.cancel();
+    _autoPlayTimer = Timer(_pauseAfterInteraction, () {
+      _startAutoPlay();
+    });
   }
 
   List<UserBadge> _sortedBadges(User user) {
@@ -59,29 +88,36 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     final badges = _sortedBadges(user);
     if (badges.isEmpty) return const SizedBox.shrink();
 
+    _totalPages = badges.length;
+    if (_autoPlayTimer == null) _startAutoPlay();
+
     return Column(
       children: [
-        ExpandablePageView.builder(
-          controller: _controller,
-          itemCount: badges.length,
-          itemBuilder: (context, index) {
-            final badge = badges[index];
-            final isCurrent = (_controller.page?.round() ?? 0) == index;
-            return TouchableOpacity(
-              onTap: () {
-                if (isCurrent) {
-                  BadgeDetailsSheet.show(context, badge: badge, user: user);
-                } else {
-                  _controller.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
-              child: _BadgeCard(badge: badge, user: user),
-            );
-          },
+        GestureDetector(
+          onPanDown: (_) => _pauseAndResume(),
+          child: ExpandablePageView.builder(
+            controller: _controller,
+            itemCount: badges.length,
+            itemBuilder: (context, index) {
+              final badge = badges[index];
+              final isCurrent = (_controller.page?.round() ?? 0) == index;
+              return TouchableOpacity(
+                onTap: () {
+                  _pauseAndResume();
+                  if (isCurrent) {
+                    BadgeDetailsSheet.show(context, badge: badge, user: user);
+                  } else {
+                    _controller.animateToPage(
+                      index,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                child: _BadgeCard(badge: badge, user: user),
+              );
+            },
+          ),
         ),
         _ScrollIndicator(controller: _controller, count: badges.length),
       ],
