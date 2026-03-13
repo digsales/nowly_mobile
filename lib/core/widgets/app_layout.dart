@@ -159,7 +159,8 @@ class _AppLayoutState extends State<AppLayout> {
     if (widget.headerBuilder != null) return widget.headerBuilder!(context);
     if (widget.headerText != null) {
       return AppTitle(
-        title: widget.headerText!
+        title: widget.headerText!,
+        titleColor: context.colorScheme.onPrimary
       );
     }
     return const SizedBox.shrink();

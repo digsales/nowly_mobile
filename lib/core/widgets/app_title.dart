@@ -21,12 +21,16 @@ class AppTitle extends StatelessWidget {
   const AppTitle({
     super.key,
     required this.title,
+    this.titleColor,
     this.helpTitle,
     this.helpText,
   });
 
   /// The heading text displayed on the left.
   final String title;
+
+  /// The heading text color on the left. Defaults to [onSurface] when omitted.
+  final Color? titleColor;
 
   /// Custom title for the help sheet. Defaults to [title] when omitted.
   final String? helpTitle;
@@ -45,7 +49,7 @@ class AppTitle extends StatelessWidget {
             style: context.textTheme.displayMedium?.copyWith(
               fontWeight: FontWeight.w500,
               fontFamily: 'Ultra',
-              color: context.colorScheme.onSurface,
+              color: titleColor ?? context.colorScheme.onSurface,
             ),
           ),
         ),
