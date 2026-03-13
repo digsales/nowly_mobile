@@ -39,93 +39,110 @@ class TaskCard extends ConsumerWidget {
           color: context.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 4,
-              height: 40,
-              decoration: BoxDecoration(
-                color: categoryColor ?? context.colorScheme.surface,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    task.title,
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      decoration: task.status == TaskStatus.completed
-                          ? TextDecoration.lineThrough
-                          : null,
+        child: IntrinsicHeight(
+          child: Row(
+            children: [
+              Center(
+                child: FractionallySizedBox(
+                  heightFactor: 1,
+                  child: Container(
+                    width: 4,
+                    decoration: BoxDecoration(
+                      color: categoryColor ?? context.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(2),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      if (category != null) ...[
-                        Icon(
-                          category.icon,
-                          size: 12,
-                          color: categoryColor ?? context.colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            category.name,
-                            style: context.textTheme.labelSmall?.copyWith(
-                              color: context.colorScheme.onSurfaceVariant,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '·',
-                          style: context.textTheme.labelSmall?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                      ] else ...[
-                        Flexible(
-                          child: Text(
-                            context.l10n.taskFormCategoryNone,
-                            style: context.textTheme.labelSmall?.copyWith(
-                              color: context.colorScheme.onSurfaceVariant,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '·',
-                          style: context.textTheme.labelSmall?.copyWith(
-                            color: context.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                      _StatusLabel(task: task, isExpired: isExpired),
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Icon(
-              _statusIcon(task.status, isExpired),
-              size: 20,
-              color: _statusColor(context, task.status, isExpired),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.title,
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        decoration: task.status == TaskStatus.completed
+                            ? TextDecoration.lineThrough
+                            : null,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (task.description != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        task.description!,
+                        style: context.textTheme.labelMedium?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        if (category != null) ...[
+                          Icon(
+                            category.icon,
+                            size: 12,
+                            color: categoryColor ?? context.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              category.name,
+                              style: context.textTheme.labelSmall?.copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '·',
+                            style: context.textTheme.labelSmall?.copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                        ] else ...[
+                          Flexible(
+                            child: Text(
+                              context.l10n.taskFormCategoryNone,
+                              style: context.textTheme.labelSmall?.copyWith(
+                                color: context.colorScheme.onSurfaceVariant,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '·',
+                            style: context.textTheme.labelSmall?.copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                        _StatusLabel(task: task, isExpired: isExpired),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                _statusIcon(task.status, isExpired),
+                size: 20,
+                color: _statusColor(context, task.status, isExpired),
+              ),
+            ],
+          ),
         ),
       ),
     );
