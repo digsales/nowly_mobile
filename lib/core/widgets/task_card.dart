@@ -43,7 +43,7 @@ class TaskCard extends ConsumerWidget {
               width: 4,
               height: 40,
               decoration: BoxDecoration(
-                color: categoryColor ?? context.colorScheme.primary,
+                color: categoryColor ?? context.colorScheme.surface,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -76,6 +76,25 @@ class TaskCard extends ConsumerWidget {
                         Flexible(
                           child: Text(
                             category.name,
+                            style: context.textTheme.labelSmall?.copyWith(
+                              color: context.colorScheme.onSurfaceVariant,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '·',
+                          style: context.textTheme.labelSmall?.copyWith(
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ] else ...[
+                        Flexible(
+                          child: Text(
+                            context.l10n.taskFormCategoryNone,
                             style: context.textTheme.labelSmall?.copyWith(
                               color: context.colorScheme.onSurfaceVariant,
                             ),
