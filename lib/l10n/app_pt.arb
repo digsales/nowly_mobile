@@ -80,6 +80,7 @@
   "homeSectionCategories": "Categorias",
   "homeCategoryHelpText": "Organize suas tarefas por categoria para melhor acompanhamento.\n\nGerencie-as por nome, cor e ícone.\n\nToque em \"Adicionar\" para criar ou em uma existente para editá-la.",
   "homeSectionBadges": "Insígnias",
+  "homeBadgesHelpText": "Conquiste insígnias e personalize seu perfil.\n\nCada insígnia tem seu próprio desafio. Complete-o para desbloqueá-la.\n\nVocê pode acompanhar o progresso e equipá-las aqui ou no seu perfil.",
   "homeSectionTasks": "Tarefas",
   "homeEdit": "Editar",
   "badgeProgressLabel": "{current} / {total}",

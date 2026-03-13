@@ -38,6 +38,7 @@ class HomeScreen extends StatelessWidget {
             padding: horizontalPadding,
             child: AppTitle(
               title: context.l10n.homeSectionBadges,
+              helpText: context.l10n.homeBadgesHelpText,
             ),
           ),
           const SizedBox(height: 32),
