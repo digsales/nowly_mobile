@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_back_button.dart';
+import 'package:nowly/core/widgets/app_title.dart';
 import 'package:sizer/sizer.dart';
 
 /// Page layout for authenticated screens.
@@ -157,13 +158,8 @@ class _AppLayoutState extends State<AppLayout> {
   Widget _buildHeader(BuildContext context) {
     if (widget.headerBuilder != null) return widget.headerBuilder!(context);
     if (widget.headerText != null) {
-      return Text(
-        widget.headerText!,
-        style: context.textTheme.displayMedium?.copyWith(
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Ultra',
-          color: context.colorScheme.onPrimary,
-        ),
+      return AppTitle(
+        title: widget.headerText!
       );
     }
     return const SizedBox.shrink();

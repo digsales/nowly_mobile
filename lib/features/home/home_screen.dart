@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
-import 'package:nowly/core/widgets/app_help_sheet.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
-import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:nowly/core/widgets/app_title.dart';
 import 'package:nowly/features/home/widgets/badge_progress_carousel.dart';
 import 'package:nowly/features/home/widgets/category_list.dart';
 
@@ -28,31 +26,9 @@ class HomeScreen extends StatelessWidget {
         children: [
           Padding(
             padding: horizontalPadding,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    context.l10n.homeSectionCategories,
-                    style: context.textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Ultra',
-                      color: context.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-                TouchableOpacity(
-                  onTap: () => AppHelpSheet.show(
-                    context: context,
-                    title: context.l10n.homeSectionCategories,
-                    text: context.l10n.homeCategoryHelpText,
-                  ),
-                  child: Icon(
-                      Ionicons.help_circle_outline,
-                      color: context.colorScheme.onSurface,
-                      size: context.textTheme.displaySmall!.fontSize,
-                    ),
-                )
-              ],
+            child: AppTitle(
+              title: context.l10n.homeSectionCategories,
+              helpText: context.l10n.homeCategoryHelpText,
             ),
           ),
           const SizedBox(height: 32),
@@ -60,13 +36,8 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 32),
           Padding(
             padding: horizontalPadding,
-            child: Text(
-              context.l10n.homeSectionBadges,
-              style: context.textTheme.displayMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Ultra',
-                color: context.colorScheme.onSurface,
-              ),
+            child: AppTitle(
+              title: context.l10n.homeSectionBadges,
             ),
           ),
           const SizedBox(height: 32),
@@ -74,29 +45,8 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 32),
           Padding(
             padding: horizontalPadding,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Text(
-                    context.l10n.homeSectionTasks,
-                    style: context.textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Ultra',
-                      color: context.colorScheme.onSurface,
-                    ),
-                  ),
-                ),
-                TouchableOpacity(
-                  child: Text(
-                    context.l10n.homeEdit,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-              ],
+            child: AppTitle(
+              title: context.l10n.homeSectionTasks,
             ),
           ),
         ],
