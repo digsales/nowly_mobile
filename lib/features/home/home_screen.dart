@@ -21,36 +21,87 @@ class HomeScreen extends StatelessWidget {
         top: 32,
         bottom: context.paddingBottom + 50,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: horizontalPadding,
-            child: AppTitle(
-              title: context.l10n.homeSectionCategories,
-              helpText: context.l10n.homeCategoryHelpText,
-            ),
-          ),
-          const SizedBox(height: 32),
-          const CategoryList(),
-          const SizedBox(height: 32),
-          Padding(
-            padding: horizontalPadding,
-            child: AppTitle(
-              title: context.l10n.homeSectionBadges,
-              helpText: context.l10n.homeBadgesHelpText,
-            ),
-          ),
-          const SizedBox(height: 32),
-          const BadgeProgressCarousel(),
-          const SizedBox(height: 32),
-          Padding(
-            padding: horizontalPadding,
-            child: AppTitle(
-              title: context.l10n.homeSectionTasks,
-            ),
-          ),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final wide = constraints.maxWidth >= 600;
+
+          if (wide) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: horizontalPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppTitle(
+                          title: context.l10n.homeSectionCategories,
+                          helpText: context.l10n.homeCategoryHelpText,
+                        ),
+                        const SizedBox(height: 32),
+                        const CategoryList(),
+                        const SizedBox(height: 32),
+                        AppTitle(
+                          title: context.l10n.homeSectionBadges,
+                          helpText: context.l10n.homeBadgesHelpText,
+                        ),
+                        const SizedBox(height: 32),
+                        const BadgeProgressCarousel(),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 32),
+                Expanded(
+                  child: Padding(
+                    padding: horizontalPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppTitle(
+                          title: context.l10n.homeSectionTasks,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: horizontalPadding,
+                child: AppTitle(
+                  title: context.l10n.homeSectionCategories,
+                  helpText: context.l10n.homeCategoryHelpText,
+                ),
+              ),
+              const SizedBox(height: 32),
+              const CategoryList(),
+              const SizedBox(height: 32),
+              Padding(
+                padding: horizontalPadding,
+                child: AppTitle(
+                  title: context.l10n.homeSectionBadges,
+                  helpText: context.l10n.homeBadgesHelpText,
+                ),
+              ),
+              const SizedBox(height: 32),
+              const BadgeProgressCarousel(),
+              const SizedBox(height: 32),
+              Padding(
+                padding: horizontalPadding,
+                child: AppTitle(
+                  title: context.l10n.homeSectionTasks,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
