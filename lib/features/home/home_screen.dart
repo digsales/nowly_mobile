@@ -33,36 +33,44 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: context.paddingLeft + 32),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AppTitle(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: context.paddingLeft + 32),
+                            child:AppTitle(
                               title: context.l10n.homeSectionCategories,
                               helpText: context.l10n.homeCategoryHelpText,
                             ),
-                            const SizedBox(height: 32),
-                            const CategoryList(),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 32),
+                          _FadingEdges(
+                            color: context.colorScheme.surface,
+                            side: FadeSize.right,
+                            child: const CategoryList(),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 32),
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: context.paddingRight + 32),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AppTitle(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: context.paddingRight + 32),
+                            child: AppTitle(
                               title: context.l10n.homeSectionBadges,
                               helpText: context.l10n.homeBadgesHelpText,
                             ),
-                            const SizedBox(height: 32),
-                            const BadgeProgressCarousel(),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 32),
+                          _FadingEdges(
+                            color: context.colorScheme.surface,
+                            side: FadeSize.left,
+                            child: const BadgeProgressCarousel(),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -111,6 +119,59 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+enum FadeSize {left, right, both}
+
+class _FadingEdges extends StatelessWidget {
+  const _FadingEdges({required this.color, this.side = FadeSize.both, required this.child});
+
+  final Color color;
+  final FadeSize side;
+  final Widget child;
+
+  static const _fadeWidth = 24.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        if (side != FadeSize.right)
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: _fadeWidth,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [color, color.withValues(alpha: 0)],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (side != FadeSize.left)
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: _fadeWidth,
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [color.withValues(alpha: 0), color],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
