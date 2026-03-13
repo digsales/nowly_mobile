@@ -35,7 +35,7 @@ class TaskCard extends ConsumerWidget {
     return TouchableOpacity(
       onTap: showDetails
           ? () => TaskDetailsSheet.show(context, task: task)
-          : () {},
+          : null,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

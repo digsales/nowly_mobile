@@ -19,8 +19,9 @@ class TouchableOpacity extends StatefulWidget {
   /// Child widget that receives the opacity effect.
   final Widget child;
 
-  /// Callback fired on tap release.
-  final VoidCallback onTap;
+  /// Callback fired on tap release. When `null`, the widget is inert
+  /// (no opacity change, no gesture handling).
+  final VoidCallback? onTap;
 
   /// Opacity applied while pressing. Defaults to `0.4`.
   final double activeOpacity;
@@ -34,6 +35,8 @@ class _TouchableOpacityState extends State<TouchableOpacity> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.onTap == null) return widget.child;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
