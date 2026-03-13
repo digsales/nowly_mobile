@@ -4,6 +4,7 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
 
 class BadgeProgressCarousel extends ConsumerStatefulWidget {
   const BadgeProgressCarousel({super.key});
@@ -55,9 +56,7 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     final badges = _sortedBadges(user);
     if (badges.isEmpty) return const SizedBox.shrink();
 
-    return SizedBox(
-      height: 100,
-      child: PageView.builder(
+    return ExpandablePageView.builder(
         clipBehavior: Clip.none,
         controller: _controller,
         itemCount: badges.length,
@@ -65,8 +64,7 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
           final badge = badges[index];
           return _BadgeCard(badge: badge, user: user);
         },
-      ),
-    );
+      );
   }
 }
 
