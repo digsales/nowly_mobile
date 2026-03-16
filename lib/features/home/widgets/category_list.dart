@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/router/app_router.dart';
-import 'package:nowly/core/theme/theme_provider.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/category_tile.dart';
 import 'package:nowly/features/home/home_provider.dart';
 import 'package:nowly/features/home/widgets/category_skeleton.dart';
@@ -15,8 +15,6 @@ class CategoryList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesAsync = ref.watch(categoriesProvider);
-    final highContrast = ref.watch(highContrastProvider);
-    final brightness = Theme.of(context).brightness;
     final horizontalPadding = EdgeInsets.only(
       left: context.paddingLeft + 32,
       right: context.paddingRight + 32,
@@ -42,14 +40,10 @@ class CategoryList extends ConsumerWidget {
                 onTap: () => context.push(AppRoutes.categoryForm),
               ),
               ...value.map((category) {
-                final color = category.resolveColor(
-                  brightness: brightness,
-                  highContrast: highContrast,
-                );
                 return CategoryTile(
                   icon: category.icon,
                   label: category.name,
-                  backgroundColor: color,
+                  backgroundColor: ref.usePrimaryColor(category.colorKey),
                   iconColor: context.colorScheme.onPrimary,
                   onTap: () => context.push(
                     AppRoutes.categoryForm,

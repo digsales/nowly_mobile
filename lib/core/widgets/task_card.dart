@@ -6,7 +6,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart';
 import 'package:nowly/core/models/task.dart';
-import 'package:nowly/core/theme/theme_provider.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/task_details_sheet.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
@@ -27,10 +27,6 @@ class TaskCard extends ConsumerWidget {
     final isExpired = isPending && task.endDate.isBefore(DateTime.now());
 
     final category = _findCategory(ref);
-    final categoryColor = category?.resolveColor(
-      brightness: Theme.of(context).brightness,
-      highContrast: ref.watch(highContrastProvider),
-    );
 
     return TouchableOpacity(
       onTap: showDetails
@@ -51,7 +47,7 @@ class TaskCard extends ConsumerWidget {
                   child: Container(
                     width: 4,
                     decoration: BoxDecoration(
-                      color: categoryColor ?? context.colorScheme.surface,
+                      color: category!= null ? ref.usePrimaryColor(category.colorKey) : context.colorScheme.surface,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -91,7 +87,7 @@ class TaskCard extends ConsumerWidget {
                           Icon(
                             category.icon,
                             size: 12,
-                            color: categoryColor ?? context.colorScheme.onSurfaceVariant,
+                            color: ref.usePrimaryColor(category.colorKey),
                           ),
                           const SizedBox(width: 4),
                           Flexible(

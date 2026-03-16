@@ -32,7 +32,7 @@ class PrimaryColorDialog extends ConsumerWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: colors.primary,
+                color: ref.usePrimaryColor(colors.key),
                 shape: BoxShape.circle,
                 border: isSelected
                     ? Border.all(

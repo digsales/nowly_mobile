@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:nowly/core/theme/primary_colors.dart';
 
 class Category {
   final String id;
@@ -103,18 +102,4 @@ class Category {
 
   /// Resolves the icon from [iconName].
   IconData get icon => iconMap[iconName] ?? Ionicons.ellipse_outline;
-
-  /// Resolves the display color based on theme brightness and high contrast.
-  Color resolveColor({
-    required Brightness brightness,
-    required bool highContrast,
-  }) {
-    final colors = AppPrimaryColors.values.firstWhere(
-      (c) => c.key == colorKey,
-      orElse: () => AppPrimaryColors.purple,
-    );
-
-    if (!highContrast) return colors.primary;
-    return brightness == Brightness.dark ? colors.light : colors.dark;
-  }
 }

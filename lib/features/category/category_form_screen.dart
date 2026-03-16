@@ -4,7 +4,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/core/theme/primary_colors.dart';
-import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
@@ -48,8 +47,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     final formState = ref.watch(categoryFormProvider);
     final notifier = ref.read(categoryFormProvider.notifier);
     final isEditing = widget.category != null;
-    final highContrast = ref.watch(highContrastProvider);
-    final brightness = Theme.of(context).brightness;
 
     final previewCategory = models.Category(
       id: '',
@@ -61,10 +58,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       iconName: formState.selectedIconName,
     );
 
-    final previewColor = previewCategory.resolveColor(
-      brightness: brightness,
-      highContrast: highContrast,
-    );
+    final previewColor = ref.usePrimaryColor(previewCategory.colorKey);
 
     return AppLayout(
       showBackButton: true,
@@ -171,7 +165,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: colors.primary,
+                  color: ref.usePrimaryColor(colors.key),
                   shape: BoxShape.circle,
                   border: isSelected
                       ? Border.all(

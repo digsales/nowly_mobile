@@ -208,7 +208,6 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildPreferenceSettings(BuildContext context, WidgetRef ref) {
     final highContrast = ref.watch(highContrastProvider);
-    final currentColor = ref.watch(primaryColorProvider).primary;
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
     final languageLabel = locale == null
@@ -256,7 +255,7 @@ class ProfileScreen extends ConsumerWidget {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(
-                  color: currentColor,
+                  color: context.colorScheme.primary,
                   shape: BoxShape.circle,
                 ),
               ),

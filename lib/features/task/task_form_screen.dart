@@ -4,7 +4,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
-import 'package:nowly/core/theme/theme_provider.dart';
+import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
@@ -159,8 +159,6 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
   Widget _buildCategoryPicker(TaskFormState formState, TaskFormNotifier notifier) {
     final categoriesAsync = ref.watch(categoriesProvider);
-    final highContrast = ref.watch(highContrastProvider);
-    final brightness = Theme.of(context).brightness;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,14 +183,10 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
             ...switch (categoriesAsync) {
               AsyncData(:final value) => value.map((category) {
                   final isSelected = category.id == formState.selectedCategoryId;
-                  final color = category.resolveColor(
-                    brightness: brightness,
-                    highContrast: highContrast,
-                  );
                   return _buildChip(
                     label: category.name,
                     icon: category.icon,
-                    color: color,
+                    color: ref.usePrimaryColor(category.colorKey),
                     isSelected: isSelected,
                     onTap: () => notifier.selectCategory(category.id),
                   );
