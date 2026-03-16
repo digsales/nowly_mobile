@@ -218,6 +218,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 StatusBadge(status: task.status),
               ],
             ),

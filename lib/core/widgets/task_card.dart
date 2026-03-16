@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
+import 'package:nowly/core/widgets/status_badge.dart';
 import 'package:nowly/core/widgets/task_details_sheet.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
@@ -58,16 +58,24 @@ class TaskCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      task.title,
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        decoration: task.status == TaskStatus.completed
-                            ? TextDecoration.lineThrough
-                            : null,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            task.title,
+                            style: context.textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              decoration: task.status == TaskStatus.completed
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        StatusBadge(status: task.status)
+                      ],
                     ),
                     if (task.description != null) ...[
                       const SizedBox(height: 4),
@@ -134,12 +142,6 @@ class TaskCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              Icon(
-                _statusIcon(task.status, isExpired),
-                size: 20,
-                color: _statusColor(context, task.status, isExpired),
-              ),
             ],
           ),
         ),
@@ -159,26 +161,6 @@ class TaskCard extends ConsumerWidget {
     } catch (_) {
       return null;
     }
-  }
-
-  IconData _statusIcon(TaskStatus status, bool isExpired) {
-    if (isExpired) return Ionicons.alert_circle_outline;
-    return switch (status) {
-      TaskStatus.pending => Ionicons.time_outline,
-      TaskStatus.completed => Ionicons.checkmark_circle_outline,
-      TaskStatus.expired => Ionicons.alert_circle_outline,
-      TaskStatus.cancelled => Ionicons.close_circle_outline,
-    };
-  }
-
-  Color _statusColor(BuildContext context, TaskStatus status, bool isExpired) {
-    if (isExpired) return context.colorScheme.error;
-    return switch (status) {
-      TaskStatus.pending => context.colorScheme.onSurfaceVariant,
-      TaskStatus.completed => context.colorScheme.primary,
-      TaskStatus.expired => context.colorScheme.error,
-      TaskStatus.cancelled => context.colorScheme.onSurfaceVariant,
-    };
   }
 }
 

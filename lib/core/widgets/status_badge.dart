@@ -12,7 +12,7 @@ class StatusBadge extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = switch (status) {
-      TaskStatus.pending => context.colorScheme.primary,
+      TaskStatus.pending => ref.usePrimaryColor('purple'),
       TaskStatus.completed => ref.usePrimaryColor('green'),
       TaskStatus.expired => ref.usePrimaryColor('red'),
       TaskStatus.cancelled => ref.usePrimaryColor('orange'),

@@ -32,6 +32,7 @@ class AppBottomSheet extends StatelessWidget {
     return showModalBottomSheet<T>(
       context: context,
       useRootNavigator: true,
+      useSafeArea: true,
       isScrollControlled: true,
       builder: (context) => AppBottomSheet(
         child: builder(context),
@@ -41,23 +42,21 @@ class AppBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        Device.orientation == Orientation.portrait ? context.paddingLeft + 32 : 32,
-        0,
-        Device.orientation == Orientation.portrait ? context.paddingLeft + 32 : 32,
-        context.paddingBottom + 32
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: SingleChildScrollView(
-              child: child,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              Device.orientation == Orientation.portrait ? context.paddingLeft + 32 : 32,
+              0,
+              Device.orientation == Orientation.portrait ? context.paddingLeft + 32 : 32,
+              context.paddingBottom + 32
             ),
+            child: child,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
