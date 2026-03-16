@@ -63,12 +63,7 @@ class TaskCard extends ConsumerWidget {
                         Expanded(
                           child: Text(
                             task.title,
-                            style: context.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              decoration: task.status == TaskStatus.completed
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
+                            style: context.textTheme.headlineMedium,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -81,9 +76,7 @@ class TaskCard extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         task.description!,
-                        style: context.textTheme.labelMedium?.copyWith(
-                          color: context.colorScheme.onSurfaceVariant
-                        ),
+                        style: context.textTheme.bodyMedium,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
