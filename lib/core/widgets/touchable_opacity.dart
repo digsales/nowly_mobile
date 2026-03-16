@@ -49,10 +49,12 @@ class _TouchableOpacityState extends State<TouchableOpacity> {
       onTapUp: (_) => setState(() => _isPressed = false),
       onTapCancel: () => setState(() => _isPressed = false),
       onTap: widget.onTap,
-      onLongPress: () {
-        HapticFeedback.mediumImpact();
-        widget.onLongPress?.call();
-      },
+      onLongPress: widget.onLongPress == null 
+        ? null
+        : () {
+            HapticFeedback.mediumImpact();
+            widget.onLongPress?.call();
+          },
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 100),
         opacity: _isPressed ? widget.activeOpacity : 1.0,
