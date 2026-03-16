@@ -8,6 +8,7 @@ import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/app_bottom_sheet.dart';
+import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/features/home/home_provider.dart';
@@ -91,7 +92,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Future<void> _cancelTask() async {
     final confirmed = await _showConfirm(
       icon: Ionicons.close_circle_outline,
-      color: AppPrimaryColors.red.primary,
+      color: AppPrimaryColors.orange.primary,
       title: context.l10n.taskDetailsCancel,
       subtitle: context.l10n.taskDetailsCancelConfirm,
       buttonText: context.l10n.taskDetailsCancel,
@@ -116,7 +117,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Future<void> _uncancelTask() async {
     final confirmed = await _showConfirm(
       icon: Ionicons.refresh_outline,
-      color: AppPrimaryColors.blue.primary,
+      color: AppPrimaryColors.orange.primary,
       title: context.l10n.taskDetailsUncancel,
       subtitle: context.l10n.taskDetailsUncancelConfirm,
       buttonText: context.l10n.taskDetailsUncancel,
@@ -142,6 +143,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     final confirmed = await _showConfirm(
       icon: Ionicons.trash_outline,
       color: context.colorScheme.error,
+      onColor: context.colorScheme.onError,
       title: context.l10n.taskDetailsDelete,
       subtitle: context.l10n.taskDetailsDeleteConfirm,
       buttonText: context.l10n.taskDetailsDelete,
@@ -166,6 +168,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Future<bool> _showConfirm({
     required IconData icon,
     required Color color,
+    Color? onColor,
     required String title,
     required String subtitle,
     required String buttonText,
@@ -175,7 +178,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
       builder: (ctx) => AppDialog(
         icon: icon,
         color: color,
-        onColor: Colors.white,
+        onColor: onColor,
         title: title,
         subtitle: subtitle,
         buttonText: buttonText,
@@ -214,7 +217,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                 child: Text(
                   _statusText(context, task.status),
                   style: context.textTheme.labelMedium?.copyWith(
-                    color: Colors.white,
+                    color: context.colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -296,42 +299,50 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Widget _buildActions(bool isPending, bool isCancelled) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
+    return Column(
       children: [
         if (isPending) ...[
-          _ActionChip(
-            icon: Ionicons.checkmark_circle_outline,
-            label: context.l10n.taskDetailsComplete,
-            color: AppPrimaryColors.green.primary,
-            onTap: _completeTask,
+          AppButton(
+            detailColor: AppPrimaryColors.green.primary,
+            onPressed: _completeTask,
+            text: context.l10n.taskDetailsComplete,
           ),
-          _ActionChip(
-            icon: Ionicons.close_circle_outline,
-            label: context.l10n.taskDetailsCancel,
-            color: AppPrimaryColors.red.primary,
-            onTap: _cancelTask,
-          ),
+          const SizedBox(height: 8),
         ],
-        if (isCancelled && widget.task.canUncancel)
-          _ActionChip(
-            icon: Ionicons.refresh_outline,
-            label: context.l10n.taskDetailsUncancel,
-            color: AppPrimaryColors.blue.primary,
-            onTap: _uncancelTask,
-          ),
-        if (widget.task.canDelete)
-          _ActionChip(
-            icon: Ionicons.trash_outline,
-            label: _deleteMinutesLeft > 0
-                ? context.l10n.taskDetailsDeleteTimer(_deleteMinutesLeft)
-                : context.l10n.taskDetailsDelete,
-            color: AppPrimaryColors.red.primary,
-            outlined: true,
-            onTap: _deleteTask,
-          ),
-      ],
+        Row(
+          children: [
+            if (isPending)
+              Expanded(
+                child: AppButton(
+                  detailColor: AppPrimaryColors.orange.primary,
+                  onPressed: _cancelTask,
+                  text: context.l10n.taskDetailsCancel,
+                ),
+              ),
+            if (isCancelled && widget.task.canUncancel)
+              Expanded(
+                child: AppButton(
+                  detailColor: AppPrimaryColors.orange.primary,
+                  onPressed: _uncancelTask,
+                  text: context.l10n.taskDetailsUncancel,
+                ),
+              ),
+            if (widget.task.canDelete) ...[
+              const SizedBox(width: 8),
+              Expanded(
+                child: AppButton(
+                  detailColor: context.colorScheme.error,
+                  textColor: context.colorScheme.onError,
+                  onPressed: _deleteTask,
+                  text: _deleteMinutesLeft > 0
+                    ? context.l10n.taskDetailsDeleteTimer(_deleteMinutesLeft)
+                    : context.l10n.taskDetailsDelete,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ]
     );
   }
 
@@ -346,10 +357,10 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
   Color _statusColor(TaskStatus status) {
     return switch (status) {
-      TaskStatus.pending => AppPrimaryColors.orange.primary,
+      TaskStatus.pending => context.colorScheme.primary,
       TaskStatus.completed => AppPrimaryColors.green.primary,
-      TaskStatus.expired => AppPrimaryColors.blue.primary,
-      TaskStatus.cancelled => AppPrimaryColors.red.primary,
+      TaskStatus.expired => AppPrimaryColors.red.primary,
+      TaskStatus.cancelled => AppPrimaryColors.orange.primary,
     };
   }
 
@@ -373,50 +384,5 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     } catch (_) {
       return null;
     }
-  }
-}
-
-class _ActionChip extends StatelessWidget {
-  const _ActionChip({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-    this.outlined = false,
-  });
-
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-  final bool outlined;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: outlined ? Colors.transparent : color,
-          borderRadius: BorderRadius.circular(20),
-          border: outlined ? Border.all(color: color, width: 1.5) : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 16, color: outlined ? color : Colors.white),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: context.textTheme.labelMedium?.copyWith(
-                color: outlined ? color : Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
