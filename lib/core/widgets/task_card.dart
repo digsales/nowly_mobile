@@ -94,7 +94,8 @@ class TaskCard extends ConsumerWidget {
                         if (category != null) ...[
                           Icon(
                             category.icon,
-                            size: 12,
+                            size: context.textTheme.labelSmall!.fontSize! * 1.2,
+                            fontWeight: FontWeight.bold,
                             color: ref.usePrimaryColor(category.colorKey),
                           ),
                           const SizedBox(width: 4),
