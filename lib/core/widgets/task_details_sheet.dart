@@ -11,6 +11,7 @@ import 'package:nowly/core/widgets/app_bottom_sheet.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
+import 'package:nowly/core/widgets/status_badge.dart';
 import 'package:nowly/features/home/home_provider.dart';
 
 class TaskDetailsSheet extends ConsumerStatefulWidget {
@@ -207,35 +208,23 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: _statusColor(task.status),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  _statusText(context, task.status),
-                  style: context.textTheme.labelMedium?.copyWith(
-                    color: context.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    task.title,
+                    style: context.textTheme.displayMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              task.title,
-              style: context.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+                StatusBadge(status: task.status),
+              ],
             ),
             const SizedBox(height: 8),
             Text(
               task.description ?? context.l10n.taskDetailsDescription,
-              style: context.textTheme.bodyMedium?.copyWith(
-                color: context.colorScheme.onSurfaceVariant,
-              ),
+              style: context.textTheme.bodyMedium,
             ),
             const SizedBox(height: 20),
             _buildInfoRow(
@@ -287,9 +276,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
         Expanded(
           child: Text(
             value,
-            style: context.textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: context.textTheme.bodyMedium,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -344,24 +331,6 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
         ),
       ]
     );
-  }
-
-  String _statusText(BuildContext context, TaskStatus status) {
-    return switch (status) {
-      TaskStatus.pending => context.l10n.taskStatusPending,
-      TaskStatus.completed => context.l10n.taskCompleted,
-      TaskStatus.expired => context.l10n.taskExpired,
-      TaskStatus.cancelled => context.l10n.taskCancelled,
-    };
-  }
-
-  Color _statusColor(TaskStatus status) {
-    return switch (status) {
-      TaskStatus.pending => context.colorScheme.primary,
-      TaskStatus.completed => ref.usePrimaryColor('green'),
-      TaskStatus.expired => ref.usePrimaryColor('red'),
-      TaskStatus.cancelled => ref.usePrimaryColor('orange'),
-    };
   }
 
   String _formatDate(DateTime date) {
