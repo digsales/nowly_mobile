@@ -7,7 +7,13 @@ class CategorySkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = EdgeInsets.only(
+      left: context.paddingLeft + 32,
+      right: context.paddingRight + 32,
+    );
+
     return SingleChildScrollView(
+      padding: horizontalPadding,
       clipBehavior: Clip.none,
       scrollDirection: Axis.horizontal,
       physics: const NeverScrollableScrollPhysics(),
