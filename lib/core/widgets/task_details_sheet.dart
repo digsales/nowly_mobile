@@ -31,7 +31,6 @@ class TaskDetailsSheet extends ConsumerStatefulWidget {
 }
 
 class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
-  bool _isLoading = false;
   Timer? _deleteTimer;
   int _deleteMinutesLeft = 0;
 
@@ -65,129 +64,97 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     super.dispose();
   }
 
-  Future<void> _completeTask() async {
-    final confirmed = await _showConfirm(
-      icon: Ionicons.checkmark_circle_outline,
-      color: ref.usePrimaryColor('green'),
-      title: context.l10n.taskDetailsComplete,
-      subtitle: context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
-      buttonText: context.l10n.taskDetailsComplete,
-    );
-    if (!confirmed || !mounted) return;
+  Future<void> _completeTask() => _confirmAndRun(
+        icon: Ionicons.checkmark_circle_outline,
+        color: ref.usePrimaryColor('green'),
+        title: context.l10n.taskDetailsComplete,
+        subtitle: context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
+        buttonText: context.l10n.taskDetailsComplete,
+        run: () => ref.read(taskRepositoryProvider).completeTask(widget.task),
+        successMessage: context.l10n.taskDetailsSuccess,
+      );
 
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(taskRepositoryProvider).completeTask(widget.task);
-      if (mounted) {
-        Navigator.of(context).pop();
-        AppSnackBar.show(context, context.l10n.taskDetailsSuccess, type: SnackBarType.success);
-      }
-    } on Exception {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        AppSnackBar.show(context, context.l10n.authErrorUnknown, type: SnackBarType.error);
-      }
-    }
-  }
+  Future<void> _cancelTask() => _confirmAndRun(
+        icon: Ionicons.close_circle_outline,
+        color: ref.usePrimaryColor('orange'),
+        title: context.l10n.taskDetailsCancel,
+        subtitle: context.l10n.taskDetailsCancelConfirm,
+        buttonText: context.l10n.taskDetailsCancel,
+        run: () => ref.read(taskRepositoryProvider).cancelTask(widget.task),
+        successMessage: context.l10n.taskDetailsSuccess,
+      );
 
-  Future<void> _cancelTask() async {
-    final confirmed = await _showConfirm(
-      icon: Ionicons.close_circle_outline,
-      color: ref.usePrimaryColor('orange'),
-      title: context.l10n.taskDetailsCancel,
-      subtitle: context.l10n.taskDetailsCancelConfirm,
-      buttonText: context.l10n.taskDetailsCancel,
-    );
-    if (!confirmed || !mounted) return;
+  Future<void> _uncancelTask() => _confirmAndRun(
+        icon: Ionicons.refresh_outline,
+        color: ref.usePrimaryColor('orange'),
+        title: context.l10n.taskDetailsUncancel,
+        subtitle: context.l10n.taskDetailsUncancelConfirm,
+        buttonText: context.l10n.taskDetailsUncancel,
+        run: () => ref.read(taskRepositoryProvider).uncancelTask(widget.task),
+        successMessage: context.l10n.taskDetailsSuccess,
+      );
 
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(taskRepositoryProvider).cancelTask(widget.task);
-      if (mounted) {
-        Navigator.of(context).pop();
-        AppSnackBar.show(context, context.l10n.taskDetailsSuccess, type: SnackBarType.success);
-      }
-    } on Exception {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        AppSnackBar.show(context, context.l10n.authErrorUnknown, type: SnackBarType.error);
-      }
-    }
-  }
+  Future<void> _deleteTask() => _confirmAndRun(
+        icon: Ionicons.trash_outline,
+        color: context.colorScheme.error,
+        onColor: context.colorScheme.onError,
+        title: context.l10n.taskDetailsDelete,
+        subtitle: context.l10n.taskDetailsDeleteConfirm,
+        buttonText: context.l10n.taskDetailsDelete,
+        run: () => ref.read(taskRepositoryProvider).deleteTask(widget.task),
+        successMessage: context.l10n.taskDetailsDeleteSuccess,
+      );
 
-  Future<void> _uncancelTask() async {
-    final confirmed = await _showConfirm(
-      icon: Ionicons.refresh_outline,
-      color: ref.usePrimaryColor('orange'),
-      title: context.l10n.taskDetailsUncancel,
-      subtitle: context.l10n.taskDetailsUncancelConfirm,
-      buttonText: context.l10n.taskDetailsUncancel,
-    );
-    if (!confirmed || !mounted) return;
-
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(taskRepositoryProvider).uncancelTask(widget.task);
-      if (mounted) {
-        Navigator.of(context).pop();
-        AppSnackBar.show(context, context.l10n.taskDetailsSuccess, type: SnackBarType.success);
-      }
-    } on Exception {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        AppSnackBar.show(context, context.l10n.authErrorUnknown, type: SnackBarType.error);
-      }
-    }
-  }
-
-  Future<void> _deleteTask() async {
-    final confirmed = await _showConfirm(
-      icon: Ionicons.trash_outline,
-      color: context.colorScheme.error,
-      onColor: context.colorScheme.onError,
-      title: context.l10n.taskDetailsDelete,
-      subtitle: context.l10n.taskDetailsDeleteConfirm,
-      buttonText: context.l10n.taskDetailsDelete,
-    );
-    if (!confirmed || !mounted) return;
-
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(taskRepositoryProvider).deleteTask(widget.task);
-      if (mounted) {
-        Navigator.of(context).pop();
-        AppSnackBar.show(context, context.l10n.taskDetailsDeleteSuccess, type: SnackBarType.success);
-      }
-    } on Exception {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        AppSnackBar.show(context, context.l10n.authErrorUnknown, type: SnackBarType.error);
-      }
-    }
-  }
-
-  Future<bool> _showConfirm({
+  Future<void> _confirmAndRun({
     required IconData icon,
     required Color color,
     Color? onColor,
     required String title,
     required String subtitle,
     required String buttonText,
+    required Future<void> Function() run,
+    required String successMessage,
   }) async {
-    return await showDialog<bool>(
+    final l10n = context.l10n;
+
+    final success = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AppDialog(
-        icon: icon,
-        color: color,
-        onColor: onColor,
-        title: title,
-        subtitle: subtitle,
-        buttonText: buttonText,
-        onPressed: () => Navigator.of(ctx).pop(true),
-        cancelText: context.l10n.deleteAccountCancel,
-        onCancel: () => Navigator.of(ctx).pop(false),
-      ),
+      barrierDismissible: false,
+      builder: (ctx) {
+        var processing = false;
+
+        return StatefulBuilder(
+          builder: (ctx, setState) => AppDialog(
+            icon: icon,
+            color: color,
+            onColor: onColor,
+            title: title,
+            subtitle: subtitle,
+            buttonText: buttonText,
+            isProcessing: processing,
+            onPressed: () async {
+              setState(() => processing = true);
+              try {
+                await run();
+                if (ctx.mounted) Navigator.of(ctx).pop(true);
+              } on Exception {
+                if (ctx.mounted) {
+                  setState(() => processing = false);
+                  AppSnackBar.show(ctx, l10n.authErrorUnknown, type: SnackBarType.error);
+                }
+              }
+            },
+            cancelText: l10n.deleteAccountCancel,
+            onCancel: processing ? null : () => Navigator.of(ctx).pop(false),
+          ),
+        );
+      },
     ) ?? false;
+
+    if (!success || !mounted) return;
+
+    Navigator.of(context).pop();
+    // AppSnackBar.show(context, successMessage, type: SnackBarType.success);
   }
 
   @override
@@ -199,63 +166,56 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
     final category = _findCategory();
 
-    return IgnorePointer(
-      ignoring: _isLoading,
-      child: AnimatedOpacity(
-        opacity: _isLoading ? 0.5 : 1.0,
-        duration: const Duration(milliseconds: 200),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    task.title,
-                    style: context.textTheme.displayMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+            Expanded(
+              child: Text(
+                task.title,
+                style: context.textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(width: 8),
-                StatusBadge(status: task.status),
-              ],
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              task.description ?? context.l10n.taskDetailsDescription,
-              style: context.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 20),
-            _buildInfoRow(
-              icon: Ionicons.folder_outline,
-              label: context.l10n.taskDetailsCategory,
-              value: category?.name ?? context.l10n.taskFormCategoryNone,
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              icon: Ionicons.calendar_outline,
-              label: context.l10n.taskDetailsDeadline,
-              value: _formatDate(task.endDate),
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              icon: Ionicons.time_outline,
-              label: context.l10n.taskDetailsCreatedAt,
-              value: _formatDate(task.createdAt),
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              icon: Ionicons.star_outline,
-              label: 'Pontos',
-              value: context.l10n.taskDetailsPoints(task.pointsEarned),
-            ),
-            const SizedBox(height: 24),
-            _buildActions(isPending, isCancelled),
+            const SizedBox(width: 8),
+            StatusBadge(status: task.status),
           ],
         ),
-      ),
+        const SizedBox(height: 8),
+        Text(
+          task.description ?? context.l10n.taskDetailsDescription,
+          style: context.textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 20),
+        _buildInfoRow(
+          icon: Ionicons.folder_outline,
+          label: context.l10n.taskDetailsCategory,
+          value: category?.name ?? context.l10n.taskFormCategoryNone,
+        ),
+        const SizedBox(height: 12),
+        _buildInfoRow(
+          icon: Ionicons.calendar_outline,
+          label: context.l10n.taskDetailsDeadline,
+          value: _formatDate(task.endDate),
+        ),
+        const SizedBox(height: 12),
+        _buildInfoRow(
+          icon: Ionicons.time_outline,
+          label: context.l10n.taskDetailsCreatedAt,
+          value: _formatDate(task.createdAt),
+        ),
+        const SizedBox(height: 12),
+        _buildInfoRow(
+          icon: Ionicons.star_outline,
+          label: 'Pontos',
+          value: context.l10n.taskDetailsPoints(task.pointsEarned),
+        ),
+        const SizedBox(height: 24),
+        _buildActions(isPending, isCancelled),
+      ],
     );
   }
 
@@ -315,19 +275,19 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                   text: context.l10n.taskDetailsUncancel,
                 ),
               ),
-            if (widget.task.canDelete) ...[
-              const SizedBox(width: 8),
-              Expanded(
-                child: AppButton(
-                  detailColor: context.colorScheme.error,
-                  textColor: context.colorScheme.onError,
-                  onPressed: _deleteTask,
-                  text: _deleteMinutesLeft > 0
-                    ? context.l10n.taskDetailsDeleteTimer(_deleteMinutesLeft)
-                    : context.l10n.taskDetailsDelete,
-                ),
-              ),
-            ],
+            const SizedBox(width: 8),
+            Expanded(
+              child: widget.task.canDelete 
+                ? AppButton(
+                    detailColor: context.colorScheme.error,
+                    textColor: context.colorScheme.onError,
+                    onPressed: _deleteTask,
+                    text: _deleteMinutesLeft > 0
+                      ? context.l10n.taskDetailsDeleteTimer(_deleteMinutesLeft)
+                      : context.l10n.taskDetailsDelete,
+                  )
+                : const SizedBox(),
+            ),
           ],
         ),
       ]
