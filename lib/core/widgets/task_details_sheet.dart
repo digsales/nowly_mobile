@@ -147,7 +147,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                 }
               }
             },
-            cancelText: l10n.deleteAccountCancel,
+            cancelText: l10n.dialogBack,
             onCancel: processing ? null : () => Navigator.of(ctx).pop(false),
           ),
         );

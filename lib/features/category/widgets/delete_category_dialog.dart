@@ -45,7 +45,7 @@ class _DeleteCategoryDialogState extends ConsumerState<DeleteCategoryDialog> {
       buttonText: context.l10n.categoryFormDelete,
       isProcessing: _isProcessing,
       onPressed: _delete,
-      cancelText: context.l10n.deleteAccountCancel,
+      cancelText: context.l10n.dialogBack,
       onCancel: () => Navigator.of(context).pop(false),
     );
   }

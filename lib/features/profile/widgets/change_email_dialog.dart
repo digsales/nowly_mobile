@@ -131,7 +131,7 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
           }
         }
       },
-      cancelText: context.l10n.deleteAccountCancel,
+      cancelText: context.l10n.dialogBack,
       onCancel: () => Navigator.of(context).pop(),
     );
   }

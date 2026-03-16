@@ -16,7 +16,7 @@ class ResetPreferencesDialog extends ConsumerWidget {
       title: context.l10n.settingsRestoreDefaults,
       subtitle: context.l10n.settingsRestoreDefaultsMessage,
       buttonText: context.l10n.settingsRestoreDefaultsConfirm,
-      cancelText: context.l10n.deleteAccountCancel,
+      cancelText: context.l10n.dialogBack,
       onPressed: () {
         resetThemeDefaults(ref);
         Navigator.of(context).pop();
