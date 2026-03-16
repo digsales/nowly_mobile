@@ -10,6 +10,8 @@ import 'package:nowly/core/widgets/status_badge.dart';
 import 'package:nowly/core/widgets/task_details_sheet.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nowly/core/router/app_router.dart';
 
 class TaskCard extends ConsumerWidget {
   const TaskCard({
@@ -28,9 +30,14 @@ class TaskCard extends ConsumerWidget {
 
     final category = _findCategory(ref);
 
+    final canEdit = showDetails && task.status == TaskStatus.pending && !isExpired;
+
     return TouchableOpacity(
       onTap: showDetails
           ? () => TaskDetailsSheet.show(context, task: task)
+          : null,
+      onLongPress: canEdit
+          ? () => context.push(AppRoutes.taskForm, extra: task)
           : null,
       child: Container(
         padding: const EdgeInsets.all(16),

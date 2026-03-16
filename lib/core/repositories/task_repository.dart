@@ -38,14 +38,24 @@ class TaskRepository {
 
   Future<void> updateTask(String taskId, {
     String? categoryId,
+    bool clearCategory = false,
     String? title,
     String? description,
+    bool clearDescription = false,
   }) async {
     try {
       final data = <String, dynamic>{};
-      if (categoryId != null) data['categoryId'] = categoryId;
+      if (clearCategory) {
+        data['categoryId'] = null;
+      } else if (categoryId != null) {
+        data['categoryId'] = categoryId;
+      }
       if (title != null) data['title'] = title;
-      if (description != null) data['description'] = description;
+      if (clearDescription) {
+        data['description'] = null;
+      } else if (description != null) {
+        data['description'] = description;
+      }
       if (data.isEmpty) return;
 
       await _tasks.doc(taskId).update(data);

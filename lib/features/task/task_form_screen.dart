@@ -16,13 +16,28 @@ import 'package:nowly/features/home/home_provider.dart';
 import 'package:nowly/features/task/task_form_provider.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
-  const TaskFormScreen({super.key});
+  const TaskFormScreen({super.key, this.task});
+
+  final Task? task;
 
   @override
   ConsumerState<TaskFormScreen> createState() => _TaskFormScreenState();
 }
 
 class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
+  bool _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_initialized && mounted) {
+        ref.read(taskFormProvider.notifier).init(widget.task);
+        setState(() => _initialized = true);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(taskFormProvider, (prev, next) {
@@ -33,11 +48,17 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
     final formState = ref.watch(taskFormProvider);
     final notifier = ref.read(taskFormProvider.notifier);
+    final isEditing = widget.task != null;
+    final effectiveCategoryId = !_initialized && isEditing
+        ? widget.task!.categoryId
+        : formState.selectedCategoryId;
 
     return AppLayout(
       showBackButton: true,
-      headerText: context.l10n.taskFormTitleAdd,
-      headerHelpText: context.l10n.taskFormInfo,
+      headerText: isEditing
+          ? context.l10n.taskFormTitleEdit
+          : context.l10n.taskFormTitleAdd,
+      headerHelpText: isEditing ? null : context.l10n.taskFormInfo,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= 600;
@@ -45,7 +66,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildPreview(notifier, formState),
+              _buildPreview(notifier, formState, effectiveCategoryId),
               const SizedBox(height: 32),
               if (wide) ...[
                 Row(
@@ -66,9 +87,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildCategoryPicker(formState, notifier),
-                          const SizedBox(height: 24),
-                          _buildDeadlinePicker(formState, notifier),
+                          _buildCategoryPicker(effectiveCategoryId, notifier),
+                          if (!isEditing) ...[
+                            const SizedBox(height: 24),
+                            _buildDeadlinePicker(formState, notifier),
+                          ],
                         ],
                       ),
                     ),
@@ -79,9 +102,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 const SizedBox(height: 24),
                 _buildDescriptionField(notifier),
                 const SizedBox(height: 24),
-                _buildCategoryPicker(formState, notifier),
-                const SizedBox(height: 24),
-                _buildDeadlinePicker(formState, notifier),
+                _buildCategoryPicker(effectiveCategoryId, notifier),
+                if (!isEditing) ...[
+                  const SizedBox(height: 24),
+                  _buildDeadlinePicker(formState, notifier),
+                ],
                 const SizedBox(height: 24),
               ],
               const SizedBox(height: 32),
@@ -89,10 +114,15 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: appMaxWidth),
                   child: AppButton(
-                    text: context.l10n.taskFormSave,
+                    text: isEditing
+                        ? context.l10n.taskFormSaveEdit
+                        : context.l10n.taskFormSave,
                     isProcessing: formState.isLoading,
                     onPressed: () async {
-                      final success = await notifier.save(context.l10n);
+                      final success = await notifier.save(
+                        context.l10n,
+                        existing: widget.task,
+                      );
                       if (success && context.mounted) {
                         context.pop();
                       }
@@ -107,21 +137,22 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     );
   }
 
-  Widget _buildPreview(TaskFormNotifier notifier, TaskFormState formState) {
+  Widget _buildPreview(TaskFormNotifier notifier, TaskFormState formState, String? categoryId) {
     final now = DateTime.now();
+    final isEditing = widget.task != null;
     final previewTask = Task(
       id: '',
       userId: '',
-      categoryId: formState.selectedCategoryId,
+      categoryId: categoryId,
       title: notifier.title.text.isEmpty
           ? context.l10n.taskFormPreviewTitle
           : notifier.title.text,
       description: notifier.description.text.isEmpty
           ? null
           : notifier.description.text,
-      endDate: now.add(formState.selectedDeadline.duration),
+      endDate: isEditing ? widget.task!.endDate : now.add(formState.selectedDeadline.duration),
       status: TaskStatus.pending,
-      createdAt: now,
+      createdAt: isEditing ? widget.task!.createdAt : now,
       pointsEarned: defaultTaskPoints,
     );
 
@@ -157,7 +188,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     );
   }
 
-  Widget _buildCategoryPicker(TaskFormState formState, TaskFormNotifier notifier) {
+  Widget _buildCategoryPicker(String? selectedCategoryId, TaskFormNotifier notifier) {
     final categoriesAsync = ref.watch(categoriesProvider);
 
     return Column(
@@ -177,12 +208,12 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
           children: [
             _buildChip(
               label: context.l10n.taskFormCategoryNone,
-              isSelected: formState.selectedCategoryId == null,
+              isSelected: selectedCategoryId == null,
               onTap: () => notifier.selectCategory(null),
             ),
             ...switch (categoriesAsync) {
               AsyncData(:final value) => value.map((category) {
-                  final isSelected = category.id == formState.selectedCategoryId;
+                  final isSelected = category.id == selectedCategoryId;
                   return _buildChip(
                     label: category.name,
                     icon: category.icon,

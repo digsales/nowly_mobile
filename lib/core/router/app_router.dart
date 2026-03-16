@@ -6,6 +6,7 @@ import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/features/ranking/ranking_screen.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/features/category/category_form_screen.dart';
+import 'package:nowly/core/models/task.dart';
 import 'package:nowly/features/task/task_form_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
@@ -195,10 +196,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'task-form',
-                    pageBuilder: (context, state) => _buildPage(
-                      state,
-                      const TaskFormScreen(),
-                    ),
+                    pageBuilder: (context, state) {
+                      final task = state.extra as Task?;
+                      return _buildPage(
+                        state,
+                        TaskFormScreen(task: task),
+                      );
+                    },
                   ),
                 ],
               ),

@@ -76,6 +76,16 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     return const TaskFormState();
   }
 
+  void init(Task? task) {
+    if (task == null) return;
+    title.controller.text = task.title;
+    description.controller.text = task.description ?? '';
+    state = state.copyWith(
+      selectedCategoryId: task.categoryId,
+      clearCategory: task.categoryId == null,
+    );
+  }
+
   void selectCategory(String? categoryId) {
     if (categoryId == null) {
       state = state.copyWith(clearCategory: true);
@@ -100,7 +110,7 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     state = state.copyWith();
   }
 
-  Future<bool> save(AppLocalizations l10n) async {
+  Future<bool> save(AppLocalizations l10n, {Task? existing}) async {
     title.validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
       Validators.minLength(2, l10n.validatorMinLength(2)),
@@ -114,23 +124,35 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      final uid = ref.read(authServiceProvider).currentUser?.uid;
-      if (uid == null) return false;
+      if (existing != null) {
+        await _taskRepository.updateTask(
+          existing.id,
+          categoryId: state.selectedCategoryId,
+          clearCategory: state.selectedCategoryId == null,
+          title: title.text,
+          description: description.text.isEmpty ? null : description.text,
+          clearDescription: description.text.isEmpty,
+        );
+      } else {
+        final uid = ref.read(authServiceProvider).currentUser?.uid;
+        if (uid == null) return false;
 
-      final now = DateTime.now();
-      final task = Task(
-        id: '',
-        userId: uid,
-        categoryId: state.selectedCategoryId,
-        title: title.text,
-        description: description.text.isEmpty ? null : description.text,
-        endDate: now.add(state.selectedDeadline.duration),
-        status: TaskStatus.pending,
-        createdAt: now,
-        pointsEarned: defaultTaskPoints,
-      );
+        final now = DateTime.now();
+        final task = Task(
+          id: '',
+          userId: uid,
+          categoryId: state.selectedCategoryId,
+          title: title.text,
+          description: description.text.isEmpty ? null : description.text,
+          endDate: now.add(state.selectedDeadline.duration),
+          status: TaskStatus.pending,
+          createdAt: now,
+          pointsEarned: defaultTaskPoints,
+        );
 
-      await _taskRepository.createTask(task);
+        await _taskRepository.createTask(task);
+      }
+
       state = state.copyWith(isLoading: false);
       return true;
     } on Exception catch (e) {

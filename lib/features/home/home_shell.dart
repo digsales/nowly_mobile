@@ -106,7 +106,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       ),
       floatingActionButton: isRootTab
           ? FloatingActionButton(
-              onPressed: () => context.push(AppRoutes.taskForm, extra: PageTransitionType.bottomToTop),
+              onPressed: () => context.push(AppRoutes.taskForm),
               tooltip: context.l10n.fabAddTask,
               foregroundColor: context.colorScheme.onPrimary,
               backgroundColor: context.colorScheme.primary,
