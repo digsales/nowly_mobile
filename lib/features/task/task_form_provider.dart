@@ -77,7 +77,9 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
   }
 
   void selectCategory(String? categoryId) {
-    if (categoryId == state.selectedCategoryId) {
+    if (categoryId == null) {
+      state = state.copyWith(clearCategory: true);
+    } else if (categoryId == state.selectedCategoryId) {
       state = state.copyWith(clearCategory: true);
     } else {
       state = state.copyWith(selectedCategoryId: categoryId);
