@@ -67,7 +67,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Future<void> _completeTask() async {
     final confirmed = await _showConfirm(
       icon: Ionicons.checkmark_circle_outline,
-      color: AppPrimaryColors.green.primary,
+      color: ref.usePrimaryColor('green'),
       title: context.l10n.taskDetailsComplete,
       subtitle: context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
       buttonText: context.l10n.taskDetailsComplete,
@@ -92,7 +92,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Future<void> _cancelTask() async {
     final confirmed = await _showConfirm(
       icon: Ionicons.close_circle_outline,
-      color: AppPrimaryColors.orange.primary,
+      color: ref.usePrimaryColor('orange'),
       title: context.l10n.taskDetailsCancel,
       subtitle: context.l10n.taskDetailsCancelConfirm,
       buttonText: context.l10n.taskDetailsCancel,
@@ -117,7 +117,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Future<void> _uncancelTask() async {
     final confirmed = await _showConfirm(
       icon: Ionicons.refresh_outline,
-      color: AppPrimaryColors.orange.primary,
+      color: ref.usePrimaryColor('orange'),
       title: context.l10n.taskDetailsUncancel,
       subtitle: context.l10n.taskDetailsUncancelConfirm,
       buttonText: context.l10n.taskDetailsUncancel,
@@ -303,7 +303,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
       children: [
         if (isPending) ...[
           AppButton(
-            detailColor: AppPrimaryColors.green.primary,
+            detailColor: ref.usePrimaryColor('green'),
             onPressed: _completeTask,
             text: context.l10n.taskDetailsComplete,
           ),
@@ -314,7 +314,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             if (isPending)
               Expanded(
                 child: AppButton(
-                  detailColor: AppPrimaryColors.orange.primary,
+                  detailColor: ref.usePrimaryColor('orange'),
                   onPressed: _cancelTask,
                   text: context.l10n.taskDetailsCancel,
                 ),
@@ -322,7 +322,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             if (isCancelled && widget.task.canUncancel)
               Expanded(
                 child: AppButton(
-                  detailColor: AppPrimaryColors.orange.primary,
+                  detailColor: ref.usePrimaryColor('orange'),
                   onPressed: _uncancelTask,
                   text: context.l10n.taskDetailsUncancel,
                 ),
@@ -358,9 +358,9 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Color _statusColor(TaskStatus status) {
     return switch (status) {
       TaskStatus.pending => context.colorScheme.primary,
-      TaskStatus.completed => AppPrimaryColors.green.primary,
-      TaskStatus.expired => AppPrimaryColors.red.primary,
-      TaskStatus.cancelled => AppPrimaryColors.orange.primary,
+      TaskStatus.completed => ref.usePrimaryColor('green'),
+      TaskStatus.expired => ref.usePrimaryColor('red'),
+      TaskStatus.cancelled => ref.usePrimaryColor('orange'),
     };
   }
 
