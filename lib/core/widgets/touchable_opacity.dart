@@ -13,6 +13,7 @@ class TouchableOpacity extends StatefulWidget {
     super.key,
     required this.child,
     required this.onTap,
+    this.onLongPress,
     this.activeOpacity = 0.4,
   });
 
@@ -22,6 +23,9 @@ class TouchableOpacity extends StatefulWidget {
   /// Callback fired on tap release. When `null`, the widget is inert
   /// (no opacity change, no gesture handling).
   final VoidCallback? onTap;
+
+  /// Callback fired on long press.
+  final VoidCallback? onLongPress;
 
   /// Opacity applied while pressing. Defaults to `0.4`.
   final double activeOpacity;
@@ -35,7 +39,7 @@ class _TouchableOpacityState extends State<TouchableOpacity> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.onTap == null) return widget.child;
+    if (widget.onTap == null && widget.onLongPress == null) return widget.child;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -44,6 +48,7 @@ class _TouchableOpacityState extends State<TouchableOpacity> {
       onTapUp: (_) => setState(() => _isPressed = false),
       onTapCancel: () => setState(() => _isPressed = false),
       onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 100),
         opacity: _isPressed ? widget.activeOpacity : 1.0,
