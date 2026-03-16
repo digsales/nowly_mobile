@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
@@ -91,10 +92,9 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                     text: context.l10n.taskFormSave,
                     isProcessing: formState.isLoading,
                     onPressed: () async {
-                      final nav = Navigator.of(context);
                       final success = await notifier.save(context.l10n);
-                      if (success && mounted) {
-                        nav.pop();
+                      if (success && context.mounted) {
+                        context.pop();
                       }
                     },
                   ),

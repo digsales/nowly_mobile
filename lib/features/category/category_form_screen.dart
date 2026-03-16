@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart' as models;
@@ -254,7 +255,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 existing: widget.category,
               );
               if (success && mounted) {
-                Navigator.of(context).pop();
+                context.pop();
               }
             },
           ),
@@ -272,7 +273,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                   ),
                 );
                 if (deleted == true && mounted) {
-                  Navigator.of(context).pop();
+                  context.pop();
                 }
               },
             ),
