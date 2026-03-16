@@ -54,7 +54,7 @@ class TaskCard extends ConsumerWidget {
                   child: Container(
                     width: 4,
                     decoration: BoxDecoration(
-                      color: category!= null ? ref.usePrimaryColor(category.colorKey) : context.colorScheme.surface,
+                      color: category!= null ? ref.usePrimaryColor(category.colorKey) : context.colorScheme.onSurface,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
