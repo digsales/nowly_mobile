@@ -103,7 +103,7 @@ class TaskCard extends ConsumerWidget {
                             child: Text(
                               category.name,
                               style: context.textTheme.labelSmall?.copyWith(
-                                color: context.colorScheme.onSurfaceVariant,
+                                color: ref.usePrimaryColor(category.colorKey),
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
