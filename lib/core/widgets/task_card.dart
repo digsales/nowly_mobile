@@ -71,7 +71,7 @@ class TaskCard extends ConsumerWidget {
                           child: Text(
                             task.title,
                             style: context.textTheme.headlineMedium,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -84,7 +84,7 @@ class TaskCard extends ConsumerWidget {
                       Text(
                         task.description!,
                         style: context.textTheme.bodyMedium,
-                        maxLines: 1,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],

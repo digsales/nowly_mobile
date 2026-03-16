@@ -7,11 +7,14 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nowly/core/router/app_router.dart';
 import 'package:nowly/core/widgets/app_bottom_sheet.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/status_badge.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
 
 class TaskDetailsSheet extends ConsumerStatefulWidget {
@@ -173,10 +176,31 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
         Row(
           children: [
             Expanded(
-              child: Text(
-                task.title,
-                style: context.textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
+              child: TouchableOpacity(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  context.push(AppRoutes.taskForm, extra: task);
+                },
+                child: Text.rich(
+                  TextSpan(
+                    text: task.title,
+                    children: [
+                      if (isPending) ...[
+                        const WidgetSpan(child: SizedBox(width: 6)),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.middle,
+                          child: Icon(
+                            Ionicons.create_outline,
+                            size: 18,
+                            color: context.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  style: context.textTheme.displayMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
