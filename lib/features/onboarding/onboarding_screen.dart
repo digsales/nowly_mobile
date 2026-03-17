@@ -103,7 +103,7 @@ class OnboardingScreen extends StatelessWidget {
           textColor: context.colorScheme.surface,
           width: buttonWidth,
           onPressed: () {
-            context.push(AppRoutes.signin, extra: PageTransitionType.bottomToTop);
+            context.push(AppRoutes.signin);
           },
         ),
         const SizedBox(height: 12),
@@ -113,7 +113,7 @@ class OnboardingScreen extends StatelessWidget {
           detailColor: context.colorScheme.surface,
           textColor: context.colorScheme.primary,
           onPressed: () {
-            context.push(AppRoutes.signup, extra: PageTransitionType.bottomToTop);
+            context.push(AppRoutes.signup);
           },
         ),
       ],
