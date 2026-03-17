@@ -49,6 +49,15 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     final badges = user != null ? _sortedBadges(user) : UserBadges.values;
     if (badges.isEmpty) return const SizedBox.shrink();
 
+    const padding = 16.0 * 2;
+    final titleSize = context.textTheme.labelLarge!.fontSize!;
+    final subtitleSize = context.textTheme.labelSmall!.fontSize!;
+    final progressBar = context.textTheme.labelSmall!.fontSize! * 3;
+    const spacings = 4.0 + 8.0; // between title-subtitle + subtitle-progress
+    final contentHeight = padding + titleSize + spacings + subtitleSize + progressBar;
+    final carouselHeight = contentHeight < 80 ? 80.0 : contentHeight;
+    final imageSize = carouselHeight - padding;
+
     return Column(
       children: [
         CarouselSlider.builder(
@@ -64,11 +73,11 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
                   _controller.animateToPage(index);
                 }
               },
-              child: _BadgeCard(badge: badge, user: user),
+              child: _BadgeCard(badge: badge, user: user, imageSize: imageSize),
             );
           },
           options: CarouselOptions(
-            height: 120,
+            height: carouselHeight,
             viewportFraction: 0.85,
             enlargeCenterPage: false,
             autoPlay: true,
@@ -89,10 +98,11 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
 }
 
 class _BadgeCard extends StatelessWidget {
-  const _BadgeCard({required this.badge, this.user});
+  const _BadgeCard({required this.badge, this.user, required this.imageSize});
 
   final UserBadge badge;
   final User? user;
+  final double imageSize;
 
   @override
   Widget build(BuildContext context) {
@@ -124,8 +134,8 @@ class _BadgeCard extends StatelessWidget {
                     ),
               child: Image.asset(
                 badge.assetPath,
-                width: 90,
-                height: 90,
+                width: imageSize,
+                height: imageSize,
                 fit: BoxFit.cover,
               ),
             ),
