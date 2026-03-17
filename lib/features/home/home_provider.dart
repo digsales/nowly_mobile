@@ -5,7 +5,7 @@ import 'package:nowly/core/repositories/category_repository.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 
-final categoriesProvider = StreamProvider.autoDispose<List<Category>>((ref) {
+final categoriesProvider = StreamProvider<List<Category>>((ref) {
   final authService = ref.watch(authServiceProvider);
   final uid = authService.currentUser?.uid;
   if (uid == null) return Stream.value([]);
@@ -17,7 +17,7 @@ final categoriesProvider = StreamProvider.autoDispose<List<Category>>((ref) {
   });
 });
 
-final pendingTasksProvider = StreamProvider.autoDispose<List<Task>>((ref) {
+final pendingTasksProvider = StreamProvider<List<Task>>((ref) {
   final authService = ref.watch(authServiceProvider);
   final uid = authService.currentUser?.uid;
   if (uid == null) return Stream.value([]);
