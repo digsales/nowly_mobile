@@ -11,10 +11,10 @@ import '../extensions/context_extensions.dart';
 /// [UserBadge] asset. Otherwise it loads a network image.
 ///
 /// ```dart
-/// AppAvatar(name: 'Diogo Sales', imageUrl: user.avatarUrl, size: 80)
+/// UserAvatar(name: 'Diogo Sales', imageUrl: user.avatarUrl, size: 80)
 /// ```
-class AppAvatar extends StatelessWidget {
-  const AppAvatar({
+class UserAvatar extends StatelessWidget {
+  const UserAvatar({
     super.key,
     required this.name,
     this.imageUrl,

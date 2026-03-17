@@ -7,7 +7,7 @@ import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
-import 'package:nowly/core/widgets/app_avatar.dart';
+import 'package:nowly/core/widgets/user_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_error_state.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
@@ -91,7 +91,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildUserInfo(BuildContext context, User user) {
     return Column(
       children: [
-        AppAvatar(
+        UserAvatar(
           name: user.name,
           imageUrl: user.avatarUrl,
           size: 40.sp,
