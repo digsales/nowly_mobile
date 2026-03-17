@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/router/app_router.dart';
@@ -10,6 +11,7 @@ import 'package:nowly/features/home/widgets/level_up_banner.dart';
 import 'package:nowly/features/home/widgets/user_level_bar.dart';
 import 'package:nowly/features/home/widgets/home_bottom_nav_bar.dart';
 import 'package:nowly/core/repositories/user_repository.dart';
+import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
 
 
@@ -41,6 +43,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     );
 
     _levelUpEntry = entry;
+    HapticFeedback.mediumImpact();
     Overlay.of(context).insert(entry);
   }
 
@@ -52,6 +55,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
+    final showLevelBar = ref.watch(showLevelBarProvider);
     final userAsync = ref.watch(currentUserProvider);
 
     ref.listen(currentUserProvider, (prev, next) {
@@ -90,17 +94,20 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       extendBody: isRootTab,
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(32, context.paddingTop + 12, 32, 20),
-            child: UserLevelBar(
-              totalPoints: userAsync.asData?.value?.totalPoints ?? 0,
-              isLoading: userAsync is! AsyncData,
-              textColor: context.colorScheme.onPrimary,
-              subtitleColor: context.colorScheme.onPrimary.withValues(alpha: 0.7),
-              trackColor: context.colorScheme.onPrimary.withValues(alpha: 0.3),
-              indicatorColor: context.colorScheme.onPrimary,
-            ),
-          ),
+          if (showLevelBar)
+            Padding(
+              padding: EdgeInsets.fromLTRB(32, context.paddingTop + 12, 32, 20),
+              child: UserLevelBar(
+                totalPoints: userAsync.asData?.value?.totalPoints ?? 0,
+                isLoading: userAsync is! AsyncData,
+                textColor: context.colorScheme.onPrimary,
+                subtitleColor: context.colorScheme.onPrimary.withValues(alpha: 0.7),
+                trackColor: context.colorScheme.onPrimary.withValues(alpha: 0.3),
+                indicatorColor: context.colorScheme.onPrimary,
+              ),
+            )
+          else
+            SizedBox(height: context.paddingTop != 0 ? context.paddingTop + 10 : 20),
           Expanded(child: widget.navigationShell),
         ],
       ),

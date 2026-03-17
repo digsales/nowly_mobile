@@ -12,6 +12,7 @@ const _kHighContrast = 'high_contrast';
 const _kFontScale = 'font_scale';
 const _kLocale = 'locale';
 const _kPrimaryColor = 'primary_color';
+const _kShowLevelBar = 'show_level_bar';
 
 // ─── ThemeMode ───────────────────────────────────────────────────────────────
 
@@ -167,6 +168,31 @@ class LocaleNotifier extends Notifier<Locale?> {
   }
 }
 
+// ─── Show Level Bar ──────────────────────────────────────────────────────────
+
+final showLevelBarProvider =
+    NotifierProvider<ShowLevelBarNotifier, bool>(ShowLevelBarNotifier.new);
+
+class ShowLevelBarNotifier extends Notifier<bool> {
+  late final SharedPreferences _prefs;
+
+  @override
+  bool build() {
+    _prefs = ref.read(sharedPreferencesProvider);
+    return _prefs.getBool(_kShowLevelBar) ?? true;
+  }
+
+  void set(bool value) {
+    state = value;
+    _prefs.setBool(_kShowLevelBar, value);
+  }
+
+  void reset() {
+    _prefs.remove(_kShowLevelBar);
+    state = true;
+  }
+}
+
 // ─── Reset all ───────────────────────────────────────────────────────────────
 
 /// Resets all theme preferences to device/system defaults and clears cache.
@@ -176,4 +202,5 @@ void resetThemeDefaults(WidgetRef ref) {
   ref.read(primaryColorProvider.notifier).reset();
   ref.read(fontScaleProvider.notifier).reset();
   ref.read(localeProvider.notifier).reset();
+  ref.read(showLevelBarProvider.notifier).reset();
 }

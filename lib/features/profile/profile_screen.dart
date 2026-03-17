@@ -207,6 +207,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildPreferenceSettings(BuildContext context, WidgetRef ref) {
+    final showLevelBar = ref.watch(showLevelBarProvider);
     final highContrast = ref.watch(highContrastProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
@@ -231,6 +232,14 @@ class ProfileScreen extends ConsumerWidget {
             onChanged: (value) => ref.read(themeModeProvider.notifier).set(
               value ? ThemeMode.dark : ThemeMode.light,
             ),
+          ),
+        ),
+        AppSettingTile(
+          icon: Ionicons.trophy_outline,
+          label: context.l10n.settingsShowLevelBar,
+          trailing: Switch(
+            value: showLevelBar,
+            onChanged: (value) => ref.read(showLevelBarProvider.notifier).set(value),
           ),
         ),
         AppSettingTile(
