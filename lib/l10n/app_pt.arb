@@ -122,10 +122,16 @@
   "taskFormDeadline1Week": "1 semana",
   "taskFormDeadline2Weeks": "2 semanas",
   "taskFormDeadline1Month": "1 mês",
-  "taskFormInfo": "Concluir uma tarefa adiciona +5 pontos à sua pontuação.\n\nAs tarefas podem ter subtarefas, cada uma adiciona +2 a pontuação total.\n\nCancelar uma tarefa remove 1 ponto.\n\nTarefas expiradas removem 3 pontos.\n\nO nome, a descrição e a categoria da tarefa podem ser editados.\n\nAo criar uma tarefa, você terá 30 minutos para excluí-la sem perder sua pontuação.\n\nAs tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem.",
+  "taskFormInfo": "Concluir uma tarefa adiciona +5 pontos à sua pontuação.\n\nAs tarefas podem ter subtarefas, cada uma adiciona +2 a pontuação total.\n\nCancelar uma tarefa remove 1 ponto.\n\nTarefas expiradas removem 3 pontos.\n\nO nome, a descrição, as subtarefas e a categoria da tarefa podem ser editados.\n\nAo criar uma tarefa, você terá 30 minutos para excluí-la sem perder sua pontuação.\n\nAs tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem.",
   "taskFormSave": "Criar tarefa",
   "taskFormSaveEdit": "Salvar alterações",
   "taskFormPreviewTitle": "Minha tarefa",
+  "taskSubtasksCount": "{count, plural, =1{1 subtarefa} other{{count} subtarefas}}",
+  "@taskSubtasksCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "taskFormSubtasks": "Subtarefas",
   "taskFormSubtaskHint": "Adicionar subtarefa...",
   "taskDetailsTitle": "Detalhes da tarefa",

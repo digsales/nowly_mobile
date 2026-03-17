@@ -72,7 +72,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       headerText: isEditing
           ? context.l10n.taskFormTitleEdit
           : context.l10n.taskFormTitleAdd,
-      headerHelpText: isEditing ? null : context.l10n.taskFormInfo,
+      headerHelpText: context.l10n.taskFormInfo,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final wide = constraints.maxWidth >= 600;
@@ -176,7 +176,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TaskCard(task: previewTask, showDetails: false),
+      child: TaskCard(
+        task: previewTask,
+        showDetails: false,
+        subtaskCount: formState.subtasks.length,
+      ),
     );
   }
 
@@ -325,11 +329,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                       style: context.textTheme.bodyMedium,
                     ),
                   ),
-                  GestureDetector(
+                  TouchableOpacity(
                     onTap: () => notifier.removeSubtask(index),
                     child: Icon(
                       Ionicons.close_outline,
-                      size: 18,
+                      size: 20,
                       color: context.colorScheme.error,
                     ),
                   ),

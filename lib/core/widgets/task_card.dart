@@ -18,10 +18,12 @@ class TaskCard extends ConsumerWidget {
     super.key,
     required this.task,
     this.showDetails = true,
+    this.subtaskCount,
   });
 
   final Task task;
   final bool showDetails;
+  final int? subtaskCount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,6 +33,11 @@ class TaskCard extends ConsumerWidget {
     final category = _findCategory(ref);
 
     final canEdit = showDetails && task.status == TaskStatus.pending && !isExpired;
+
+    final remoteSubtasks = showDetails
+        ? ref.watch(subtasksProvider(task.id)).asData?.value
+        : null;
+    final effectiveCount = subtaskCount ?? remoteSubtasks?.length ?? 0;
 
     return TouchableOpacity(
       onTap: showDetails
@@ -86,6 +93,15 @@ class TaskCard extends ConsumerWidget {
                         style: context.textTheme.bodyMedium,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                    if(effectiveCount > 0) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        context.l10n.taskSubtasksCount(effectiveCount),
+                        style: context.textTheme.labelSmall?.copyWith(
+                          color: context.colorScheme.onSurfaceVariant,
+                        ),
                       ),
                     ],
                     const SizedBox(height: 4),
