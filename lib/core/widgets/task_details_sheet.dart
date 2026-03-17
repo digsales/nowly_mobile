@@ -144,7 +144,6 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
     final success = await showDialog<bool>(
       context: context,
-      barrierDismissible: false,
       builder: (ctx) {
         var processing = false;
 
