@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      sha256: febf4b0163e0242adc13d7a863b04965351f59e7dfea56675c7c2caa7bcd7476
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.2"
   change_app_package_name:
     dependency: "direct dev"
     description:
@@ -177,14 +185,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
-  expandable_page_view:
-    dependency: "direct main"
-    description:
-      name: expandable_page_view
-      sha256: "0dc2f7d5ee2148df424a343daf6434353a5d56d0cd2e64282cb3ac782f769bba"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
   fake_async:
     dependency: transitive
     description:

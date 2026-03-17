@@ -25,7 +25,7 @@ dependencies:
   animated_bottom_navigation_bar: ^1.4.0
   shared_preferences: ^2.5.4
   shimmer: ^3.0.0
-  expandable_page_view: ^1.2.1
+  carousel_slider: ^5.1.2
 
 dev_dependencies:
   flutter_test:
