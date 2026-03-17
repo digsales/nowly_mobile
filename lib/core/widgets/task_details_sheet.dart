@@ -212,7 +212,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                           alignment: PlaceholderAlignment.middle,
                           child: Icon(
                             Ionicons.create_outline,
-                            size: 18,
+                            size: context.textTheme.displayMedium!.fontSize! / 1.5,
                             color: context.colorScheme.onSurfaceVariant,
                           ),
                         ),
