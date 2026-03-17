@@ -174,12 +174,14 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       pointsEarned: formState.totalPoints,
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TaskCard(
-        task: previewTask,
-        showDetails: false,
-        subtaskCount: formState.subtasks.length,
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: TaskCard(
+          task: previewTask,
+          showDetails: false,
+          subtaskCount: formState.subtasks.length,
+        ),
       ),
     );
   }
