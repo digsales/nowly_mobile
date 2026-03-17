@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/models/category.dart';
+import 'package:nowly/core/models/subtask.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/category_repository.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
@@ -36,4 +37,9 @@ final pendingTasksProvider = StreamProvider<List<Task>>((ref) {
 
     return pending;
   });
+});
+
+final subtasksProvider = StreamProvider.family<List<Subtask>, String>((ref, taskId) {
+  final repo = ref.watch(taskRepositoryProvider);
+  return repo.watchSubtasks(taskId);
 });

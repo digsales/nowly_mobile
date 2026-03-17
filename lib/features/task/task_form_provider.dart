@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nowly/core/models/subtask.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
@@ -38,12 +39,16 @@ class TaskFormState {
     this.selectedDeadline = TaskDeadline.oneDay,
     this.isLoading = false,
     this.errorMessage,
+    this.subtasks = const [],
   });
 
   final String? selectedCategoryId;
   final TaskDeadline selectedDeadline;
   final bool isLoading;
   final String? errorMessage;
+  final List<Subtask> subtasks;
+
+  int get totalPoints => defaultTaskPoints + (subtasks.length * subtaskPoints);
 
   TaskFormState copyWith({
     String? selectedCategoryId,
@@ -51,12 +56,14 @@ class TaskFormState {
     bool? isLoading,
     String? errorMessage,
     bool clearCategory = false,
+    List<Subtask>? subtasks,
   }) {
     return TaskFormState(
       selectedCategoryId: clearCategory ? null : (selectedCategoryId ?? this.selectedCategoryId),
       selectedDeadline: selectedDeadline ?? this.selectedDeadline,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
+      subtasks: subtasks ?? this.subtasks,
     );
   }
 }
@@ -76,7 +83,7 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     return const TaskFormState();
   }
 
-  void init(Task? task) {
+  Future<void> init(Task? task) async {
     if (task == null) return;
     title.controller.text = task.title;
     description.controller.text = task.description ?? '';
@@ -84,6 +91,10 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
       selectedCategoryId: task.categoryId,
       clearCategory: task.categoryId == null,
     );
+
+    // Load existing subtasks
+    final snapshot = await _taskRepository.watchSubtasks(task.id).first;
+    state = state.copyWith(subtasks: snapshot);
   }
 
   void selectCategory(String? categoryId) {
@@ -110,6 +121,36 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     state = state.copyWith();
   }
 
+  void addSubtask(String text) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return;
+    final subtask = Subtask(id: '', title: trimmed);
+    state = state.copyWith(subtasks: [...state.subtasks, subtask]);
+  }
+
+  void removeSubtask(int index) {
+    final updated = [...state.subtasks]..removeAt(index);
+    state = state.copyWith(subtasks: updated);
+  }
+
+  /// Syncs local subtask list with Firestore for an existing task.
+  Future<void> _syncSubtasks(String taskId) async {
+    final remote = await _taskRepository.watchSubtasks(taskId).first;
+    final localIds = state.subtasks.where((s) => s.id.isNotEmpty).map((s) => s.id).toSet();
+    final remoteIds = remote.map((s) => s.id).toSet();
+
+    // Remove subtasks that were deleted locally
+    for (final id in remoteIds.difference(localIds)) {
+      await _taskRepository.removeSubtask(taskId, id);
+    }
+
+    // Add new subtasks (id is empty for locally created ones)
+    final newSubtasks = state.subtasks.where((s) => s.id.isEmpty).toList();
+    if (newSubtasks.isNotEmpty) {
+      await _taskRepository.addSubtasks(taskId, newSubtasks);
+    }
+  }
+
   Future<bool> save(AppLocalizations l10n, {Task? existing}) async {
     title.validator = Validators.combine([
       Validators.required(l10n.validatorRequired),
@@ -124,6 +165,8 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     state = state.copyWith(isLoading: true);
 
     try {
+      final points = state.totalPoints;
+
       if (existing != null) {
         await _taskRepository.updateTask(
           existing.id,
@@ -132,7 +175,9 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
           title: title.text,
           description: description.text.isEmpty ? null : description.text,
           clearDescription: description.text.isEmpty,
+          pointsEarned: points,
         );
+        await _syncSubtasks(existing.id);
       } else {
         final uid = ref.read(authServiceProvider).currentUser?.uid;
         if (uid == null) return false;
@@ -147,10 +192,14 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
           endDate: now.add(state.selectedDeadline.duration),
           status: TaskStatus.pending,
           createdAt: now,
-          pointsEarned: defaultTaskPoints,
+          pointsEarned: points,
         );
 
-        await _taskRepository.createTask(task);
+        final taskId = await _taskRepository.createTask(task);
+
+        if (state.subtasks.isNotEmpty) {
+          await _taskRepository.addSubtasks(taskId, state.subtasks);
+        }
       }
 
       state = state.copyWith(isLoading: false);

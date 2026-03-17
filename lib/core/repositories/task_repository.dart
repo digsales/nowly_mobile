@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nowly/core/models/subtask.dart';
 import 'package:nowly/core/models/task.dart';
 
 const defaultTaskPoints = 5;
+const subtaskPoints = 2;
 
 class TaskRepository {
   TaskRepository(this._firestore);
@@ -17,6 +19,9 @@ class TaskRepository {
   DocumentReference<Map<String, dynamic>> _userDoc(String userId) =>
       _firestore.collection('users').doc(userId);
 
+  CollectionReference<Map<String, dynamic>> _subtasks(String taskId) =>
+      _tasks.doc(taskId).collection('subtasks');
+
   Stream<List<Task>> watchPendingTasks(String userId) {
     return _tasks
         .where('userId', isEqualTo: userId)
@@ -27,10 +32,11 @@ class TaskRepository {
             .toList());
   }
 
-  Future<void> createTask(Task task) async {
+  Future<String> createTask(Task task) async {
     try {
       final doc = task.id.isEmpty ? _tasks.doc() : _tasks.doc(task.id);
       await doc.set(task.toJson());
+      return doc.id;
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
@@ -42,6 +48,7 @@ class TaskRepository {
     String? title,
     String? description,
     bool clearDescription = false,
+    int? pointsEarned,
   }) async {
     try {
       final data = <String, dynamic>{};
@@ -56,6 +63,7 @@ class TaskRepository {
       } else if (description != null) {
         data['description'] = description;
       }
+      if (pointsEarned != null) data['pointsEarned'] = pointsEarned;
       if (data.isEmpty) return;
 
       await _tasks.doc(taskId).update(data);
@@ -129,6 +137,33 @@ class TaskRepository {
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
+  }
+
+  // ─── Subtasks ────────────────────────────────────────────────────────────────
+
+  Stream<List<Subtask>> watchSubtasks(String taskId) {
+    return _subtasks(taskId).snapshots().map((snapshot) =>
+        snapshot.docs.map((doc) => Subtask.fromJson(doc.id, doc.data())).toList());
+  }
+
+  Future<void> addSubtask(String taskId, Subtask subtask) async {
+    await _subtasks(taskId).add(subtask.toJson());
+  }
+
+  Future<void> removeSubtask(String taskId, String subtaskId) async {
+    await _subtasks(taskId).doc(subtaskId).delete();
+  }
+
+  Future<void> toggleSubtask(String taskId, String subtaskId, bool isDone) async {
+    await _subtasks(taskId).doc(subtaskId).update({'isDone': isDone});
+  }
+
+  Future<void> addSubtasks(String taskId, List<Subtask> subtasks) async {
+    final batch = _firestore.batch();
+    for (final subtask in subtasks) {
+      batch.set(_subtasks(taskId).doc(), subtask.toJson());
+    }
+    await batch.commit();
   }
 
   Future<void> markAsExpired(List<String> taskIds, {required String userId}) async {

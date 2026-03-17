@@ -216,6 +216,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             style: context.textTheme.bodyMedium,
           ),
         ],
+        _buildSubtasks(task, category),
         Divider(
           height: 32,
           color: context.colorScheme.outlineVariant,
@@ -248,6 +249,60 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
         const SizedBox(height: 24),
         _buildActions(isPending, isCancelled),
       ],
+    );
+  }
+
+  Widget _buildSubtasks(Task task, Category? category) {
+    final subtasksAsync = ref.watch(subtasksProvider(task.id));
+    final subtasks = subtasksAsync.asData?.value;
+    if (subtasks == null || subtasks.isEmpty) return const SizedBox.shrink();
+
+    final isPending = task.status == TaskStatus.pending &&
+        task.endDate.isAfter(DateTime.now());
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: subtasks.map((subtask) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: TouchableOpacity(
+              onTap: isPending
+                  ? () => ref.read(taskRepositoryProvider).toggleSubtask(
+                        task.id, subtask.id, !subtask.isDone)
+                  : null,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Icon(
+                    subtask.isDone
+                        ? Ionicons.checkmark_circle
+                        : Ionicons.ellipse_outline,
+                    size: 20,
+                    color: subtask.isDone
+                        ? category != null 
+                          ? ref.usePrimaryColor(category.colorKey) 
+                          : context.colorScheme.onSurface
+                        : context.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      subtask.title,
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        color: subtask.isDone
+                            ? context.colorScheme.onSurfaceVariant
+                            : null,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 

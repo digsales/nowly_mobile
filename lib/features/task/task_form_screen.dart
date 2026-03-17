@@ -4,7 +4,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/task.dart';
-import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
 import 'package:nowly/core/widgets/app_button.dart';
@@ -12,6 +11,7 @@ import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/task_card.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
 import 'package:nowly/features/task/task_form_provider.dart';
 
@@ -26,16 +26,30 @@ class TaskFormScreen extends ConsumerStatefulWidget {
 
 class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
   bool _initialized = false;
+  final _subtaskController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!_initialized && mounted) {
-        ref.read(taskFormProvider.notifier).init(widget.task);
-        setState(() => _initialized = true);
+        await ref.read(taskFormProvider.notifier).init(widget.task);
+        if (mounted) setState(() => _initialized = true);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _subtaskController.dispose();
+    super.dispose();
+  }
+
+  void _addSubtask() {
+    final text = _subtaskController.text.trim();
+    if (text.isEmpty) return;
+    ref.read(taskFormProvider.notifier).addSubtask(text);
+    _subtaskController.clear();
   }
 
   @override
@@ -79,6 +93,8 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                           _buildTitleField(notifier),
                           const SizedBox(height: 24),
                           _buildDescriptionField(notifier),
+                          const SizedBox(height: 24),
+                          _buildSubtasks(formState, notifier),
                         ],
                       ),
                     ),
@@ -101,6 +117,8 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 _buildTitleField(notifier),
                 const SizedBox(height: 24),
                 _buildDescriptionField(notifier),
+                const SizedBox(height: 24),
+                _buildSubtasks(formState, notifier),
                 const SizedBox(height: 24),
                 _buildCategoryPicker(effectiveCategoryId, notifier),
                 if (!isEditing) ...[
@@ -153,7 +171,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
       endDate: isEditing ? widget.task!.endDate : now.add(formState.selectedDeadline.duration),
       status: TaskStatus.pending,
       createdAt: isEditing ? widget.task!.createdAt : now,
-      pointsEarned: defaultTaskPoints,
+      pointsEarned: formState.totalPoints,
     );
 
     return Padding(
@@ -273,6 +291,69 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSubtasks(TaskFormState formState, TaskFormNotifier notifier) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.taskFormSubtasks,
+          style: context.textTheme.labelLarge?.copyWith(
+            color: context.colorScheme.primary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        if (formState.subtasks.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          ...List.generate(formState.subtasks.length, (index) {
+            final subtask = formState.subtasks[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Ionicons.ellipse_outline,
+                    size: 18,
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      subtask.title,
+                      style: context.textTheme.bodyMedium,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => notifier.removeSubtask(index),
+                    child: Icon(
+                      Ionicons.close_outline,
+                      size: 18,
+                      color: context.colorScheme.error,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
+        const SizedBox(height: 12),
+        AppTextField(
+          controller: _subtaskController,
+          hintText: context.l10n.taskFormSubtaskHint,
+          prefixIcon: Ionicons.list_outline,
+          textCapitalization: TextCapitalization.sentences,
+          suffixIcon: TouchableOpacity(
+            onTap: _addSubtask,
+            child: Icon(
+              Ionicons.add_circle_outline,
+              color: context.colorScheme.primary,
+              size: context.textTheme.bodyMedium!.fontSize! * 1.71,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
