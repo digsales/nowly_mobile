@@ -68,15 +68,36 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     super.dispose();
   }
 
-  Future<void> _completeTask() => _confirmAndRun(
-        icon: Ionicons.checkmark_circle_outline,
-        color: ref.usePrimaryColor('green'),
-        title: context.l10n.taskDetailsComplete,
-        subtitle: context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
-        buttonText: context.l10n.taskDetailsComplete,
-        run: () => ref.read(taskRepositoryProvider).completeTask(widget.task),
-        successMessage: context.l10n.taskDetailsSuccess,
+  Future<void> _completeTask() async {
+    final subtasks = ref.read(subtasksProvider(widget.task.id)).asData?.value ?? [];
+    final hasSubtasks = subtasks.isNotEmpty;
+    final allDone = subtasks.every((s) => s.isDone);
+
+    if (hasSubtasks && !allDone) {
+      await showDialog(
+        context: context,
+        builder: (ctx) => AppDialog(
+          icon: Ionicons.alert_circle_outline,
+          color: ref.usePrimaryColor('yellow'),
+          title: context.l10n.taskDetailsComplete,
+          subtitle: context.l10n.taskDetailsSubtasksPending,
+          cancelText: context.l10n.dialogBack,
+          onCancel: () => Navigator.of(ctx).pop(),
+        ),
       );
+      return;
+    }
+
+    return _confirmAndRun(
+      icon: Ionicons.checkmark_circle_outline,
+      color: ref.usePrimaryColor('green'),
+      title: context.l10n.taskDetailsComplete,
+      subtitle: context.l10n.taskDetailsCompleteConfirm(widget.task.pointsEarned),
+      buttonText: context.l10n.taskDetailsComplete,
+      run: () => ref.read(taskRepositoryProvider).completeTask(widget.task),
+      successMessage: context.l10n.taskDetailsSuccess,
+    );
+  }
 
   Future<void> _cancelTask() => _confirmAndRun(
         icon: Ionicons.close_circle_outline,

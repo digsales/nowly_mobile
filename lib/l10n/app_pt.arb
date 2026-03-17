@@ -153,6 +153,7 @@
   "taskDetailsDeleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
   "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 ponto.",
   "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} pontos!",
+  "taskDetailsSubtasksPending": "Você precisa concluir todas as subtarefas antes de finalizar esta tarefa.",
   "@taskDetailsCompleteConfirm": {
     "placeholders": {
       "points": { "type": "int" }
