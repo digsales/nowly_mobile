@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/models/category.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
@@ -208,16 +209,23 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             StatusBadge(status: task.status),
           ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          task.description ?? context.l10n.taskDetailsDescription,
-          style: context.textTheme.bodyMedium,
+        if (task.description != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            task.description!,
+            style: context.textTheme.bodyMedium,
+          ),
+        ],
+        Divider(
+          height: 32,
+          color: context.colorScheme.outlineVariant,
         ),
-        const SizedBox(height: 20),
         _buildInfoRow(
-          icon: Ionicons.folder_outline,
-          label: context.l10n.taskDetailsCategory,
+          icon: category?.icon,
           value: category?.name ?? context.l10n.taskFormCategoryNone,
+          color: category != null
+            ? ref.usePrimaryColor(category.colorKey)
+            : context.colorScheme.onSurfaceVariant,
         ),
         const SizedBox(height: 12),
         _buildInfoRow(
@@ -244,24 +252,30 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Widget _buildInfoRow({
-    required IconData icon,
-    required String label,
+    IconData? icon,
+    String? label,
     required String value,
+    Color? color,
   }) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: context.colorScheme.onSurfaceVariant),
-        const SizedBox(width: 10),
-        Text(
-          '$label: ',
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
+        if (icon != null) ...[
+          Icon(icon, size: 18, color: color ?? context.colorScheme.onSurfaceVariant),
+          const SizedBox(width: 10),
+        ],
+        if (label != null)
+          Text(
+            '$label: ',
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+            ),
           ),
-        ),
         Expanded(
           child: Text(
             value,
-            style: context.textTheme.bodyMedium,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: color ?? context.colorScheme.onSurface,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -326,7 +340,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
         '${date.minute.toString().padLeft(2, '0')}';
   }
 
-  dynamic _findCategory() {
+  Category? _findCategory() {
     final categoryId = widget.task.categoryId;
     if (categoryId == null) return null;
 
