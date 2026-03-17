@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/models/user_badge.dart';
+import 'package:nowly/core/utils/level_utils.dart';
 
 import '../extensions/context_extensions.dart';
 
@@ -18,6 +19,7 @@ class AppAvatar extends StatelessWidget {
     required this.name,
     this.imageUrl,
     this.size = 80,
+    this.totalPoints,
   });
 
   /// Full name used to extract initials (e.g. "Diogo Sales" -> "DS").
@@ -28,6 +30,9 @@ class AppAvatar extends StatelessWidget {
 
   /// Diameter of the avatar. Defaults to 80.
   final double size;
+
+  /// If provided, calculates the level from total points and shows a badge at bottom-left.
+  final int? totalPoints;
 
   String get _initials {
     final parts = name.trim().split(RegExp(r'\s+'));
@@ -54,29 +59,59 @@ class AppAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final image = _resolveImage();
 
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: context.colorScheme.primary,
-        image: image != null
-            ? DecorationImage(image: image, fit: BoxFit.cover)
-            : null,
-      ),
-      child: image == null
-          ? Center(
-              child: Text(
-                _initials,
-                style: TextStyle(
-                  color: context.colorScheme.onPrimary,
-                  fontFamily: "ultra",
-                  fontSize: size * 0.35,
-                  fontWeight: FontWeight.w600,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: context.colorScheme.primary,
+            image: image != null
+                ? DecorationImage(image: image, fit: BoxFit.cover)
+                : null,
+          ),
+          child: image == null
+              ? Center(
+                  child: Text(
+                    _initials,
+                    style: TextStyle(
+                      color: context.colorScheme.onPrimary,
+                      fontFamily: "ultra",
+                      fontSize: size * 0.35,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              : null,
+        ),
+        if (totalPoints != null)
+          Positioned(
+            bottom: -2,
+            left: -2,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              decoration: BoxDecoration(
+                color: context.colorScheme.primary,
+                borderRadius: BorderRadius.circular(99),
+                border: Border.all(
+                  color: context.colorScheme.surface,
+                  width: 2,
                 ),
               ),
-            )
-          : null,
+              child: Text(
+                '${calculateLevel(totalPoints!)}',
+                style: TextStyle(
+                  color: context.colorScheme.onPrimary,
+                  fontSize: size * 0.16,
+                  fontWeight: FontWeight.w700,
+                  height: 1,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

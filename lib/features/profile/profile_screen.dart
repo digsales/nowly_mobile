@@ -95,6 +95,7 @@ class ProfileScreen extends ConsumerWidget {
           name: user.name,
           imageUrl: user.avatarUrl,
           size: 40.sp,
+          totalPoints: user.totalPoints,
         ),
         const SizedBox(height: 16),
         Text(
