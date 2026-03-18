@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart';
+import 'package:nowly/core/models/subtask.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
@@ -37,6 +38,7 @@ class TaskDetailsSheet extends ConsumerStatefulWidget {
 class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Timer? _deleteTimer;
   int _deleteMinutesLeft = 0;
+  List<Subtask>? _optimisticSubtasks;
 
   @override
   void initState() {
@@ -273,9 +275,20 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   }
 
   Widget _buildSubtasks(Task task, Category? category) {
-    final subtasksAsync = ref.watch(subtasksProvider(task.id));
-    final subtasks = subtasksAsync.asData?.value;
-    if (subtasks == null || subtasks.isEmpty) return const SizedBox.shrink();
+    final remoteSubtasks = ref.watch(subtasksProvider(task.id)).asData?.value;
+    if (remoteSubtasks == null || remoteSubtasks.isEmpty) return const SizedBox.shrink();
+
+    final subtasks = _optimisticSubtasks ?? remoteSubtasks;
+
+    // Clear optimistic state once Firestore catches up
+    if (_optimisticSubtasks != null &&
+        _optimisticSubtasks!.length == remoteSubtasks.length &&
+        List.generate(_optimisticSubtasks!.length, (i) =>
+            _optimisticSubtasks![i].id == remoteSubtasks[i].id).every((e) => e)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _optimisticSubtasks = null);
+      });
+    }
 
     final isPending = task.status == TaskStatus.pending &&
         task.endDate.isAfter(DateTime.now());
@@ -299,6 +312,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                 final updated = [...subtasks];
                 final item = updated.removeAt(oldIndex);
                 updated.insert(newIndex, item);
+                setState(() => _optimisticSubtasks = updated);
                 ref.read(taskRepositoryProvider).reorderSubtasks(task.id, updated);
               }
             : (_, _) {},
