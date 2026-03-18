@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
-import 'package:nowly/features/history/history_screen.dart';
+import 'package:nowly/features/progress/progress_screen.dart';
 import 'package:nowly/features/ranking/ranking_screen.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/features/category/category_form_screen.dart';
@@ -29,7 +29,7 @@ abstract class AppRoutes {
   static const String categoryForm = '/home/category-form';
   static const String taskForm = '/home/task-form';
   static const String ranking = '/ranking';
-  static const String history = '/history';
+  static const String progress = '/progress';
   static const String profile = '/profile';
 }
 
@@ -200,9 +200,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.history,
+                path: AppRoutes.progress,
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: HistoryScreen()),
+                    const NoTransitionPage(child: ProgressScreen()),
               ),
             ],
           ),

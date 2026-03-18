@@ -86,7 +86,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final isRootTab = const [
       AppRoutes.home,
       AppRoutes.ranking,
-      AppRoutes.history,
+      AppRoutes.progress,
       AppRoutes.profile,
     ].contains(location);
 
