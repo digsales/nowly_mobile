@@ -7,7 +7,7 @@ import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
-import 'package:nowly/core/widgets/app_avatar.dart';
+import 'package:nowly/core/widgets/user_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_error_state.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
@@ -91,10 +91,11 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildUserInfo(BuildContext context, User user) {
     return Column(
       children: [
-        AppAvatar(
+        UserAvatar(
           name: user.name,
           imageUrl: user.avatarUrl,
           size: 40.sp,
+          totalPoints: user.totalPoints,
         ),
         const SizedBox(height: 16),
         Text(
@@ -208,7 +209,7 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _buildPreferenceSettings(BuildContext context, WidgetRef ref) {
     final highContrast = ref.watch(highContrastProvider);
-    final currentColor = ref.watch(primaryColorProvider).primary;
+    final showLevelBar = ref.watch(showLevelBarProvider);
     final fontScale = ref.watch(fontScaleProvider);
     final locale = ref.watch(localeProvider);
     final languageLabel = locale == null
@@ -243,6 +244,14 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
         AppSettingTile(
+          icon: Ionicons.trophy_outline,
+          label: context.l10n.settingsShowLevelBar,
+          trailing: Switch(
+            value: showLevelBar,
+            onChanged: (value) => ref.read(showLevelBarProvider.notifier).set(value),
+          ),
+        ),
+        AppSettingTile(
           icon: Ionicons.color_palette_outline,
           label: context.l10n.settingsPrimaryColor,
           onTap: () => showDialog(
@@ -256,7 +265,7 @@ class ProfileScreen extends ConsumerWidget {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(
-                  color: currentColor,
+                  color: context.colorScheme.primary,
                   shape: BoxShape.circle,
                 ),
               ),

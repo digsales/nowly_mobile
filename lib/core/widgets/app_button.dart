@@ -78,7 +78,7 @@ class AppButton extends StatelessWidget {
       AppButtonVariant.filled => ElevatedButton(
           onPressed: isProcessing ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(width ?? 100.w, 31.sp),
+            minimumSize: Size(width ?? 100.w, 60),
             backgroundColor: detailColor ?? context.colorScheme.primary,
             foregroundColor: textColor ?? context.colorScheme.surface,
             disabledBackgroundColor: detailColor ?? context.colorScheme.primary,
@@ -91,7 +91,7 @@ class AppButton extends StatelessWidget {
       AppButtonVariant.outlined => OutlinedButton(
           onPressed: isProcessing ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            minimumSize: Size(width ?? 100.w, 31.sp),
+            minimumSize: Size(width ?? 100.w, 60),
             side: BorderSide(
               color: detailColor ?? context.colorScheme.primary,
               width: 2,
