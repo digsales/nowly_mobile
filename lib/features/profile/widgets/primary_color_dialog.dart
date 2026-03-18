@@ -32,7 +32,7 @@ class PrimaryColorDialog extends ConsumerWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: colors.primary,
+                color: ref.usePrimaryColor(colors.key),
                 shape: BoxShape.circle,
                 border: isSelected
                     ? Border.all(
@@ -52,7 +52,7 @@ class PrimaryColorDialog extends ConsumerWidget {
           );
         }).toList(),
       ),
-      cancelText: context.l10n.deleteAccountCancel,
+      cancelText: context.l10n.dialogBack,
       onCancel: () => Navigator.of(context).pop(),
     );
   }

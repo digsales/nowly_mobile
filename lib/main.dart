@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +40,7 @@ Future<void> main() async {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  static const double _baseFontSize = 16;
+  static const double _baseFontSize = kIsWeb ? 12 : 16;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/models/category.dart';
-import 'package:nowly/core/theme/app_palette.dart';
 import 'package:nowly/l10n/app_localizations.dart';
 
 class CategoryRepository {
@@ -16,7 +13,8 @@ class CategoryRepository {
 
   Future<void> createCategory(Category category) async {
     try {
-      await _categories.doc(category.id).set(category.toJson());
+      final doc = category.id.isEmpty ? _categories.doc() : _categories.doc(category.id);
+      await doc.set(category.toJson());
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
@@ -30,9 +28,20 @@ class CategoryRepository {
     }
   }
 
-  Future<void> deleteCategory(String categoryId) async {
+  Future<void> deleteCategory(String categoryId, {required String userId}) async {
     try {
-      await _categories.doc(categoryId).delete();
+      final tasks = await _firestore
+          .collection('tasks')
+          .where('userId', isEqualTo: userId)
+          .where('categoryId', isEqualTo: categoryId)
+          .get();
+
+      final batch = _firestore.batch();
+      for (final doc in tasks.docs) {
+        batch.update(doc.reference, {'categoryId': null});
+      }
+      batch.delete(_categories.doc(categoryId));
+      await batch.commit();
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
@@ -48,14 +57,13 @@ class CategoryRepository {
   }
 
   Future<void> seedDefaultCategories(String userId, AppLocalizations l10n) async {
-    const colors = AppPalette.categoryColors;
     final defaults = [
-      _DefaultCategory(l10n.categoryStudy, colors[0], 'book_outline'),
-      _DefaultCategory(l10n.categoryWork, colors[1], 'briefcase_outline'),
-      _DefaultCategory(l10n.categoryHealth, colors[2], 'heart_outline'),
-      _DefaultCategory(l10n.categoryPersonal, colors[3], 'person_outline'),
-      _DefaultCategory(l10n.categoryHome, colors[4], 'home_outline'),
-      _DefaultCategory(l10n.categorySocial, colors[5], 'people_outline'),
+      _DefaultCategory(l10n.categoryStudy, 'blue', 'book_outline'),
+      _DefaultCategory(l10n.categoryWork, 'red', 'briefcase_outline'),
+      _DefaultCategory(l10n.categoryHealth, 'green', 'heart_outline'),
+      _DefaultCategory(l10n.categoryPersonal, 'purple', 'person_outline'),
+      _DefaultCategory(l10n.categoryHome, 'orange', 'home_outline'),
+      _DefaultCategory(l10n.categorySocial, 'pink', 'people_outline'),
     ];
 
     final batch = _firestore.batch();
@@ -65,7 +73,7 @@ class CategoryRepository {
       batch.set(doc, {
         'userId': userId,
         'name': data.name,
-        'color': data.color.toARGB32(),
+        'colorKey': data.colorKey,
         'iconName': data.iconName,
       });
     }
@@ -79,9 +87,9 @@ class CategoryRepository {
 }
 
 class _DefaultCategory {
-  const _DefaultCategory(this.name, this.color, this.iconName);
+  const _DefaultCategory(this.name, this.colorKey, this.iconName);
   final String name;
-  final Color color;
+  final String colorKey;
   final String iconName;
 }
 

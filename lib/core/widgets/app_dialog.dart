@@ -96,7 +96,7 @@ class AppDialog extends StatelessWidget {
       if (cancelText != null) ...[
         const SizedBox(height: 16),
         TouchableOpacity(
-          onTap: isProcessing ? () {} : (onCancel ?? () {}),
+          onTap: isProcessing ? null : (onCancel ?? () {}),
           child: Text(
             cancelText!,
             style: context.textTheme.labelLarge?.copyWith(

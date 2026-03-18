@@ -8,7 +8,7 @@ import 'package:nowly/core/validators/field_controller.dart';
 import 'package:nowly/core/validators/validators.dart';
 import 'package:nowly/l10n/app_localizations.dart';
 
-final currentUserProvider = StreamProvider.autoDispose<User?>((ref) {
+final currentUserProvider = StreamProvider<User?>((ref) {
   final authService = ref.watch(authServiceProvider);
   final uid = authService.currentUser?.uid;
   if (uid == null) return Stream.value(null);

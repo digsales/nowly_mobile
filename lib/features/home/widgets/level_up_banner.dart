@@ -117,7 +117,7 @@ class _LevelUpBannerState extends State<LevelUpBanner>
                                 Text(
                                   widget.title,
                                   style: context.textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 const SizedBox(height: 2),

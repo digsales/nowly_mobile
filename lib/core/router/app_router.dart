@@ -4,6 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/features/ranking/ranking_screen.dart';
+import 'package:nowly/core/models/category.dart' as models;
+import 'package:nowly/features/category/category_form_screen.dart';
+import 'package:nowly/core/models/task.dart';
+import 'package:nowly/features/task/task_form_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
 import 'package:nowly/features/profile/profile_screen.dart';
@@ -22,40 +26,25 @@ abstract class AppRoutes {
 
   // authenticated routes
   static const String home = '/home';
+  static const String categoryForm = '/home/category-form';
+  static const String taskForm = '/home/task-form';
   static const String ranking = '/ranking';
   static const String history = '/history';
   static const String profile = '/profile';
 }
 
-enum PageTransitionType {
-  bottomToTop,
-  cupertino,
-}
-
-CustomTransitionPage _buildPage(GoRouterState state, Widget child) {
-  final transition = state.extra as PageTransitionType?;
-  return CustomTransitionPage(
-    key: state.pageKey,
-    child: child,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return switch (transition) {
-        PageTransitionType.bottomToTop => SlideTransition(
+class _BottomToTopPage<T> extends CustomTransitionPage<T> {
+  _BottomToTopPage({required super.child, super.key})
+      : super(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              SlideTransition(
             position: animation.drive(
               Tween(begin: const Offset(0, 1), end: Offset.zero)
                   .chain(CurveTween(curve: Curves.easeOut)),
             ),
             child: child,
           ),
-        PageTransitionType.cupertino => CupertinoPageTransition(
-            primaryRouteAnimation: animation,
-            secondaryRouteAnimation: secondaryAnimation,
-            linearTransition: true,
-            child: child,
-          ),
-        null => FadeTransition(opacity: animation, child: child),
-      };
-    },
-  );
+        );
 }
 
 class _TabSwitcher extends StatefulWidget {
@@ -142,23 +131,22 @@ final routerProvider = Provider<GoRouter>((ref) {
       // auth routes
       GoRoute(
         path: AppRoutes.onboarding,
-        pageBuilder: (context, state) =>
-            _buildPage(state, const OnboardingScreen()),
+        builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
         path: AppRoutes.signin,
         pageBuilder: (context, state) =>
-            _buildPage(state, const SigninPage()),
+            _BottomToTopPage(key: state.pageKey, child: const SigninPage()),
       ),
       GoRoute(
         path: AppRoutes.signup,
         pageBuilder: (context, state) =>
-            _buildPage(state, const SignupPage()),
+            _BottomToTopPage(key: state.pageKey, child: const SignupPage()),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,
         pageBuilder: (context, state) =>
-            _buildPage(state, const ForgotPasswordPage()),
+            const CupertinoPage(child: ForgotPasswordPage()),
       ),
 
       // authenticated shell
@@ -176,7 +164,27 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.home,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, const HomeScreen()),
+                    const NoTransitionPage(child: HomeScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'category-form',
+                    pageBuilder: (context, state) {
+                      final category = state.extra as models.Category?;
+                      return _BottomToTopPage(
+                        child: CategoryFormScreen(category: category),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'task-form',
+                    pageBuilder: (context, state) {
+                      final task = state.extra as Task?;
+                      return _BottomToTopPage(
+                        child: TaskFormScreen(task: task),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -185,7 +193,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.ranking,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, const RankingScreen()),
+                    const NoTransitionPage(child: RankingScreen()),
               ),
             ],
           ),
@@ -194,7 +202,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.history,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, const HistoryScreen()),
+                    const NoTransitionPage(child: HistoryScreen()),
               ),
             ],
           ),
@@ -203,7 +211,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.profile,
                 pageBuilder: (context, state) =>
-                    _buildPage(state, const ProfileScreen()),
+                    const NoTransitionPage(child: ProfileScreen()),
               ),
             ],
           ),

@@ -28,7 +28,7 @@ class DeleteAccountDialog extends ConsumerWidget {
           Navigator.of(context).pop();
         }
       },
-      cancelText: context.l10n.deleteAccountCancel,
+      cancelText: context.l10n.dialogBack,
       onCancel: () => Navigator.of(context).pop(),
       body: AppTextField(
         controller: notifier.password.controller,

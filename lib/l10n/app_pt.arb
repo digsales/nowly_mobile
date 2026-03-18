@@ -43,7 +43,7 @@
   
   "ranking": "Classificação",
   
-  "history": "Histório",
+  "history": "Histórico",
   
   "profile": "Perfil",
 
@@ -77,6 +77,120 @@
 
   "fabAddTask": "Adicionar tarefa",
 
+  "dialogBack": "Voltar",
+
+  "homeSectionCategories": "Categorias",
+  "homeCategoryHelpText": "Organize suas tarefas por categoria para melhor acompanhamento.\n\nGerencie-as por nome, cor e ícone.\n\nToque em \"Adicionar\" para criar ou em uma existente para editá-la.",
+  "homeSectionBadges": "Insígnias",
+  "homeBadgesHelpText": "Conquiste insígnias e personalize seu perfil.\n\nCada insígnia tem seu próprio desafio. Complete-o para desbloqueá-la.\n\nVocê pode acompanhar o progresso e equipá-las aqui ou no seu perfil.",
+  "homeSectionTasks": "Tarefas",
+  "homeTasksHelpText": "Acompanhe as tarefas pendentes e complete-as antes que seus prazos terminem.\n\nTarefas concluídas a tempo darão pontos para subir de nível. Evolua para ganhar novas insígnias e se destacar na classificação.\n\nVocê pode adicionar tarefas através do \"+\" localizado no centro inferior da tela.",
+  "homeEdit": "Editar",
+  "emptyTaskHint": "Nenhuma tarefa pendente. Toque no \"+\" para criar.",
+  "taskTimeRemainingDays": "{count} {count, plural, =1{dia} other{dias}} restante{count, plural, =1{} other{s}}",
+  "@taskTimeRemainingDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskTimeRemainingHours": "{count} {count, plural, =1{hora} other{horas}} restante{count, plural, =1{} other{s}}",
+  "@taskTimeRemainingHours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskTimeRemainingMinutes": "{count} {count, plural, =1{minuto} other{minutos}} restante{count, plural, =1{} other{s}}",
+  "@taskTimeRemainingMinutes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskExpired": "Expirada",
+  "taskCompleted": "Concluída",
+  "taskCancelled": "Cancelada",
+  "taskFormTitleAdd": "Nova tarefa",
+  "taskFormTitleEdit": "Editar tarefa",
+  "taskFormName": "Nome da tarefa",
+  "taskFormNameHint": "O que precisa fazer?",
+  "taskFormDescription": "Descrição",
+  "taskFormDescriptionHint": "Detalhes opcionais...",
+  "taskFormCategory": "Categoria",
+  "taskFormCategoryNone": "Sem categoria",
+  "taskFormDeadline": "Prazo",
+  "taskFormDeadline1Day": "1 dia",
+  "taskFormDeadline3Days": "3 dias",
+  "taskFormDeadline1Week": "1 semana",
+  "taskFormDeadline2Weeks": "2 semanas",
+  "taskFormDeadline1Month": "1 mês",
+  "taskFormInfo": "Concluir uma tarefa adiciona +5 pontos à sua pontuação.\n\nAs tarefas podem ter subtarefas, cada uma adiciona +2 a pontuação total.\n\nCancelar uma tarefa remove 1 ponto.\n\nTarefas expiradas removem 3 pontos.\n\nO nome, a descrição, as subtarefas e a categoria da tarefa podem ser editados.\n\nAo criar uma tarefa, você terá 30 minutos para excluí-la sem perder sua pontuação.\n\nAs tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem.",
+  "taskFormSave": "Criar tarefa",
+  "taskFormSaveEdit": "Salvar alterações",
+  "taskFormPreviewTitle": "Minha tarefa",
+  "taskSubtasksCount": "{count, plural, =1{1 subtarefa} other{{count} subtarefas}}",
+  "@taskSubtasksCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskFormSubtasks": "Subtarefas",
+  "taskFormSubtaskHint": "Adicionar subtarefa...",
+  "taskDetailsTitle": "Detalhes da tarefa",
+  "taskDetailsDescription": "Sem descrição",
+  "taskDetailsCategory": "Categoria",
+  "taskDetailsDeadline": "Prazo",
+  "taskDetailsCreatedAt": "Criada em",
+  "taskDetailsPoints": "{points} pts",
+  "@taskDetailsPoints": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "taskDetailsComplete": "Concluir",
+  "taskDetailsCancel": "Cancelar",
+  "taskDetailsUncancel": "Reativar",
+  "taskDetailsEdit": "Editar",
+  "taskDetailsDelete": "Excluir",
+  "taskDetailsDeleteTimer": "Excluir ({minutes}min)",
+  "@taskDetailsDeleteTimer": {
+    "placeholders": {
+      "minutes": { "type": "int" }
+    }
+  },
+  "taskDetailsDeleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
+  "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 ponto.",
+  "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} pontos!",
+  "taskDetailsSubtasksPending": "Você precisa concluir todas as subtarefas antes de finalizar esta tarefa.",
+  "@taskDetailsCompleteConfirm": {
+    "placeholders": {
+      "points": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 ponto de volta.",
+  "taskDetailsSuccess": "Tarefa atualizada com sucesso!",
+  "taskDetailsDeleteSuccess": "Tarefa excluída com sucesso!",
+  "taskStatusPending": "Pendente",
+
+  "badgeDataUnavailable": "Não foi possível coletar dados.",
+  "badgeProgressLabel": "{current} / {total}",
+  "@badgeProgressLabel": {
+    "placeholders": {
+      "current": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "addCategory": "Adicionar",
+  "emptyCategoryHint": "Crie uma categoria e comece",
+  "categoryFormTitleAdd": "Nova categoria",
+  "categoryFormTitleEdit": "Editar categoria",
+  "categoryFormName": "Nome",
+  "categoryFormNameHint": "Nome da categoria",
+  "categoryFormColor": "Cor",
+  "categoryFormIcon": "Ícone",
+  "categoryFormSave": "Salvar",
+  "categoryFormDelete": "Excluir categoria",
+  "categoryFormDeleteMessage": "Tem certeza que deseja excluir esta categoria?",
+
   "categoryStudy": "Estudo",
   "categoryWork": "Trabalho",
   "categoryHealth": "Saúde",
@@ -89,6 +203,7 @@
   "settingsEditNameButton": "Salvar",
   "settingsDarkMode": "Modo escuro",
   "settingsHighContrast": "Alto contraste",
+  "settingsShowLevelBar": "Progresso de nível",
   "settingsFontSize": "Tamanho da fonte",
   "settingsChangeEmail": "E-mail",
   "settingsChangeEmailTitle": "Alterar e-mail",

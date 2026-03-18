@@ -35,16 +35,6 @@ abstract final class AppPalette {
   static const Color highContrastBlack = Color(0xFF000000);
   static const Color inputFillHighContrastDark = Color(0xFF333333);
 
-  // Category colors
-  static const List<Color> categoryColors = [
-    Color(0xFF5C8DFF),
-    Color(0xFFE05A5A),
-    Color(0xFF4CAF7D),
-    Color(0xFF9C6ADE),
-    Color(0xFFFFB74D),
-    Color(0xFF4DD0C8),
-  ];
-
   // Semantic
   static const Color error = Color(0xFFD32F2F);
   static const Color success = Color(0xFF388E3C);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_back_button.dart';
+import 'package:nowly/core/widgets/app_title.dart';
 import 'package:sizer/sizer.dart';
 
 /// Page layout for authenticated screens.
@@ -18,14 +19,24 @@ class AppLayout extends StatefulWidget {
   const AppLayout({
     super.key,
     this.headerText,
+    this.headerHelpTitle,
+    this.headerHelpText,
     this.headerBuilder,
     this.showBackButton = false,
     this.onRefresh,
+    this.bodyPadding,
     required this.body,
   });
 
   /// Simple text header (styled with Ultra font)
   final String? headerText;
+
+  /// Custom title for the help sheet. Defaults to [headerText] when omitted.
+  final String? headerHelpTitle;
+
+  /// Help text shown in the help sheet. When non-null, a help icon
+  /// appears next to the header title.
+  final String? headerHelpText;
 
   /// Custom header builder (takes priority over headerText)
   final WidgetBuilder? headerBuilder;
@@ -36,6 +47,10 @@ class AppLayout extends StatefulWidget {
   /// Pull-to-refresh callback. When non-null, wraps the scroll view
   /// in a [RefreshIndicator].
   final RefreshCallback? onRefresh;
+
+  /// Custom padding for the body area. When null, uses the default
+  /// (32px horizontal + safe area, 32px top, 50px + safe area bottom).
+  final EdgeInsets? bodyPadding;
 
   /// Main content
   final Widget body;
@@ -126,12 +141,13 @@ class _AppLayoutState extends State<AppLayout> {
       child: CustomScrollView(
         slivers: [
           SliverPadding(
-            padding: EdgeInsets.only(
-              top: 32,
-              left: context.paddingLeft + 32,
-              right: context.paddingRight + 32,
-              bottom: context.paddingBottom + 50,
-            ),
+            padding: widget.bodyPadding ??
+                EdgeInsets.only(
+                  top: 32,
+                  left: context.paddingLeft + 32,
+                  right: context.paddingRight + 32,
+                  bottom: context.paddingBottom + 50,
+                ),
             sliver: SliverToBoxAdapter(child: widget.body),
           ),
         ],
@@ -151,13 +167,11 @@ class _AppLayoutState extends State<AppLayout> {
   Widget _buildHeader(BuildContext context) {
     if (widget.headerBuilder != null) return widget.headerBuilder!(context);
     if (widget.headerText != null) {
-      return Text(
-        widget.headerText!,
-        style: context.textTheme.displayMedium?.copyWith(
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Ultra',
-          color: context.colorScheme.onPrimary,
-        ),
+      return AppTitle(
+        title: widget.headerText!,
+        titleColor: context.colorScheme.onPrimary,
+        helpTitle: widget.headerHelpTitle,
+        helpText: widget.headerHelpText,
       );
     }
     return const SizedBox.shrink();

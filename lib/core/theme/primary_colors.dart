@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nowly/core/theme/theme_provider.dart';
 
+/// Represents a primary color with its high contrast variants.
+///
+/// - [primary]: default color, used when high contrast is off.
+/// - [light]: light variant, used in dark theme with high contrast.
+/// - [dark]: dark variant, used in light theme with high contrast.
+///
+/// To add a new color:
+/// 1. Create a new [PrimaryColors] instance in [AppPrimaryColors].
+/// 2. Add it to the [AppPrimaryColors.values] list.
+/// 3. Use it in widgets with `ref.usePrimaryColor('key')`.
 class PrimaryColors {
   final String key;
   final Color primary;
@@ -14,6 +26,10 @@ class PrimaryColors {
   });
 }
 
+/// Available primary colors in the app.
+///
+/// Each color has three variants ([primary], [light], [dark]) that
+/// adapt automatically to theme and high contrast via [usePrimaryColor].
 abstract final class AppPrimaryColors {
   static const PrimaryColors purple = PrimaryColors(
     key: 'purple',
@@ -74,4 +90,29 @@ abstract final class AppPrimaryColors {
   static const List<PrimaryColors> values = [
     purple, blue, green, yellow, orange, red, pink, gray,
   ];
+}
+
+/// [WidgetRef] extension to resolve primary colors automatically.
+///
+/// Returns the correct color variant based on [highContrastProvider]
+/// and [themeModeProvider], without needing [BuildContext].
+///
+/// Usage in a [ConsumerWidget] or [ConsumerStatefulWidget]:
+/// ```dart
+/// final green = ref.usePrimaryColor('green');
+/// final red = ref.usePrimaryColor('red');
+/// ```
+extension PrimaryColorRef on WidgetRef {
+  Color usePrimaryColor(String key) {
+    final highContrast = watch(highContrastProvider);
+    if (!highContrast) {
+      return AppPrimaryColors.values
+          .firstWhere((c) => c.key == key, orElse: () => AppPrimaryColors.purple)
+          .primary;
+    }
+    final themeMode = watch(themeModeProvider);
+    final colors = AppPrimaryColors.values
+        .firstWhere((c) => c.key == key, orElse: () => AppPrimaryColors.purple);
+    return themeMode == ThemeMode.dark ? colors.light : colors.dark;
+  }
 }
