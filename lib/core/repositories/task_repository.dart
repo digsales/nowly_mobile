@@ -142,12 +142,16 @@ class TaskRepository {
   // ─── Subtasks ────────────────────────────────────────────────────────────────
 
   Stream<List<Subtask>> watchSubtasks(String taskId) {
-    return _subtasks(taskId).snapshots().map((snapshot) =>
-        snapshot.docs.map((doc) => Subtask.fromJson(doc.id, doc.data())).toList());
+    return _subtasks(taskId)
+        .orderBy('order')
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Subtask.fromJson(doc.id, doc.data())).toList());
   }
 
-  Future<void> addSubtask(String taskId, Subtask subtask) async {
-    await _subtasks(taskId).add(subtask.toJson());
+  Future<void> addSubtask(String taskId, Subtask subtask, {int? order}) async {
+    final data = order != null ? subtask.copyWith(order: order).toJson() : subtask.toJson();
+    await _subtasks(taskId).add(data);
   }
 
   Future<void> removeSubtask(String taskId, String subtaskId) async {
@@ -158,10 +162,19 @@ class TaskRepository {
     await _subtasks(taskId).doc(subtaskId).update({'isDone': isDone});
   }
 
-  Future<void> addSubtasks(String taskId, List<Subtask> subtasks) async {
+  Future<void> addSubtasks(String taskId, List<Subtask> subtasks, {int startOrder = 0}) async {
     final batch = _firestore.batch();
-    for (final subtask in subtasks) {
-      batch.set(_subtasks(taskId).doc(), subtask.toJson());
+    for (var i = 0; i < subtasks.length; i++) {
+      final data = subtasks[i].copyWith(order: startOrder + i).toJson();
+      batch.set(_subtasks(taskId).doc(), data);
+    }
+    await batch.commit();
+  }
+
+  Future<void> reorderSubtasks(String taskId, List<Subtask> subtasks) async {
+    final batch = _firestore.batch();
+    for (var i = 0; i < subtasks.length; i++) {
+      batch.update(_subtasks(taskId).doc(subtasks[i].id), {'order': i});
     }
     await batch.commit();
   }

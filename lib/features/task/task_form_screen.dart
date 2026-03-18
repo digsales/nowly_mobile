@@ -313,36 +313,52 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
         ),
         if (formState.subtasks.isNotEmpty) ...[
           const SizedBox(height: 12),
-          ...List.generate(formState.subtasks.length, (index) {
-            final subtask = formState.subtasks[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                children: [
-                  Icon(
-                    Ionicons.ellipse_outline,
-                    size: 18,
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      subtask.title,
-                      style: context.textTheme.bodyMedium,
+          ReorderableListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            proxyDecorator: (child, index, animation) {
+              return Material(
+                color: Colors.transparent,
+                child: child,
+              );
+            },
+            itemCount: formState.subtasks.length,
+            onReorder: notifier.reorderSubtask,
+            itemBuilder: (context, index) {
+              final subtask = formState.subtasks[index];
+              return Padding(
+                key: ValueKey('subtask_form_$index'),
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    ReorderableDragStartListener(
+                      index: index,
+                      child: Icon(
+                        Ionicons.reorder_three_outline,
+                        size: 20,
+                        color: context.colorScheme.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                  TouchableOpacity(
-                    onTap: () => notifier.removeSubtask(index),
-                    child: Icon(
-                      Ionicons.close_outline,
-                      size: 20,
-                      color: context.colorScheme.error,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        subtask.title,
+                        style: context.textTheme.bodyMedium,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }),
+                    TouchableOpacity(
+                      onTap: () => notifier.removeSubtask(index),
+                      child: Icon(
+                        Ionicons.close_outline,
+                        size: 20,
+                        color: context.colorScheme.error,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ],
         const SizedBox(height: 12),
         AppTextField(

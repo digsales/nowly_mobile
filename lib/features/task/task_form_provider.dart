@@ -133,6 +133,14 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     state = state.copyWith(subtasks: updated);
   }
 
+  void reorderSubtask(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) newIndex--;
+    final updated = [...state.subtasks];
+    final item = updated.removeAt(oldIndex);
+    updated.insert(newIndex, item);
+    state = state.copyWith(subtasks: updated);
+  }
+
   /// Syncs local subtask list with Firestore for an existing task.
   Future<void> _syncSubtasks(String taskId) async {
     final remote = await _taskRepository.watchSubtasks(taskId).first;
@@ -146,8 +154,15 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
 
     // Add new subtasks (id is empty for locally created ones)
     final newSubtasks = state.subtasks.where((s) => s.id.isEmpty).toList();
+    final existingCount = state.subtasks.where((s) => s.id.isNotEmpty).length;
     if (newSubtasks.isNotEmpty) {
-      await _taskRepository.addSubtasks(taskId, newSubtasks);
+      await _taskRepository.addSubtasks(taskId, newSubtasks, startOrder: existingCount);
+    }
+
+    // Reorder existing subtasks to match the local order
+    final existingSubtasks = state.subtasks.where((s) => s.id.isNotEmpty).toList();
+    if (existingSubtasks.isNotEmpty) {
+      await _taskRepository.reorderSubtasks(taskId, existingSubtasks);
     }
   }
 

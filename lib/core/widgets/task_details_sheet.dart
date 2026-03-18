@@ -282,46 +282,84 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
     return Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: subtasks.map((subtask) {
+      child: ReorderableListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        buildDefaultDragHandles: false,
+        proxyDecorator: (child, index, animation) {
+          return Material(
+            color: Colors.transparent,
+            child: child,
+          );
+        },
+        itemCount: subtasks.length,
+        onReorder: isPending
+            ? (oldIndex, newIndex) {
+                if (newIndex > oldIndex) newIndex--;
+                final updated = [...subtasks];
+                final item = updated.removeAt(oldIndex);
+                updated.insert(newIndex, item);
+                ref.read(taskRepositoryProvider).reorderSubtasks(task.id, updated);
+              }
+            : (_, _) {},
+        itemBuilder: (context, index) {
+          final subtask = subtasks[index];
           return Padding(
+            key: ValueKey(subtask.id),
             padding: const EdgeInsets.only(bottom: 8),
-            child: TouchableOpacity(
-              onTap: isPending
-                  ? () => ref.read(taskRepositoryProvider).toggleSubtask(
-                        task.id, subtask.id, !subtask.isDone)
-                  : null,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Icon(
-                    subtask.isDone
-                        ? Ionicons.checkmark_circle
-                        : Ionicons.ellipse_outline,
-                    size: 20,
-                    color: subtask.isDone
-                        ? category != null 
-                          ? ref.usePrimaryColor(category.colorKey) 
-                          : context.colorScheme.onSurface
-                        : context.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      subtask.title,
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        color: subtask.isDone
-                            ? context.colorScheme.onSurfaceVariant
-                            : null,
-                      ),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                if (isPending)
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: Icon(
+                      Ionicons.reorder_three_outline,
+                      size: 20,
+                      color: context.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                ],
-              ),
+
+                if (isPending) const SizedBox(width: 8),
+
+                Expanded(
+                  child: TouchableOpacity(
+                    onTap: isPending
+                        ? () => ref.read(taskRepositoryProvider).toggleSubtask(
+                              task.id, subtask.id, !subtask.isDone)
+                        : null,
+                    child: Row(
+                      children: [
+                        Icon(
+                          subtask.isDone
+                              ? Ionicons.checkmark_circle
+                              : Ionicons.ellipse_outline,
+                          size: 20,
+                          color: subtask.isDone
+                              ? category != null
+                                  ? ref.usePrimaryColor(category.colorKey)
+                                  : context.colorScheme.onSurface
+                              : context.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            subtask.title,
+                            style: context.textTheme.bodyLarge?.copyWith(
+                              color: subtask.isDone
+                                  ? context.colorScheme.onSurfaceVariant
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
-        }).toList(),
+        },
       ),
     );
   }
