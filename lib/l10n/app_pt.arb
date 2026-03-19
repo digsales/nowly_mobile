@@ -165,6 +165,24 @@
       "points": { "type": "int" }
     }
   },
+  "taskDetailsUncancelTimerDays": "Reativar ({count}d)",
+  "@taskDetailsUncancelTimerDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelTimerHours": "Reativar ({count}h)",
+  "@taskDetailsUncancelTimerHours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelTimerMinutes": "Reativar ({count}min)",
+  "@taskDetailsUncancelTimerMinutes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 ponto de volta.",
   "taskDetailsSuccess": "Tarefa atualizada com sucesso!",
   "taskDetailsDeleteSuccess": "Tarefa excluída com sucesso!",

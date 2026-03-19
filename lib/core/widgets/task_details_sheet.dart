@@ -38,6 +38,8 @@ class TaskDetailsSheet extends ConsumerStatefulWidget {
 class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Timer? _deleteTimer;
   int _deleteMinutesLeft = 0;
+  Timer? _uncancelTimer;
+  Duration _uncancelRemaining = Duration.zero;
   List<Subtask>? _optimisticSubtasks;
 
   @override
@@ -48,6 +50,13 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
       _deleteTimer = Timer.periodic(
         const Duration(seconds: 30),
         (_) => _updateDeleteTimer(),
+      );
+    }
+    if (widget.task.canUncancel) {
+      _updateUncancelTimer();
+      _uncancelTimer = Timer.periodic(
+        const Duration(minutes: 1),
+        (_) => _updateUncancelTimer(),
       );
     }
   }
@@ -64,9 +73,19 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     if (mounted) setState(() => _deleteMinutesLeft = remaining.clamp(0, 30));
   }
 
+  void _updateUncancelTimer() {
+    final remaining = widget.task.endDate.difference(DateTime.now());
+    if (remaining.isNegative) {
+      _uncancelTimer?.cancel();
+      _uncancelTimer = null;
+    }
+    if (mounted) setState(() => _uncancelRemaining = remaining);
+  }
+
   @override
   void dispose() {
     _deleteTimer?.cancel();
+    _uncancelTimer?.cancel();
     super.dispose();
   }
 
@@ -437,7 +456,14 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                 child: AppButton(
                   detailColor: ref.usePrimaryColor('orange'),
                   onPressed: _uncancelTask,
-                  text: context.l10n.taskDetailsUncancel,
+                  text: _uncancelRemaining.isNegative
+                      ? context.l10n.taskDetailsUncancel
+                      : _uncancelRemaining.inDays > 0
+                          ? context.l10n.taskDetailsUncancelTimerDays(_uncancelRemaining.inDays)
+                          : _uncancelRemaining.inHours > 0
+                              ? context.l10n.taskDetailsUncancelTimerHours(_uncancelRemaining.inHours)
+                              : context.l10n.taskDetailsUncancelTimerMinutes(
+                                  _uncancelRemaining.inMinutes.clamp(1, 59)),
                 ),
               ),
             const SizedBox(width: 8),
