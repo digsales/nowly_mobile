@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_back_button.dart';
 import 'package:nowly/core/widgets/app_title.dart';
@@ -61,9 +62,32 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout> {
   final _scrollController = ScrollController();
+  bool _showScrollToTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final show = _scrollController.hasClients && _scrollController.offset > 80;
+    if (show != _showScrollToTop) {
+      setState(() => _showScrollToTop = show);
+    }
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
+    );
+  }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
@@ -125,7 +149,48 @@ class _AppLayoutState extends State<AppLayout> {
         body: _buildBody(context),
     );
 
-    return Scaffold(body: scrollView);
+    return Scaffold(
+      body: Stack(
+        children: [
+          scrollView,
+          Positioned(
+            top: 12,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: AnimatedScale(
+                scale: _showScrollToTop ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: GestureDetector(
+                  onTap: _scrollToTop,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.colorScheme.shadow.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Ionicons.chevron_up_outline,
+                      color: context.colorScheme.onPrimary,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
