@@ -26,7 +26,7 @@ class HomeBottomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: context.colorScheme.shadow.withValues(alpha: 0.2),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
