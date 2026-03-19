@@ -219,10 +219,12 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           children: [
             Expanded(
               child: TouchableOpacity(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  context.push(AppRoutes.taskForm, extra: task);
-                },
+                onTap: isPending 
+                  ? () {
+                      Navigator.of(context).pop();
+                      context.push(AppRoutes.taskForm, extra: task);
+                    }
+                  : null,
                 child: Text.rich(
                   TextSpan(
                     text: task.title,
