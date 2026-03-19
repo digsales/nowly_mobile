@@ -104,7 +104,10 @@ class TaskRepository {
         final userSnap = await tx.get(_userDoc(task.userId));
         final currentPoints = userSnap.data()?['totalPoints'] as int? ?? 0;
 
-        tx.update(_tasks.doc(task.id), {'status': 'cancelled'});
+        tx.update(_tasks.doc(task.id), {
+          'status': 'cancelled',
+          'cancelledAt': DateTime.now().toIso8601String(),
+        });
         tx.update(_userDoc(task.userId), {
           'totalCancelled': FieldValue.increment(1),
           'totalPoints': max(0, currentPoints - 1),
@@ -123,7 +126,10 @@ class TaskRepository {
 
     try {
       final batch = _firestore.batch();
-      batch.update(_tasks.doc(task.id), {'status': 'pending'});
+      batch.update(_tasks.doc(task.id), {
+        'status': 'pending',
+        'cancelledAt': null,
+      });
       batch.update(_userDoc(task.userId), {
         'totalCancelled': FieldValue.increment(-1),
         'totalPoints': FieldValue.increment(1),

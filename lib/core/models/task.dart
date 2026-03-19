@@ -30,6 +30,7 @@ class Task {
   final TaskStatus status;
   final DateTime createdAt;
   final DateTime? completedAt;
+  final DateTime? cancelledAt;
   final int pointsEarned;
 
   const Task({
@@ -42,6 +43,7 @@ class Task {
     required this.status,
     required this.createdAt,
     this.completedAt,
+    this.cancelledAt,
     required this.pointsEarned,
   });
 
@@ -58,6 +60,9 @@ class Task {
       completedAt: json['completedAt'] != null
           ? DateTime.parse(json['completedAt'] as String)
           : null,
+      cancelledAt: json['cancelledAt'] != null
+          ? DateTime.parse(json['cancelledAt'] as String)
+          : null,
       pointsEarned: json['pointsEarned'] as int,
     );
   }
@@ -72,6 +77,7 @@ class Task {
       'status': status.toJson(),
       'createdAt': createdAt.toIso8601String(),
       'completedAt': completedAt?.toIso8601String(),
+      'cancelledAt': cancelledAt?.toIso8601String(),
       'pointsEarned': pointsEarned,
     };
   }
@@ -91,6 +97,7 @@ class Task {
     TaskStatus? status,
     DateTime? createdAt,
     DateTime? completedAt,
+    DateTime? cancelledAt,
     int? pointsEarned,
   }) {
     return Task(
@@ -103,6 +110,7 @@ class Task {
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       completedAt: completedAt ?? this.completedAt,
+      cancelledAt: cancelledAt ?? this.cancelledAt,
       pointsEarned: pointsEarned ?? this.pointsEarned,
     );
   }

@@ -108,12 +108,16 @@ final historyTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
       };
 
       filtered.sort((a, b) {
-        final dateA = a.status == TaskStatus.completed
-            ? (a.completedAt ?? a.endDate)
-            : a.endDate;
-        final dateB = b.status == TaskStatus.completed
-            ? (b.completedAt ?? b.endDate)
-            : b.endDate;
+        final dateA = switch (a.status) {
+          TaskStatus.completed => a.completedAt ?? a.endDate,
+          TaskStatus.cancelled => a.cancelledAt ?? a.endDate,
+          _ => a.endDate,
+        };
+        final dateB = switch (b.status) {
+          TaskStatus.completed => b.completedAt ?? b.endDate,
+          TaskStatus.cancelled => b.cancelledAt ?? b.endDate,
+          _ => b.endDate,
+        };
         return dateB.compareTo(dateA);
       });
       return AsyncData(filtered);
