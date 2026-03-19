@@ -7,7 +7,7 @@ class User {
   final int totalPoints;
   final int totalCompleted;
   final int totalExpired;
-  final int totalCanceled;
+  final int totalCancelled;
   final int currentStreak;
   final int highestLevel;
   final List<String> unlockedBadges;
@@ -21,7 +21,7 @@ class User {
     this.totalPoints = 0,
     this.totalCompleted = 0,
     this.totalExpired = 0,
-    this.totalCanceled = 0,
+    this.totalCancelled = 0,
     this.currentStreak = 0,
     this.highestLevel = 0,
     this.unlockedBadges = const [],
@@ -37,7 +37,7 @@ class User {
       totalPoints: json['totalPoints'] as int? ?? 0,
       totalCompleted: json['totalCompleted'] as int? ?? 0,
       totalExpired: json['totalExpired'] as int? ?? 0,
-      totalCanceled: json['totalCanceled'] as int? ?? 0,
+      totalCancelled: json['totalCancelled'] as int? ?? 0,
       currentStreak: json['currentStreak'] as int? ?? 0,
       highestLevel: json['highestLevel'] as int? ?? 0,
       unlockedBadges: (json['unlockedBadges'] as List<dynamic>?)?.cast<String>() ?? const [],
@@ -53,7 +53,7 @@ class User {
       'totalPoints': totalPoints,
       'totalCompleted': totalCompleted,
       'totalExpired': totalExpired,
-      'totalCanceled': totalCanceled,
+      'totalCancelled': totalCancelled,
       'currentStreak': currentStreak,
       'highestLevel': highestLevel,
       'unlockedBadges': unlockedBadges,
@@ -68,7 +68,7 @@ class User {
     int? totalPoints,
     int? totalCompleted,
     int? totalExpired,
-    int? totalCanceled,
+    int? totalCancelled,
     int? currentStreak,
     int? highestLevel,
     List<String>? unlockedBadges,
@@ -82,7 +82,7 @@ class User {
       totalPoints: totalPoints ?? this.totalPoints,
       totalCompleted: totalCompleted ?? this.totalCompleted,
       totalExpired: totalExpired ?? this.totalExpired,
-      totalCanceled: totalCanceled ?? this.totalCanceled,
+      totalCancelled: totalCancelled ?? this.totalCancelled,
       currentStreak: currentStreak ?? this.currentStreak,
       highestLevel: highestLevel ?? this.highestLevel,
       unlockedBadges: unlockedBadges ?? this.unlockedBadges,

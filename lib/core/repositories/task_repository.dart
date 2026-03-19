@@ -106,7 +106,7 @@ class TaskRepository {
 
         tx.update(_tasks.doc(task.id), {'status': 'cancelled'});
         tx.update(_userDoc(task.userId), {
-          'totalCanceled': FieldValue.increment(1),
+          'totalCancelled': FieldValue.increment(1),
           'totalPoints': max(0, currentPoints - 1),
         });
       });
@@ -125,7 +125,7 @@ class TaskRepository {
       final batch = _firestore.batch();
       batch.update(_tasks.doc(task.id), {'status': 'pending'});
       batch.update(_userDoc(task.userId), {
-        'totalCanceled': FieldValue.increment(-1),
+        'totalCancelled': FieldValue.increment(-1),
         'totalPoints': FieldValue.increment(1),
       });
       await batch.commit();
