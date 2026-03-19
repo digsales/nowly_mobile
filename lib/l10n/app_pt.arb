@@ -336,5 +336,10 @@
     "placeholders": {
       "count": { "type": "int" }
     }
-  }
+  },
+
+  "progressSectionHistory": "Histórico",
+  "progressHistoryHelpText": "Veja todas as suas tarefas finalizadas.\n\nFiltre por status para encontrar tarefas concluídas, canceladas ou expiradas.",
+  "progressHistoryFilterAll": "Todas",
+  "progressHistoryEmpty": "Nenhuma tarefa encontrada."
 }

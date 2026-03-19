@@ -73,6 +73,56 @@ TaskStats _computeStats(List<Task> tasks, ProgressFilter filter) {
   );
 }
 
+// ─── History ──────────────────────────────────────────────────────────────────
+
+enum HistoryFilter { all, completed, cancelled, expired }
+
+class HistoryFilterNotifier extends Notifier<HistoryFilter> {
+  @override
+  HistoryFilter build() => HistoryFilter.all;
+
+  void set(HistoryFilter filter) => state = filter;
+}
+
+final historyFilterProvider =
+    NotifierProvider<HistoryFilterNotifier, HistoryFilter>(
+        HistoryFilterNotifier.new);
+
+final historyTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
+  final tasksAsync = ref.watch(allTasksProvider);
+  final filter = ref.watch(historyFilterProvider);
+
+  return tasksAsync.when(
+    data: (tasks) {
+      final nonPending =
+          tasks.where((t) => t.status != TaskStatus.pending).toList();
+
+      final filtered = switch (filter) {
+        HistoryFilter.all => nonPending,
+        HistoryFilter.completed =>
+          nonPending.where((t) => t.status == TaskStatus.completed).toList(),
+        HistoryFilter.cancelled =>
+          nonPending.where((t) => t.status == TaskStatus.cancelled).toList(),
+        HistoryFilter.expired =>
+          nonPending.where((t) => t.status == TaskStatus.expired).toList(),
+      };
+
+      filtered.sort((a, b) {
+        final dateA = a.status == TaskStatus.completed
+            ? (a.completedAt ?? a.endDate)
+            : a.endDate;
+        final dateB = b.status == TaskStatus.completed
+            ? (b.completedAt ?? b.endDate)
+            : b.endDate;
+        return dateB.compareTo(dateA);
+      });
+      return AsyncData(filtered);
+    },
+    loading: () => const AsyncLoading(),
+    error: (e, st) => AsyncError(e, st),
+  );
+});
+
 class TaskStats {
   final int completed;
   final int cancelled;

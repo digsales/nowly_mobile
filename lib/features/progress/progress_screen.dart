@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_title.dart';
+import 'package:nowly/features/progress/widgets/task_history.dart';
 import 'package:nowly/features/progress/widgets/task_pie_chart.dart';
 
 class ProgressScreen extends StatelessWidget {
@@ -19,6 +20,13 @@ class ProgressScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           const TaskPieChart(),
+          const SizedBox(height: 48),
+          AppTitle(
+            title: context.l10n.progressSectionHistory,
+            helpText: context.l10n.progressHistoryHelpText,
+          ),
+          const SizedBox(height: 32),
+          const TaskHistory(),
         ]
       ),
     );
