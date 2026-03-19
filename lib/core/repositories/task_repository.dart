@@ -32,6 +32,15 @@ class TaskRepository {
             .toList());
   }
 
+  Stream<List<Task>> watchAllTasks(String userId) {
+    return _tasks
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Task.fromJson(doc.id, doc.data()))
+            .toList());
+  }
+
   Future<String> createTask(Task task) async {
     try {
       final doc = task.id.isEmpty ? _tasks.doc() : _tasks.doc(task.id);

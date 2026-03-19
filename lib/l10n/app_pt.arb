@@ -319,5 +319,22 @@
   "badgeLevel1000Name": "Milênio",
   "badgeLevel1000Desc": "Alcance o nível 1000.",
   "badgeLevel2000Name": "Transcendente",
-  "badgeLevel2000Desc": "Alcance o nível 2000."
+  "badgeLevel2000Desc": "Alcance o nível 2000.",
+
+  "progressSectionStatistics": "Estatísticas",
+  "progressStatisticsHelpText": "Veja suas estatísticas de tarefas concluídas, canceladas e expiradas.\n\nFiltre os dados por último mês, semestre, ano ou todo o período.",
+  "progressFilterLastMonth": "Último mês",
+  "progressFilterLast6Months": "6 meses",
+  "progressFilterLastYear": "Último ano",
+  "progressFilterAllTime": "Todo período",
+  "progressCompleted": "Concluídas",
+  "progressCancelled": "Canceladas",
+  "progressExpired": "Expiradas",
+  "progressEmpty": "Nenhuma tarefa encontrada neste período.",
+  "progressTotal": "{count} {count, plural, =1{tarefa} other{tarefas}}",
+  "@progressTotal": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
 }
