@@ -5,13 +5,14 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/progress/progress_provider.dart';
+import 'package:nowly/features/progress/widgets/task_pie_chart_skeleton.dart';
 
 class TaskPieChart extends ConsumerWidget {
   const TaskPieChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stats = ref.watch(filteredTaskStatsProvider);
+    final statsAsync = ref.watch(filteredTaskStatsProvider);
     final filter = ref.watch(progressFilterProvider);
 
     return LayoutBuilder(
@@ -22,39 +23,57 @@ class TaskPieChart extends ConsumerWidget {
           children: [
             _FilterChips(filter: filter, ref: ref),
             const SizedBox(height: 32),
-            if (stats.isEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 64),
-                child: Text(
-                  context.l10n.progressEmpty,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: context.colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              )
-            else if (wide)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 200,
-                      child: _Chart(stats: stats, ref: ref),
+            switch (statsAsync) {
+              AsyncLoading() => TaskPieChartSkeleton(wide: wide, ref: ref),
+              AsyncError() => Padding(
+                  padding: const EdgeInsets.only(top: 64),
+                  child: Text(
+                    context.l10n.progressEmpty,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(width: 32),
-                  Expanded(child: _Legend(stats: stats, ref: ref)),
-                ],
-              )
-            else ...[
-              SizedBox(
-                height: 200,
-                child: _Chart(stats: stats, ref: ref),
-              ),
-              const SizedBox(height: 32),
-              _Legend(stats: stats, ref: ref),
-            ],
+                ),
+              AsyncData(:final value) when value.isEmpty => Padding(
+                  padding: const EdgeInsets.only(top: 64),
+                  child: Text(
+                    context.l10n.progressEmpty,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              AsyncData(:final value) => wide
+                  ? Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 200,
+                                child: _Chart(stats: value, ref: ref),
+                              ),
+                            ),
+                            const SizedBox(width: 32),
+                            Expanded(child: _Legend(stats: value, ref: ref)),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 200,
+                          child: _Chart(stats: value, ref: ref),
+                        ),
+                        const SizedBox(height: 32),
+                        _Legend(stats: value, ref: ref),
+                      ],
+                    ),
+            },
           ],
         );
       },
@@ -213,8 +232,8 @@ class _LegendItem extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 14,
-          height: 14,
+          width: 20,
+          height: 20,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,

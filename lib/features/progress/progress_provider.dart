@@ -25,14 +25,14 @@ final allTasksProvider = StreamProvider<List<Task>>((ref) {
   return repo.watchAllTasks(uid);
 });
 
-final filteredTaskStatsProvider = Provider<TaskStats>((ref) {
+final filteredTaskStatsProvider = Provider<AsyncValue<TaskStats>>((ref) {
   final tasksAsync = ref.watch(allTasksProvider);
   final filter = ref.watch(progressFilterProvider);
 
   return tasksAsync.when(
-    data: (tasks) => _computeStats(tasks, filter),
-    loading: () => TaskStats.empty,
-    error: (_, _) => TaskStats.empty,
+    data: (tasks) => AsyncData(_computeStats(tasks, filter)),
+    loading: () => const AsyncLoading(),
+    error: (e, st) => AsyncError(e, st),
   );
 });
 
