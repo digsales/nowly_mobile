@@ -7,7 +7,8 @@ import 'package:nowly/core/widgets/touchable_opacity.dart';
 /// Section title styled with the Ultra font family.
 ///
 /// Displays a bold heading with an optional help icon on the right.
-/// When [helpText] is provided, tapping the icon opens an [AppHelpSheet]
+/// When [onRefresh] is provided, tapping the refresh icon do the action.
+/// When [helpText] is provided, tapping the help icon opens an [AppHelpSheet]
 /// with the given text. The sheet title defaults to [title] but can be
 /// overridden with [helpTitle].
 ///
@@ -22,6 +23,7 @@ class AppTitle extends StatelessWidget {
     super.key,
     required this.title,
     this.titleColor,
+    this.onRefresh,
     this.helpTitle,
     this.helpText,
   });
@@ -31,6 +33,10 @@ class AppTitle extends StatelessWidget {
 
   /// The heading text color on the left. Defaults to [onSurface] when omitted.
   final Color? titleColor;
+
+  /// Refresh function that when not omitted, show a refresh icon
+  /// on the right side of the title.
+  final VoidCallback? onRefresh;
 
   /// Custom title for the help sheet. Defaults to [title] when omitted.
   final String? helpTitle;
@@ -53,7 +59,19 @@ class AppTitle extends StatelessWidget {
             ),
           ),
         ),
-        if (helpText != null)
+        if (onRefresh != null) ...[
+          const SizedBox(width: 8),
+          TouchableOpacity(
+            onTap: onRefresh,
+            child: Icon(
+                Ionicons.refresh_circle_outline,
+                color: titleColor ?? context.colorScheme.onSurface,
+                size: context.textTheme.displaySmall!.fontSize,
+              ),
+          ),
+        ],
+        if (helpText != null) ...[
+          const SizedBox(width: 8),
           TouchableOpacity(
             onTap: () => AppHelpSheet.show(
               context: context,
@@ -65,7 +83,8 @@ class AppTitle extends StatelessWidget {
                 color: titleColor ?? context.colorScheme.onSurface,
                 size: context.textTheme.displaySmall!.fontSize,
               ),
-          )
+          ),
+        ],
       ],
     );
   }

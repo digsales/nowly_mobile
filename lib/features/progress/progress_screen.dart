@@ -19,6 +19,7 @@ class ProgressScreen extends ConsumerWidget {
         children: [
           AppTitle(
             title: context.l10n.progressSectionStatistics,
+            onRefresh: () => ref.invalidate(filteredTaskStatsProvider),
             helpText: context.l10n.progressStatisticsHelpText,
           ),
           const SizedBox(height: 32),
@@ -26,6 +27,7 @@ class ProgressScreen extends ConsumerWidget {
           const SizedBox(height: 48),
           AppTitle(
             title: context.l10n.progressSectionHistory,
+            onRefresh: () => ref.invalidate(historyProvider),
             helpText: context.l10n.progressHistoryHelpText,
           ),
           const SizedBox(height: 32),
