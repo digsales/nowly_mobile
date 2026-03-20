@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/category.dart';
 import 'package:nowly/core/models/task.dart';
@@ -258,13 +259,13 @@ class _StatusLabelState extends State<_StatusLabel> {
 
   String _resolveText(BuildContext context) {
     if (widget.task.status == TaskStatus.completed) {
-      return context.l10n.taskCompleted;
+      return _formatTimeAgo(context, widget.task.completedAt ?? widget.task.createdAt);
     }
     if (widget.task.status == TaskStatus.cancelled) {
-      return context.l10n.taskCancelled;
+      return _formatTimeAgo(context, widget.task.cancelledAt ?? widget.task.createdAt);
     }
     if (widget.task.status == TaskStatus.expired || widget.isExpired) {
-      return context.l10n.taskExpired;
+      return _formatTimeAgo(context, widget.task.endDate);
     }
 
     final remaining = widget.task.endDate.difference(DateTime.now());
@@ -287,5 +288,26 @@ class _StatusLabelState extends State<_StatusLabel> {
     return context.l10n.taskTimeRemainingMinutes(
       remaining.inMinutes.clamp(1, 59),
     );
+  }
+
+  String _formatTimeAgo(BuildContext context, DateTime date) {
+    final diff = DateTime.now().difference(date);
+
+    if (diff.inDays > 30) {
+      return DateFormat('dd/MM/yyyy').format(date);
+    }
+    if (diff.inDays >= 7) {
+      return context.l10n.timeAgoWeeks(diff.inDays ~/ 7);
+    }
+    if (diff.inDays >= 1) {
+      return context.l10n.timeAgoDays(diff.inDays);
+    }
+    if (diff.inHours >= 1) {
+      return context.l10n.timeAgoHours(diff.inHours);
+    }
+    if (diff.inMinutes >= 1) {
+      return context.l10n.timeAgoMinutes(diff.inMinutes);
+    }
+    return context.l10n.timeAgoNow;
   }
 }

@@ -108,6 +108,31 @@
   "taskExpired": "Expirada",
   "taskCompleted": "Concluída",
   "taskCancelled": "Cancelada",
+  "timeAgoNow": "Agora",
+  "timeAgoMinutes": "{count, plural, =1{Há 1 minuto} other{Há {count} minutos}}",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeAgoHours": "{count, plural, =1{Há 1 hora} other{Há {count} horas}}",
+  "@timeAgoHours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeAgoDays": "{count, plural, =1{Há 1 dia} other{Há {count} dias}}",
+  "@timeAgoDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeAgoWeeks": "{count, plural, =1{Há 1 semana} other{Há {count} semanas}}",
+  "@timeAgoWeeks": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "taskFormTitleAdd": "Nova tarefa",
   "taskFormTitleEdit": "Editar tarefa",
   "taskFormName": "Nome da tarefa",
