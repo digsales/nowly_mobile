@@ -98,6 +98,8 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
+
     Widget scrollView = NestedScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
@@ -122,7 +124,7 @@ class _AppLayoutState extends State<AppLayout> {
               },
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: context.paddingLeft + 16,
+                  left: (railWide ? 0 : context.paddingLeft) + 16,
                   right: context.paddingRight + 32,
                 ),
                 child: ConstrainedBox(
@@ -198,6 +200,8 @@ class _AppLayoutState extends State<AppLayout> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
+    
     final content = Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -225,7 +229,7 @@ class _AppLayoutState extends State<AppLayout> {
               padding: widget.bodyPadding ??
                   EdgeInsets.only(
                     top: 32,
-                    left: context.paddingLeft + 32,
+                    left: (railWide ? 0 : context.paddingLeft) + 32,
                     right: context.paddingRight + 32,
                     bottom: context.paddingBottom + 50,
                   ),

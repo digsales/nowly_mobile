@@ -73,11 +73,14 @@ class _TabSwitcherState extends State<_TabSwitcher> {
 
   @override
   Widget build(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
     final goingRight = widget.currentIndex > _previousIndex;
 
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
+      duration: railWide ? Duration.zero : const Duration(milliseconds: 250),
       transitionBuilder: (child, animation) {
+        if (railWide) return child;
+
         final isIncoming = child.key == ValueKey(widget.currentIndex);
         final begin = isIncoming
             ? Offset(goingRight ? 1.0 : -1.0, 0)
