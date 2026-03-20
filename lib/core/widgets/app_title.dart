@@ -18,7 +18,7 @@ import 'package:nowly/core/widgets/touchable_opacity.dart';
 ///   helpText: 'Organize your tasks into categories.',
 /// )
 /// ```
-class AppTitle extends StatelessWidget {
+class AppTitle extends StatefulWidget {
   const AppTitle({
     super.key,
     required this.title,
@@ -36,7 +36,7 @@ class AppTitle extends StatelessWidget {
 
   /// Refresh function that when not omitted, show a refresh icon
   /// on the right side of the title.
-  final VoidCallback? onRefresh;
+  final Future<void> Function()? onRefresh;
 
   /// Custom title for the help sheet. Defaults to [title] when omitted.
   final String? helpTitle;
@@ -46,43 +46,93 @@ class AppTitle extends StatelessWidget {
   final String? helpText;
 
   @override
+  State<AppTitle> createState() => _AppTitleState();
+}
+
+class _AppTitleState extends State<AppTitle>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _spinController;
+  bool _isRefreshing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _spinController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+  }
+
+  @override
+  void dispose() {
+    _spinController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRefresh() async {
+    if (_isRefreshing) return;
+    setState(() => _isRefreshing = true);
+    _spinController.repeat();
+
+    try {
+      await widget.onRefresh!();
+    } finally {
+      if (mounted) {
+        _spinController.stop();
+        _spinController.reset();
+        setState(() => _isRefreshing = false);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final color = widget.titleColor ?? context.colorScheme.onSurface;
+    final iconSize = context.textTheme.displaySmall!.fontSize;
+
     return Row(
       children: [
         Expanded(
           child: Text(
-            title,
+            widget.title,
             style: context.textTheme.displayMedium?.copyWith(
               fontWeight: FontWeight.w500,
               fontFamily: 'Ultra',
-              color: titleColor ?? context.colorScheme.onSurface,
+              color: color,
             ),
           ),
         ),
-        if (onRefresh != null) ...[
+        if (widget.onRefresh != null) ...[
           const SizedBox(width: 8),
-          TouchableOpacity(
-            onTap: onRefresh,
-            child: Icon(
-                Ionicons.refresh_circle_outline,
-                color: titleColor ?? context.colorScheme.onSurface,
-                size: context.textTheme.displaySmall!.fontSize,
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 100),
+            opacity: _isRefreshing ? 0.4 : 1.0,
+            child: TouchableOpacity(
+              onTap: _isRefreshing ? null : _handleRefresh,
+              child: RotationTransition(
+                turns: _spinController,
+                child: Icon(
+                  Ionicons.refresh_circle_outline,
+                  color: color,
+                  size: iconSize,
+                ),
               ),
+            ),
           ),
         ],
-        if (helpText != null) ...[
+        if (widget.helpText != null) ...[
           const SizedBox(width: 8),
           TouchableOpacity(
             onTap: () => AppHelpSheet.show(
               context: context,
-              title: helpTitle ?? title,
-              text: helpText!,
+              title: widget.helpTitle ?? widget.title,
+              text: widget.helpText!,
             ),
             child: Icon(
-                Ionicons.help_circle_outline,
-                color: titleColor ?? context.colorScheme.onSurface,
-                size: context.textTheme.displaySmall!.fontSize,
-              ),
+              Ionicons.help_circle_outline,
+              color: color,
+              size: iconSize,
+            ),
           ),
         ],
       ],
