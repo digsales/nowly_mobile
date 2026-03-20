@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sizer/sizer.dart';
 
 /// Animated rotating hourglass spinner.
 ///
@@ -49,7 +48,7 @@ class _AppLoadingState extends State<AppLoading>
   @override
   Widget build(BuildContext context) {
     final resolvedColor = widget.color ?? Theme.of(context).colorScheme.primary;
-    final resolvedSize = widget.size ?? 20.sp;
+    final resolvedSize = widget.size ?? 30;
 
     return RotationTransition(
       turns: _controller,

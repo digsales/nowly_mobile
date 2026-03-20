@@ -18,6 +18,7 @@ import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/status_badge.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/home_provider.dart';
+import 'package:nowly/features/progress/progress_provider.dart';
 
 class TaskDetailsSheet extends ConsumerStatefulWidget {
   const TaskDetailsSheet({super.key, required this.task});
@@ -198,6 +199,8 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
     if (!success || !mounted) return;
 
+    ref.invalidate(filteredTaskStatsProvider);
+    ref.invalidate(historyProvider);
     Navigator.of(context).pop();
     // AppSnackBar.show(context, successMessage, type: SnackBarType.success);
   }

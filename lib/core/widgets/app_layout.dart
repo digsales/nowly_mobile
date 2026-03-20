@@ -25,6 +25,7 @@ class AppLayout extends StatefulWidget {
     this.headerBuilder,
     this.showBackButton = false,
     this.onRefresh,
+    this.onScrollNearEnd,
     this.bodyPadding,
     required this.body,
   });
@@ -48,6 +49,9 @@ class AppLayout extends StatefulWidget {
   /// Pull-to-refresh callback. When non-null, wraps the scroll view
   /// in a [RefreshIndicator].
   final RefreshCallback? onRefresh;
+
+  /// Called when the user scrolls near the end of the content (80%).
+  final VoidCallback? onScrollNearEnd;
 
   /// Custom padding for the body area. When null, uses the default
   /// (32px horizontal + safe area, 32px top, 50px + safe area bottom).
@@ -203,19 +207,32 @@ class _AppLayoutState extends State<AppLayout> {
           topRight: Radius.circular(50),
         ),
       ),
-      child: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: widget.bodyPadding ??
-                EdgeInsets.only(
-                  top: 32,
-                  left: context.paddingLeft + 32,
-                  right: context.paddingRight + 32,
-                  bottom: context.paddingBottom + 50,
-                ),
-            sliver: SliverToBoxAdapter(child: widget.body),
-          ),
-        ],
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (widget.onScrollNearEnd != null &&
+              notification is ScrollEndNotification) {
+            final metrics = notification.metrics;
+            if (metrics.maxScrollExtent > 0 &&
+                metrics.pixels >= metrics.maxScrollExtent * 0.8) {
+              widget.onScrollNearEnd!();
+            }
+          }
+          return false;
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: widget.bodyPadding ??
+                  EdgeInsets.only(
+                    top: 32,
+                    left: context.paddingLeft + 32,
+                    right: context.paddingRight + 32,
+                    bottom: context.paddingBottom + 50,
+                  ),
+              sliver: SliverToBoxAdapter(child: widget.body),
+            ),
+          ],
+        ),
       ),
     );
 

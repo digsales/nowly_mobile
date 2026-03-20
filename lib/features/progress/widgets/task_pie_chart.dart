@@ -24,6 +24,7 @@ class TaskPieChart extends ConsumerWidget {
             _FilterChips(filter: filter, ref: ref),
             const SizedBox(height: 32),
             switch (statsAsync) {
+              AsyncLoading(:final value?) => _buildChart(wide, value, ref),
               AsyncLoading() => TaskPieChartSkeleton(wide: wide, ref: ref),
               AsyncError() => Padding(
                   padding: const EdgeInsets.only(top: 64),
@@ -45,39 +46,43 @@ class TaskPieChart extends ConsumerWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              AsyncData(:final value) => wide
-                  ? Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: 200,
-                                child: _Chart(stats: value, ref: ref),
-                              ),
-                            ),
-                            const SizedBox(width: 32),
-                            Expanded(child: _Legend(stats: value, ref: ref)),
-                          ],
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        SizedBox(
-                          height: 200,
-                          child: _Chart(stats: value, ref: ref),
-                        ),
-                        const SizedBox(height: 32),
-                        _Legend(stats: value, ref: ref),
-                      ],
-                    ),
+              AsyncData(:final value) => _buildChart(wide, value, ref),
             },
           ],
         );
       },
     );
+  }
+
+  Widget _buildChart(bool wide, TaskStats value, WidgetRef ref) {
+    return wide
+        ? Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 200,
+                      child: _Chart(stats: value, ref: ref),
+                    ),
+                  ),
+                  const SizedBox(width: 32),
+                  Expanded(child: _Legend(stats: value, ref: ref)),
+                ],
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              SizedBox(
+                height: 200,
+                child: _Chart(stats: value, ref: ref),
+              ),
+              const SizedBox(height: 32),
+              _Legend(stats: value, ref: ref),
+            ],
+          );
   }
 }
 

@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
+import 'package:nowly/features/profile/profile_provider.dart';
 
 enum ProgressFilter { lastMonth, last6Months, lastYear, allTime }
 
 class ProgressFilterNotifier extends Notifier<ProgressFilter> {
   @override
-  ProgressFilter build() => ProgressFilter.allTime;
+  ProgressFilter build() => ProgressFilter.lastMonth;
 
   void set(ProgressFilter filter) => state = filter;
 }
@@ -16,62 +18,49 @@ final progressFilterProvider =
     NotifierProvider<ProgressFilterNotifier, ProgressFilter>(
         ProgressFilterNotifier.new);
 
-final allTasksProvider = StreamProvider<List<Task>>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final uid = authService.currentUser?.uid;
-  if (uid == null) return Stream.value([]);
+class TaskStatsNotifier extends AsyncNotifier<TaskStats> {
+  @override
+  Future<TaskStats> build() async {
+    final filter = ref.watch(progressFilterProvider);
 
-  final repo = ref.watch(taskRepositoryProvider);
-  return repo.watchAllTasks(uid);
-});
+    if (filter == ProgressFilter.allTime) {
+      final userAsync = ref.watch(currentUserProvider);
+      final user = userAsync.asData?.value;
+      if (user == null) return state.asData?.value ?? TaskStats.empty;
 
-final filteredTaskStatsProvider = Provider<AsyncValue<TaskStats>>((ref) {
-  final tasksAsync = ref.watch(allTasksProvider);
-  final filter = ref.watch(progressFilterProvider);
-
-  return tasksAsync.when(
-    data: (tasks) => AsyncData(_computeStats(tasks, filter)),
-    loading: () => const AsyncLoading(),
-    error: (e, st) => AsyncError(e, st),
-  );
-});
-
-TaskStats _computeStats(List<Task> tasks, ProgressFilter filter) {
-  final now = DateTime.now();
-  final DateTime? cutoff = switch (filter) {
-    ProgressFilter.lastMonth => DateTime(now.year, now.month - 1, now.day),
-    ProgressFilter.last6Months => DateTime(now.year, now.month - 6, now.day),
-    ProgressFilter.lastYear => DateTime(now.year - 1, now.month, now.day),
-    ProgressFilter.allTime => null,
-  };
-
-  final filtered = cutoff == null
-      ? tasks
-      : tasks.where((t) => t.createdAt.isAfter(cutoff)).toList();
-
-  var completed = 0;
-  var cancelled = 0;
-  var expired = 0;
-
-  for (final task in filtered) {
-    switch (task.status) {
-      case TaskStatus.completed:
-        completed++;
-      case TaskStatus.cancelled:
-        cancelled++;
-      case TaskStatus.expired:
-        expired++;
-      case TaskStatus.pending:
-        break;
+      return TaskStats(
+        completed: user.totalCompleted,
+        cancelled: user.totalCancelled,
+        expired: user.totalExpired,
+      );
     }
-  }
 
-  return TaskStats(
-    completed: completed,
-    cancelled: cancelled,
-    expired: expired,
-  );
+    final uid = ref.read(authServiceProvider).currentUser?.uid;
+    if (uid == null) return TaskStats.empty;
+
+    final now = DateTime.now();
+    final from = switch (filter) {
+      ProgressFilter.lastMonth => DateTime(now.year, now.month - 1, now.day),
+      ProgressFilter.last6Months => DateTime(now.year, now.month - 6, now.day),
+      ProgressFilter.lastYear => DateTime(now.year - 1, now.month, now.day),
+      ProgressFilter.allTime => now,
+    };
+
+    final stats = await ref.read(taskRepositoryProvider).fetchStatsByPeriod(
+      userId: uid,
+      from: from,
+    );
+
+    return TaskStats(
+      completed: stats.completed,
+      cancelled: stats.cancelled,
+      expired: stats.expired,
+    );
+  }
 }
+
+final filteredTaskStatsProvider =
+    AsyncNotifierProvider<TaskStatsNotifier, TaskStats>(TaskStatsNotifier.new);
 
 // ─── History ──────────────────────────────────────────────────────────────────
 
@@ -88,44 +77,95 @@ final historyFilterProvider =
     NotifierProvider<HistoryFilterNotifier, HistoryFilter>(
         HistoryFilterNotifier.new);
 
-final historyTasksProvider = Provider<AsyncValue<List<Task>>>((ref) {
-  final tasksAsync = ref.watch(allTasksProvider);
-  final filter = ref.watch(historyFilterProvider);
+class HistoryState {
+  const HistoryState({
+    this.tasks = const [],
+    this.lastDocument,
+    this.hasMore = true,
+    this.isLoadingMore = false,
+  });
 
-  return tasksAsync.when(
-    data: (tasks) {
-      final nonPending =
-          tasks.where((t) => t.status != TaskStatus.pending).toList();
+  final List<Task> tasks;
+  final DocumentSnapshot? lastDocument;
+  final bool hasMore;
+  final bool isLoadingMore;
 
-      final filtered = switch (filter) {
-        HistoryFilter.all => nonPending,
-        HistoryFilter.completed =>
-          nonPending.where((t) => t.status == TaskStatus.completed).toList(),
-        HistoryFilter.cancelled =>
-          nonPending.where((t) => t.status == TaskStatus.cancelled).toList(),
-        HistoryFilter.expired =>
-          nonPending.where((t) => t.status == TaskStatus.expired).toList(),
-      };
+  HistoryState copyWith({
+    List<Task>? tasks,
+    DocumentSnapshot? lastDocument,
+    bool? hasMore,
+    bool? isLoadingMore,
+  }) {
+    return HistoryState(
+      tasks: tasks ?? this.tasks,
+      lastDocument: lastDocument ?? this.lastDocument,
+      hasMore: hasMore ?? this.hasMore,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+    );
+  }
+}
 
-      filtered.sort((a, b) {
-        final dateA = switch (a.status) {
-          TaskStatus.completed => a.completedAt ?? a.endDate,
-          TaskStatus.cancelled => a.cancelledAt ?? a.endDate,
-          _ => a.endDate,
-        };
-        final dateB = switch (b.status) {
-          TaskStatus.completed => b.completedAt ?? b.endDate,
-          TaskStatus.cancelled => b.cancelledAt ?? b.endDate,
-          _ => b.endDate,
-        };
-        return dateB.compareTo(dateA);
-      });
-      return AsyncData(filtered);
-    },
-    loading: () => const AsyncLoading(),
-    error: (e, st) => AsyncError(e, st),
-  );
-});
+class HistoryNotifier extends AsyncNotifier<HistoryState> {
+  static const _pageSize = 10;
+
+  @override
+  Future<HistoryState> build() async {
+    ref.watch(historyFilterProvider);
+    return _fetchPage();
+  }
+
+  Future<HistoryState> _fetchPage({DocumentSnapshot? startAfter}) async {
+    final uid = ref.read(authServiceProvider).currentUser?.uid;
+    if (uid == null) return const HistoryState(hasMore: false);
+
+    final filter = ref.read(historyFilterProvider);
+    final statusFilter = switch (filter) {
+      HistoryFilter.all => null,
+      HistoryFilter.completed => 'completed',
+      HistoryFilter.cancelled => 'cancelled',
+      HistoryFilter.expired => 'expired',
+    };
+
+    final snapshot = await ref.read(taskRepositoryProvider).fetchHistoryPage(
+      userId: uid,
+      limit: _pageSize,
+      statusFilter: statusFilter,
+      startAfter: startAfter,
+    );
+
+    final tasks = snapshot.docs
+        .map((doc) => Task.fromJson(doc.id, doc.data()))
+        .toList();
+
+    return HistoryState(
+      tasks: tasks,
+      lastDocument: snapshot.docs.isNotEmpty ? snapshot.docs.last : null,
+      hasMore: tasks.length >= _pageSize,
+    );
+  }
+
+  Future<void> loadMore() async {
+    final current = state.asData?.value;
+    if (current == null || !current.hasMore || current.isLoadingMore) return;
+
+    state = AsyncData(current.copyWith(isLoadingMore: true));
+
+    try {
+      final next = await _fetchPage(startAfter: current.lastDocument);
+      state = AsyncData(HistoryState(
+        tasks: [...current.tasks, ...next.tasks],
+        lastDocument: next.lastDocument,
+        hasMore: next.hasMore,
+      ));
+    } catch (e, st) {
+      state = AsyncData(current.copyWith(isLoadingMore: false));
+      state = AsyncError(e, st);
+    }
+  }
+}
+
+final historyProvider =
+    AsyncNotifierProvider<HistoryNotifier, HistoryState>(HistoryNotifier.new);
 
 class TaskStats {
   final int completed;

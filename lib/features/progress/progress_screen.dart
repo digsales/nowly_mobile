@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_title.dart';
+import 'package:nowly/features/progress/progress_provider.dart';
 import 'package:nowly/features/progress/widgets/task_history.dart';
 import 'package:nowly/features/progress/widgets/task_pie_chart.dart';
 
-class ProgressScreen extends StatelessWidget {
+class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppLayout(
       headerText: context.l10n.progress,
+      onScrollNearEnd: () => ref.read(historyProvider.notifier).loadMore(),
       body: Column(
         children: [
           AppTitle(

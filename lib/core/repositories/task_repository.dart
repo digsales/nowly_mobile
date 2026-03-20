@@ -32,15 +32,6 @@ class TaskRepository {
             .toList());
   }
 
-  Stream<List<Task>> watchAllTasks(String userId) {
-    return _tasks
-        .where('userId', isEqualTo: userId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => Task.fromJson(doc.id, doc.data()))
-            .toList());
-  }
-
   Future<String> createTask(Task task) async {
     try {
       final doc = task.id.isEmpty ? _tasks.doc() : _tasks.doc(task.id);
@@ -152,6 +143,62 @@ class TaskRepository {
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
+  }
+
+  // ─── Stats by period ────────────────────────────────────────────────────────
+
+  Future<({int completed, int cancelled, int expired})> fetchStatsByPeriod({
+    required String userId,
+    required DateTime from,
+  }) async {
+    final snapshot = await _tasks
+        .where('userId', isEqualTo: userId)
+        .where('status', whereIn: ['completed', 'cancelled', 'expired'])
+        .where('createdAt', isGreaterThan: from.toIso8601String())
+        .get();
+
+    var completed = 0;
+    var cancelled = 0;
+    var expired = 0;
+
+    for (final doc in snapshot.docs) {
+      final status = doc.data()['status'] as String;
+      switch (status) {
+        case 'completed':
+          completed++;
+        case 'cancelled':
+          cancelled++;
+        case 'expired':
+          expired++;
+      }
+    }
+
+    return (completed: completed, cancelled: cancelled, expired: expired);
+  }
+
+  // ─── History (paginated) ────────────────────────────────────────────────────
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchHistoryPage({
+    required String userId,
+    required int limit,
+    String? statusFilter,
+    DocumentSnapshot? startAfter,
+  }) {
+    final statuses = statusFilter != null
+        ? [statusFilter]
+        : ['completed', 'cancelled', 'expired'];
+
+    Query<Map<String, dynamic>> query = _tasks
+        .where('userId', isEqualTo: userId)
+        .where('status', whereIn: statuses)
+        .orderBy('createdAt', descending: true)
+        .limit(limit);
+
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter);
+    }
+
+    return query.get();
   }
 
   // ─── Subtasks ────────────────────────────────────────────────────────────────

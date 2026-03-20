@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/models/task.dart';
+import 'package:nowly/core/widgets/app_loading.dart';
 import 'package:nowly/core/widgets/task_card.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/home/widgets/task_list_skeleton.dart';
@@ -12,14 +13,14 @@ class TaskHistory extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasksAsync = ref.watch(historyTasksProvider);
+    final historyAsync = ref.watch(historyProvider);
     final filter = ref.watch(historyFilterProvider);
 
     return Column(
       children: [
         _FilterChips(filter: filter, ref: ref),
         const SizedBox(height: 24),
-        switch (tasksAsync) {
+        switch (historyAsync) {
           AsyncLoading() => const TaskListSkeleton(),
           AsyncError() => Text(
               context.l10n.errorMessage,
@@ -27,7 +28,7 @@ class TaskHistory extends ConsumerWidget {
                 color: context.colorScheme.error,
               ),
             ),
-          AsyncData(:final value) when value.isEmpty => Text(
+          AsyncData(:final value) when value.tasks.isEmpty => Text(
               context.l10n.progressHistoryEmpty,
               style: context.textTheme.bodyMedium?.copyWith(
                 color: context.colorScheme.onSurfaceVariant,
@@ -36,8 +37,19 @@ class TaskHistory extends ConsumerWidget {
           AsyncData(:final value) => LayoutBuilder(
               builder: (context, constraints) {
                 final wide = constraints.maxWidth >= 600;
-                if (wide) return _buildGrid(value);
-                return _buildList(value);
+                return Column(
+                  children: [
+                    if (wide)
+                      _buildGrid(value.tasks)
+                    else
+                      _buildList(value.tasks),
+                    if (value.isLoadingMore)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 16),
+                        child: AppLoading(),
+                      ),
+                  ],
+                );
               },
             ),
         },
