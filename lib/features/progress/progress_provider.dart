@@ -106,7 +106,7 @@ class HistoryState {
 }
 
 class HistoryNotifier extends AsyncNotifier<HistoryState> {
-  static const _pageSize = 10;
+  static const _pageSize = 16;
 
   @override
   Future<HistoryState> build() async {
