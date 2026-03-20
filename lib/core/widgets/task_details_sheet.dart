@@ -271,11 +271,34 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             ? ref.usePrimaryColor(category.colorKey)
             : context.colorScheme.onSurfaceVariant,
         ),
+        if (task.completedAt != null) ...[
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            icon: Ionicons.checkmark_circle_outline,
+            label: context.l10n.taskDetailsCompletedAt,
+            value: _formatDate(task.completedAt!),
+            color: ref.usePrimaryColor('green'),
+          ),
+        ],
+        if (task.cancelledAt != null) ...[
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            icon: Ionicons.close_circle_outline,
+            label: context.l10n.taskDetailsCancelledAt,
+            value: _formatDate(task.cancelledAt!),
+            color: ref.usePrimaryColor('orange'),
+          ),
+        ],
         const SizedBox(height: 12),
         _buildInfoRow(
           icon: Ionicons.calendar_outline,
-          label: context.l10n.taskDetailsDeadline,
+          label: task.status == TaskStatus.expired
+            ? context.l10n.taskDetailsExpiredAt
+            : context.l10n.taskDetailsDeadline,
           value: _formatDate(task.endDate),
+          color:  task.status == TaskStatus.expired
+            ? ref.usePrimaryColor('red')
+            : null,
         ),
         const SizedBox(height: 12),
         _buildInfoRow(
@@ -415,14 +438,16 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           Text(
             '$label: ',
             style: context.textTheme.bodyMedium?.copyWith(
-              color: context.colorScheme.onSurfaceVariant,
+              color: color ?? context.colorScheme.onSurfaceVariant,
             ),
           ),
         Expanded(
           child: Text(
             value,
             style: context.textTheme.bodyMedium?.copyWith(
-              color: color ?? context.colorScheme.onSurface,
+              color: label == null && color != null
+                ? color
+                : context.colorScheme.onSurface,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
