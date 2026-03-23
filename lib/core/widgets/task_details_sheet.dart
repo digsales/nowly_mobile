@@ -274,13 +274,27 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             ? ref.usePrimaryColor(category.colorKey)
             : context.colorScheme.onSurfaceVariant,
         ),
-        if (task.resolvedAt != null && task.status != TaskStatus.expired) ...[
+        const SizedBox(height: 12),
+        _buildInfoRow(
+          icon: Ionicons.time_outline,
+          label: context.l10n.taskDetailsCreatedAt,
+          value: _formatDate(task.createdAt),
+        ),
+        if (task.status != TaskStatus.expired) ...[
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            icon: Ionicons.timer_outline,
+            label: context.l10n.taskDetailsDeadline,
+            value: _formatDate(task.endDate),
+          ),
+        ],
+        if (task.resolvedAt != null) ...[
           const SizedBox(height: 12),
           _buildInfoRow(
             icon: switch (task.status) {
               TaskStatus.completed => Ionicons.checkmark_circle_outline,
               TaskStatus.cancelled => Ionicons.close_circle_outline,
-              _ => Ionicons.time_outline,
+              _ => Ionicons.timer_outline,
             },
             label: switch (task.status) {
               TaskStatus.completed => context.l10n.taskDetailsCompletedAt,
@@ -291,27 +305,10 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             color: switch (task.status) {
               TaskStatus.completed => ref.usePrimaryColor('green'),
               TaskStatus.cancelled => ref.usePrimaryColor('orange'),
-              _ => context.colorScheme.error,
+              _ => ref.usePrimaryColor('red'),
             },
           ),
         ],
-        const SizedBox(height: 12),
-        _buildInfoRow(
-          icon: Ionicons.calendar_outline,
-          label: task.status == TaskStatus.expired
-            ? context.l10n.taskDetailsExpiredAt
-            : context.l10n.taskDetailsDeadline,
-          value: _formatDate(task.endDate),
-          color:  task.status == TaskStatus.expired
-            ? ref.usePrimaryColor('red')
-            : null,
-        ),
-        const SizedBox(height: 12),
-        _buildInfoRow(
-          icon: Ionicons.time_outline,
-          label: context.l10n.taskDetailsCreatedAt,
-          value: _formatDate(task.createdAt),
-        ),
         const SizedBox(height: 12),
         _buildInfoRow(
           icon: Ionicons.star_outline,
