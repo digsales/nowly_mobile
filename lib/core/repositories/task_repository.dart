@@ -74,16 +74,48 @@ class TaskRepository {
 
   Future<void> completeTask(Task task) async {
     try {
-      final batch = _firestore.batch();
-      batch.update(_tasks.doc(task.id), {
-        'status': 'completed',
-        'completedAt': DateTime.now().toIso8601String(),
+      await _firestore.runTransaction((tx) async {
+        final userSnap = await tx.get(_userDoc(task.userId));
+        final data = userSnap.data();
+
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        final lastStreakRaw = data?['lastStreakDate'] as String?;
+        final lastStreakDate = lastStreakRaw != null ? DateTime.parse(lastStreakRaw) : null;
+        final lastStreakDay = lastStreakDate != null
+            ? DateTime(lastStreakDate.year, lastStreakDate.month, lastStreakDate.day)
+            : null;
+
+        final currentStreak = data?['currentStreak'] as int? ?? 0;
+
+        final Map<String, dynamic> streakUpdate;
+        if (lastStreakDay == today) {
+          // Already completed today — don't change streak
+          streakUpdate = {};
+        } else if (lastStreakDay == today.subtract(const Duration(days: 1))) {
+          // Completed yesterday — increment streak
+          streakUpdate = {
+            'currentStreak': currentStreak + 1,
+            'lastStreakDate': today.toIso8601String(),
+          };
+        } else {
+          // First time or streak broken — reset to 1
+          streakUpdate = {
+            'currentStreak': 1,
+            'lastStreakDate': today.toIso8601String(),
+          };
+        }
+
+        tx.update(_tasks.doc(task.id), {
+          'status': 'completed',
+          'completedAt': now.toIso8601String(),
+        });
+        tx.update(_userDoc(task.userId), {
+          'totalCompleted': FieldValue.increment(1),
+          'totalPoints': FieldValue.increment(task.pointsEarned),
+          ...streakUpdate,
+        });
       });
-      batch.update(_userDoc(task.userId), {
-        'totalCompleted': FieldValue.increment(1),
-        'totalPoints': FieldValue.increment(task.pointsEarned),
-      });
-      await batch.commit();
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }

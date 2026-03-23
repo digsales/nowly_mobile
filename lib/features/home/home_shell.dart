@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nowly/core/router/app_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/utils/level_utils.dart';
 import 'package:nowly/features/home/widgets/level_up_banner.dart';
@@ -27,6 +28,23 @@ class HomeShell extends ConsumerStatefulWidget {
 
 class _HomeShellState extends ConsumerState<HomeShell> {
   OverlayEntry? _levelUpEntry;
+  bool _streakChecked = false;
+
+  void _checkStreakReset(User user) {
+    if (_streakChecked) return;
+    _streakChecked = true;
+    final lastStreak = user.lastStreakDate;
+    if (lastStreak == null || user.currentStreak == 0) return;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final lastDay = DateTime(lastStreak.year, lastStreak.month, lastStreak.day);
+    if (today.difference(lastDay).inDays >= 2) {
+      ref.read(userRepositoryProvider).updateUser(user.id, {
+        'currentStreak': 0,
+        'lastStreakDate': null,
+      });
+    }
+  }
 
   void _showLevelUp(int newLevel) {
     _levelUpEntry?.remove();
@@ -58,6 +76,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   Widget build(BuildContext context) {
     final showLevelBar = ref.watch(showLevelBarProvider);
     final userAsync = ref.watch(currentUserProvider);
+
+    final user = userAsync.asData?.value;
+    if (user != null && !_streakChecked) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkStreakReset(user));
+    }
 
     ref.listen(currentUserProvider, (prev, next) {
       if (prev == null || prev.asData == null) return;

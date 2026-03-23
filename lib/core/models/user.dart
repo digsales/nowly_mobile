@@ -9,6 +9,7 @@ class User {
   final int totalExpired;
   final int totalCancelled;
   final int currentStreak;
+  final DateTime? lastStreakDate;
   final int highestLevel;
   final List<String> unlockedBadges;
 
@@ -23,6 +24,7 @@ class User {
     this.totalExpired = 0,
     this.totalCancelled = 0,
     this.currentStreak = 0,
+    this.lastStreakDate,
     this.highestLevel = 0,
     this.unlockedBadges = const [],
   });
@@ -39,6 +41,9 @@ class User {
       totalExpired: json['totalExpired'] as int? ?? 0,
       totalCancelled: json['totalCancelled'] as int? ?? 0,
       currentStreak: json['currentStreak'] as int? ?? 0,
+      lastStreakDate: json['lastStreakDate'] != null
+          ? DateTime.parse(json['lastStreakDate'] as String)
+          : null,
       highestLevel: json['highestLevel'] as int? ?? 0,
       unlockedBadges: (json['unlockedBadges'] as List<dynamic>?)?.cast<String>() ?? const [],
     );
@@ -55,6 +60,7 @@ class User {
       'totalExpired': totalExpired,
       'totalCancelled': totalCancelled,
       'currentStreak': currentStreak,
+      'lastStreakDate': lastStreakDate?.toIso8601String(),
       'highestLevel': highestLevel,
       'unlockedBadges': unlockedBadges,
     };
@@ -70,6 +76,7 @@ class User {
     int? totalExpired,
     int? totalCancelled,
     int? currentStreak,
+    DateTime? lastStreakDate,
     int? highestLevel,
     List<String>? unlockedBadges,
   }) {
@@ -84,6 +91,7 @@ class User {
       totalExpired: totalExpired ?? this.totalExpired,
       totalCancelled: totalCancelled ?? this.totalCancelled,
       currentStreak: currentStreak ?? this.currentStreak,
+      lastStreakDate: lastStreakDate ?? this.lastStreakDate,
       highestLevel: highestLevel ?? this.highestLevel,
       unlockedBadges: unlockedBadges ?? this.unlockedBadges,
     );
