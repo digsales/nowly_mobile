@@ -177,6 +177,7 @@
   "taskDetailsCancel": "Cancelar",
   "taskDetailsUncancel": "Reativar",
   "taskDetailsEdit": "Editar",
+  "taskDetailsRepeat": "Repetir tarefa",
   "taskDetailsDelete": "Excluir",
   "taskDetailsDeleteTimer": "Excluir ({minutes}min)",
   "@taskDetailsDeleteTimer": {

@@ -11,6 +11,7 @@ import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/router/app_router.dart';
+import 'package:nowly/features/task/task_form_provider.dart';
 import 'package:nowly/core/widgets/app_bottom_sheet.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
@@ -474,6 +475,20 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             detailColor: ref.usePrimaryColor('green'),
             onPressed: _completeTask,
             text: context.l10n.taskDetailsComplete,
+          ),
+          const SizedBox(height: 8),
+        ],
+        if (!isPending) ...[
+          AppButton(
+            detailColor: context.colorScheme.primary,
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.push(
+                AppRoutes.taskForm,
+                extra: TaskFormArgs.template(widget.task),
+              );
+            },
+            text: context.l10n.taskDetailsRepeat,
           ),
           const SizedBox(height: 8),
         ],
