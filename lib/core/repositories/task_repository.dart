@@ -108,7 +108,7 @@ class TaskRepository {
 
         tx.update(_tasks.doc(task.id), {
           'status': 'completed',
-          'completedAt': now.toIso8601String(),
+          'resolvedAt': now.toIso8601String(),
         });
         tx.update(_userDoc(task.userId), {
           'totalCompleted': FieldValue.increment(1),
@@ -129,7 +129,7 @@ class TaskRepository {
 
         tx.update(_tasks.doc(task.id), {
           'status': 'cancelled',
-          'cancelledAt': DateTime.now().toIso8601String(),
+          'resolvedAt': DateTime.now().toIso8601String(),
         });
         tx.update(_userDoc(task.userId), {
           'totalCancelled': FieldValue.increment(1),
@@ -152,6 +152,7 @@ class TaskRepository {
       batch.update(_tasks.doc(task.id), {
         'status': 'pending',
         'cancelledAt': null,
+        'resolvedAt': null,
       });
       batch.update(_userDoc(task.userId), {
         'totalCancelled': FieldValue.increment(-1),
@@ -223,7 +224,7 @@ class TaskRepository {
     Query<Map<String, dynamic>> query = _tasks
         .where('userId', isEqualTo: userId)
         .where('status', whereIn: statuses)
-        .orderBy('createdAt', descending: true)
+        .orderBy('resolvedAt', descending: true)
         .limit(limit);
 
     if (startAfter != null) {
@@ -273,20 +274,23 @@ class TaskRepository {
     await batch.commit();
   }
 
-  Future<void> markAsExpired(List<String> taskIds, {required String userId}) async {
-    if (taskIds.isEmpty) return;
+  Future<void> markAsExpired(List<Task> tasks, {required String userId}) async {
+    if (tasks.isEmpty) return;
 
-    final penalty = taskIds.length * 3;
+    final penalty = tasks.length * 3;
 
     await _firestore.runTransaction((tx) async {
       final userSnap = await tx.get(_userDoc(userId));
       final currentPoints = userSnap.data()?['totalPoints'] as int? ?? 0;
 
-      for (final id in taskIds) {
-        tx.update(_tasks.doc(id), {'status': 'expired'});
+      for (final task in tasks) {
+        tx.update(_tasks.doc(task.id), {
+          'status': 'expired',
+          'resolvedAt': task.endDate.toIso8601String(),
+        });
       }
       tx.update(_userDoc(userId), {
-        'totalExpired': FieldValue.increment(taskIds.length),
+        'totalExpired': FieldValue.increment(tasks.length),
         'totalPoints': max(0, currentPoints - penalty),
       });
     });

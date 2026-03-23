@@ -274,22 +274,25 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
             ? ref.usePrimaryColor(category.colorKey)
             : context.colorScheme.onSurfaceVariant,
         ),
-        if (task.completedAt != null) ...[
+        if (task.resolvedAt != null && task.status != TaskStatus.expired) ...[
           const SizedBox(height: 12),
           _buildInfoRow(
-            icon: Ionicons.checkmark_circle_outline,
-            label: context.l10n.taskDetailsCompletedAt,
-            value: _formatDate(task.completedAt!),
-            color: ref.usePrimaryColor('green'),
-          ),
-        ],
-        if (task.cancelledAt != null) ...[
-          const SizedBox(height: 12),
-          _buildInfoRow(
-            icon: Ionicons.close_circle_outline,
-            label: context.l10n.taskDetailsCancelledAt,
-            value: _formatDate(task.cancelledAt!),
-            color: ref.usePrimaryColor('orange'),
+            icon: switch (task.status) {
+              TaskStatus.completed => Ionicons.checkmark_circle_outline,
+              TaskStatus.cancelled => Ionicons.close_circle_outline,
+              _ => Ionicons.time_outline,
+            },
+            label: switch (task.status) {
+              TaskStatus.completed => context.l10n.taskDetailsCompletedAt,
+              TaskStatus.cancelled => context.l10n.taskDetailsCancelledAt,
+              _ => context.l10n.taskDetailsExpiredAt,
+            },
+            value: _formatDate(task.resolvedAt!),
+            color: switch (task.status) {
+              TaskStatus.completed => ref.usePrimaryColor('green'),
+              TaskStatus.cancelled => ref.usePrimaryColor('orange'),
+              _ => context.colorScheme.error,
+            },
           ),
         ],
         const SizedBox(height: 12),

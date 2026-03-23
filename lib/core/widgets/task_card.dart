@@ -258,14 +258,8 @@ class _StatusLabelState extends State<_StatusLabel> {
   }
 
   String _resolveText(BuildContext context) {
-    if (widget.task.status == TaskStatus.completed) {
-      return _formatTimeAgo(context, widget.task.completedAt ?? widget.task.createdAt);
-    }
-    if (widget.task.status == TaskStatus.cancelled) {
-      return _formatTimeAgo(context, widget.task.cancelledAt ?? widget.task.createdAt);
-    }
-    if (widget.task.status == TaskStatus.expired || widget.isExpired) {
-      return _formatTimeAgo(context, widget.task.endDate);
+    if (widget.task.status != TaskStatus.pending || widget.isExpired) {
+      return _formatTimeAgo(context, widget.task.resolvedAt ?? widget.task.endDate);
     }
 
     final remaining = widget.task.endDate.difference(DateTime.now());
