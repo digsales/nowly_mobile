@@ -151,7 +151,6 @@ class TaskRepository {
       final batch = _firestore.batch();
       batch.update(_tasks.doc(task.id), {
         'status': 'pending',
-        'cancelledAt': null,
         'resolvedAt': null,
       });
       batch.update(_userDoc(task.userId), {
