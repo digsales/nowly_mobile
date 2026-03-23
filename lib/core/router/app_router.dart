@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
-import 'package:nowly/features/progress/progress_screen.dart';
-import 'package:nowly/features/ranking/ranking_screen.dart';
+import 'package:nowly/features/performance/performance_screen.dart';
+import 'package:nowly/features/history/history_screen.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/features/category/category_form_screen.dart';
 import 'package:nowly/core/models/task.dart';
@@ -196,7 +196,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.ranking,
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: RankingScreen()),
+                    const NoTransitionPage(child: HistoryScreen()),
               ),
             ],
           ),
@@ -205,7 +205,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.progress,
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: ProgressScreen()),
+                    const NoTransitionPage(child: PerformanceScreen()),
               ),
             ],
           ),

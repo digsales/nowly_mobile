@@ -15,7 +15,7 @@ class HomeBottomNavBar extends StatelessWidget {
 
   static const _icons = [
     Ionicons.home_outline,
-    Ionicons.trophy_outline,
+    Ionicons.book_outline,
     Ionicons.stats_chart_outline,
     Ionicons.person_outline,
   ];

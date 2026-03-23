@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
-import 'package:nowly/features/progress/progress_provider.dart';
-import 'package:nowly/features/progress/widgets/task_pie_chart_skeleton.dart';
+import 'package:nowly/features/performance/performance_provider.dart';
+import 'package:nowly/features/performance/widgets/task_pie_chart_skeleton.dart';
 
 class TaskPieChart extends ConsumerWidget {
   const TaskPieChart({super.key});

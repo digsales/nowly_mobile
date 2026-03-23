@@ -50,14 +50,14 @@ class HomeNavigationRail extends StatelessWidget {
           label: Text(context.l10n.home),
         ),
         NavigationRailDestination(
-          icon: const Icon(Ionicons.trophy_outline),
+          icon: const Icon(Ionicons.book_outline),
           selectedIcon: const Icon(Ionicons.trophy),
-          label: Text(context.l10n.ranking),
+          label: Text(context.l10n.history),
         ),
         NavigationRailDestination(
           icon: const Icon(Ionicons.stats_chart_outline),
           selectedIcon: const Icon(Ionicons.stats_chart),
-          label: Text(context.l10n.progress),
+          label: Text(context.l10n.performance),
         ),
         NavigationRailDestination(
           icon: const Icon(Ionicons.person_outline),

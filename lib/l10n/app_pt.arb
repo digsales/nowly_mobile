@@ -41,9 +41,9 @@
 
   "home": "Início",
   
-  "ranking": "Classificação",
+  "history": "Histórico",
   
-  "progress": "Progresso",
+  "performance": "Desempenho",
   
   "profile": "Perfil",
 
@@ -384,8 +384,8 @@
     }
   },
 
-  "progressSectionHistory": "Histórico",
-  "progressHistoryHelpText": "Veja todas as suas tarefas finalizadas.\n\nFiltre por status para encontrar tarefas concluídas, canceladas ou expiradas.",
-  "progressHistoryFilterAll": "Todas",
-  "progressHistoryEmpty": "Nenhuma tarefa encontrada."
+  "historySectionTasks": "Tarefas",
+  "historyTasksHelpText": "Veja todas as suas tarefas finalizadas.\n\nFiltre por status para encontrar tarefas concluídas, canceladas ou expiradas.",
+  "historyTasksFilterAll": "Todas",
+  "historyTasksEmpty": "Nenhuma tarefa encontrada."
 }

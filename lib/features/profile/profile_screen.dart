@@ -244,7 +244,7 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
         AppSettingTile(
-          icon: Ionicons.trophy_outline,
+          icon: Ionicons.book_outline,
           label: context.l10n.settingsShowLevelBar,
           trailing: Switch(
             value: showLevelBar,

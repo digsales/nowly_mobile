@@ -5,8 +5,8 @@ import 'package:nowly/core/models/task.dart';
 import 'package:nowly/core/widgets/app_loading.dart';
 import 'package:nowly/core/widgets/task_card.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:nowly/features/history/history_provider.dart';
 import 'package:nowly/features/home/widgets/task_list_skeleton.dart';
-import 'package:nowly/features/progress/progress_provider.dart';
 
 class TaskHistory extends ConsumerWidget {
   const TaskHistory({super.key});
@@ -29,7 +29,7 @@ class TaskHistory extends ConsumerWidget {
               ),
             ),
           AsyncData(:final value) when value.tasks.isEmpty => Text(
-              context.l10n.progressHistoryEmpty,
+              context.l10n.historyTasksEmpty,
               style: context.textTheme.bodyMedium?.copyWith(
                 color: context.colorScheme.onSurfaceVariant,
               ),
@@ -128,7 +128,7 @@ class _FilterChips extends StatelessWidget {
 
   String _filterLabel(BuildContext context, HistoryFilter f) {
     return switch (f) {
-      HistoryFilter.all => context.l10n.progressHistoryFilterAll,
+      HistoryFilter.all => context.l10n.historyTasksFilterAll,
       HistoryFilter.completed => context.l10n.progressCompleted,
       HistoryFilter.cancelled => context.l10n.progressCancelled,
       HistoryFilter.expired => context.l10n.progressExpired,
