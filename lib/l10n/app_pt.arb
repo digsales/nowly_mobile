@@ -167,7 +167,7 @@
   "taskDetailsExpiredAt": "Expirada em",
   "taskDetailsDeadline": "Prazo",
   "taskDetailsCreatedAt": "Criada em",
-  "taskDetailsPoints": "{points} pts",
+  "taskDetailsPoints": "{points} {points, plural, =1{pt} other{pts}}",
   "@taskDetailsPoints": {
     "placeholders": {
       "points": { "type": "int" }

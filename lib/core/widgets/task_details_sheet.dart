@@ -252,7 +252,22 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
               ),
             ),
             const SizedBox(width: 8),
-            StatusBadge(status: task.status),
+            Column(
+              children: [
+                StatusBadge(status: task.status),
+                Text(
+                  task.status == TaskStatus.completed || task.status == TaskStatus.pending
+                    ? "+${context.l10n.taskDetailsPoints(task.pointsEarned)}"
+                    : task.status == TaskStatus.cancelled
+                      ? "-${context.l10n.taskDetailsPoints(1)}"
+                      : "-${context.l10n.taskDetailsPoints(3)}",
+                  style: context.textTheme.bodyLarge?.copyWith(
+                      color: ref.usePrimaryColor(task.status.colorKey),
+                      fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
         if (task.description != null) ...[
@@ -302,19 +317,9 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
               _ => context.l10n.taskDetailsExpiredAt,
             },
             value: _formatDate(task.resolvedAt!),
-            color: switch (task.status) {
-              TaskStatus.completed => ref.usePrimaryColor('green'),
-              TaskStatus.cancelled => ref.usePrimaryColor('orange'),
-              _ => ref.usePrimaryColor('red'),
-            },
+            color: ref.usePrimaryColor(task.status.colorKey),
           ),
         ],
-        const SizedBox(height: 12),
-        _buildInfoRow(
-          icon: Ionicons.star_outline,
-          label: 'Pontos',
-          value: context.l10n.taskDetailsPoints(task.pointsEarned),
-        ),
         const SizedBox(height: 24),
         _buildActions(isPending, isCancelled),
       ],

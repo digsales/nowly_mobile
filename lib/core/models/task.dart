@@ -18,6 +18,14 @@ extension TaskStatusX on TaskStatus {
       TaskStatus.cancelled => 'cancelled',
     };
   }
+
+  String get colorKey => switch (this) {
+    TaskStatus.pending => 'purple',
+    TaskStatus.completed => 'green',
+    TaskStatus.expired => 'red',
+    TaskStatus.cancelled => 'orange',
+  };
+
 }
 
 class Task {
