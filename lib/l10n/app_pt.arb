@@ -84,7 +84,7 @@
   "homeSectionBadges": "Insígnias",
   "homeBadgesHelpText": "Conquiste insígnias e personalize seu perfil.\n\nCada insígnia tem seu próprio desafio. Complete-o para desbloqueá-la.\n\nVocê pode acompanhar o progresso e equipá-las aqui ou no seu perfil.",
   "homeSectionTasks": "Tarefas",
-  "homeTasksHelpText": "Acompanhe as tarefas pendentes e complete-as antes que seus prazos terminem.\n\nTarefas concluídas a tempo darão pontos para subir de nível. Evolua para ganhar novas insígnias e se destacar na classificação.\n\nVocê pode adicionar tarefas através do \"+\" localizado no centro inferior da tela.",
+  "homeTasksHelpText": "Acompanhe as tarefas pendentes e complete-as antes que seus prazos terminem.\n\nTarefas concluídas a tempo darão experiência para subir de nível. Evolua para ganhar novas insígnias e se destacar na classificação.\n\nVocê pode adicionar tarefas através do \"+\" localizado no centro inferior da tela.",
   "homeEdit": "Editar",
   "emptyTaskHint": "Nenhuma tarefa pendente. Toque no \"+\" para criar.",
   "taskTimeRemainingDays": "{count} {count, plural, =1{dia} other{dias}} restante{count, plural, =1{} other{s}}",
@@ -147,7 +147,7 @@
   "taskFormDeadline1Week": "1 semana",
   "taskFormDeadline2Weeks": "2 semanas",
   "taskFormDeadline1Month": "1 mês",
-  "taskFormInfo": "Concluir uma tarefa adiciona +5 pontos à sua pontuação.\n\nAs tarefas podem ter subtarefas, cada uma adiciona +2 a pontuação total.\n\nCancelar uma tarefa remove 1 ponto.\n\nTarefas expiradas removem 3 pontos.\n\nO nome, a descrição, as subtarefas e a categoria da tarefa podem ser editados.\n\nAo criar uma tarefa, você terá 30 minutos para excluí-la sem perder sua pontuação.\n\nAs tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem.",
+  "taskFormInfo": "Regras de experiência:\n\n- Concluir tarefa: +5 XP\n- Subtarefa concluída: +2 XP cada\n\n- Cancelar tarefa: -1 XP\n- Tarefa expirada: -3 XP\n\nRegras importantes:\n\n- O nome, a descrição, as subtarefas e a categoria da tarefa podem ser editados\n- Tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem\n- Ao criar uma tarefa, você tem 30 minutos para excluí-la sem penalidade",
   "taskFormSave": "Criar tarefa",
   "taskFormSaveEdit": "Salvar alterações",
   "taskFormPreviewTitle": "Minha tarefa",
@@ -167,7 +167,7 @@
   "taskDetailsExpiredAt": "Expirada em",
   "taskDetailsDeadline": "Prazo",
   "taskDetailsCreatedAt": "Criada em",
-  "taskDetailsPoints": "{points} {points, plural, =1{pt} other{pts}}",
+  "taskDetailsPoints": "{points} XP",
   "@taskDetailsPoints": {
     "placeholders": {
       "points": { "type": "int" }
@@ -185,8 +185,8 @@
     }
   },
   "taskDetailsDeleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
-  "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 ponto.",
-  "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} pontos!",
+  "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 XP.",
+  "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} XP!",
   "taskDetailsSubtasksPending": "Você precisa concluir todas as subtarefas antes de finalizar esta tarefa.",
   "@taskDetailsCompleteConfirm": {
     "placeholders": {
@@ -211,7 +211,7 @@
       "count": { "type": "int" }
     }
   },
-  "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 ponto de volta.",
+  "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 XP de volta.",
   "taskDetailsSuccess": "Tarefa atualizada com sucesso!",
   "taskDetailsDeleteSuccess": "Tarefa excluída com sucesso!",
   "taskStatusPending": "Pendente",
@@ -290,7 +290,7 @@
       "level": { "type": "int" }
     }
   },
-  "profileLevelProgress": "{points} pts para o Nível {nextLevel}",
+  "profileLevelProgress": "{points} XP para o Nível {nextLevel}",
   "@profileLevelProgress": {
     "placeholders": {
       "points": { "type": "int" },
