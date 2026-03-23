@@ -11,6 +11,7 @@ import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/router/app_router.dart';
+import 'package:nowly/core/widgets/app_divider.dart';
 import 'package:nowly/features/task/task_form_provider.dart';
 import 'package:nowly/core/widgets/app_bottom_sheet.dart';
 import 'package:nowly/core/widgets/app_button.dart';
@@ -280,10 +281,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           ),
         ],
         _buildSubtasks(task, category),
-        Divider(
-          height: 32,
-          color: context.colorScheme.outlineVariant,
-        ),
+        const AppDivider(),
         _buildInfoRow(
           icon: category?.icon,
           value: category?.name ?? context.l10n.taskFormCategoryNone,

@@ -7,6 +7,7 @@ import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/models/app_language.dart';
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/utils/app_max_width.dart';
+import 'package:nowly/core/widgets/app_divider.dart';
 import 'package:nowly/core/widgets/user_avatar.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_error_state.dart';
@@ -70,9 +71,9 @@ class ProfileScreen extends ConsumerWidget {
                   _buildUserInfo(context, value),
                   const SizedBox(height: 24),
                   _buildBadges(context, ref, value),
-                  Divider(height: 32, color: context.colorScheme.outlineVariant),
+                  const AppDivider(),
                   _buildAccountSettings(context, ref, value),
-                  Divider(height: 32, color: context.colorScheme.outlineVariant),
+                  const AppDivider(),
                   _buildPreferenceSettings(context, ref),
                   const SizedBox(height: 32),
                   _buildActions(context, notifier),
