@@ -30,6 +30,9 @@ class AppDivider extends StatelessWidget {
                 ),
                 child: Text(
                   text!.toUpperCase(),
+                  style: context.textTheme.labelSmall?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
                   textAlign: TextAlign.center,
                   softWrap: true,
                 ),
