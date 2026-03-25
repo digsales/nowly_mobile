@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
+import 'package:nowly/features/performance/performance_screen.dart';
 import 'package:nowly/features/history/history_screen.dart';
-import 'package:nowly/features/ranking/ranking_screen.dart';
 import 'package:nowly/core/models/category.dart' as models;
 import 'package:nowly/features/category/category_form_screen.dart';
 import 'package:nowly/core/models/task.dart';
+import 'package:nowly/features/task/task_form_provider.dart';
 import 'package:nowly/features/task/task_form_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
@@ -29,7 +30,7 @@ abstract class AppRoutes {
   static const String categoryForm = '/home/category-form';
   static const String taskForm = '/home/task-form';
   static const String ranking = '/ranking';
-  static const String history = '/history';
+  static const String progress = '/progress';
   static const String profile = '/profile';
 }
 
@@ -73,11 +74,14 @@ class _TabSwitcherState extends State<_TabSwitcher> {
 
   @override
   Widget build(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
     final goingRight = widget.currentIndex > _previousIndex;
 
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
+      duration: railWide ? Duration.zero : const Duration(milliseconds: 250),
       transitionBuilder: (child, animation) {
+        if (railWide) return child;
+
         final isIncoming = child.key == ValueKey(widget.currentIndex);
         final begin = isIncoming
             ? Offset(goingRight ? 1.0 : -1.0, 0)
@@ -178,9 +182,18 @@ final routerProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'task-form',
                     pageBuilder: (context, state) {
-                      final task = state.extra as Task?;
+                      final extra = state.extra;
+                      final Task? task;
+                      final bool isTemplate;
+                      if (extra is TaskFormArgs) {
+                        task = extra.task;
+                        isTemplate = extra.isTemplate;
+                      } else {
+                        task = extra as Task?;
+                        isTemplate = false;
+                      }
                       return _BottomToTopPage(
-                        child: TaskFormScreen(task: task),
+                        child: TaskFormScreen(task: task, isTemplate: isTemplate),
                       );
                     },
                   ),
@@ -193,16 +206,16 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: AppRoutes.ranking,
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: RankingScreen()),
+                    const NoTransitionPage(child: HistoryScreen()),
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.history,
+                path: AppRoutes.progress,
                 pageBuilder: (context, state) =>
-                    const NoTransitionPage(child: HistoryScreen()),
+                    const NoTransitionPage(child: PerformanceScreen()),
               ),
             ],
           ),

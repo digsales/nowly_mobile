@@ -12,6 +12,14 @@ final taskFormProvider =
     NotifierProvider.autoDispose<TaskFormNotifier, TaskFormState>(
         TaskFormNotifier.new);
 
+class TaskFormArgs {
+  const TaskFormArgs.edit(this.task) : isTemplate = false;
+  const TaskFormArgs.template(this.task) : isTemplate = true;
+
+  final Task task;
+  final bool isTemplate;
+}
+
 enum TaskDeadline {
   oneDay(Duration(days: 1)),
   threeDays(Duration(days: 3)),
@@ -95,6 +103,23 @@ class TaskFormNotifier extends Notifier<TaskFormState> {
     // Load existing subtasks
     final snapshot = await _taskRepository.watchSubtasks(task.id).first;
     state = state.copyWith(subtasks: snapshot);
+  }
+
+  Future<void> initFromTemplate(Task task) async {
+    title.controller.text = task.title;
+    description.controller.text = task.description ?? '';
+    state = state.copyWith(
+      selectedCategoryId: task.categoryId,
+      clearCategory: task.categoryId == null,
+    );
+
+    // Load subtask titles only — new task, so no IDs
+    final snapshot = await _taskRepository.watchSubtasks(task.id).first;
+    state = state.copyWith(
+      subtasks: snapshot
+          .map((s) => Subtask(id: '', title: s.title, isDone: false))
+          .toList(),
+    );
   }
 
   void selectCategory(String? categoryId) {

@@ -29,7 +29,7 @@ final pendingTasksProvider = StreamProvider<List<Task>>((ref) {
     final expired = list.where((t) => t.endDate.isBefore(now)).toList();
 
     if (expired.isNotEmpty) {
-      repo.markAsExpired(expired.map((t) => t.id).toList(), userId: uid);
+      repo.markAsExpired(expired, userId: uid);
     }
 
     final pending = list.where((t) => !t.endDate.isBefore(now)).toList()

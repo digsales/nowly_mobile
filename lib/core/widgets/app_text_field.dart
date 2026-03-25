@@ -303,7 +303,7 @@ class _AppTextFieldState extends State<AppTextField> {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: context.colorScheme.shadow.withValues(alpha: 0.1),
             blurRadius: shadowBlur,
             offset: const Offset(0, 2),
           ),

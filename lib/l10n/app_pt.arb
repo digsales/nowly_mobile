@@ -41,9 +41,9 @@
 
   "home": "Início",
   
-  "ranking": "Classificação",
-  
   "history": "Histórico",
+  
+  "performance": "Desempenho",
   
   "profile": "Perfil",
 
@@ -84,7 +84,7 @@
   "homeSectionBadges": "Insígnias",
   "homeBadgesHelpText": "Conquiste insígnias e personalize seu perfil.\n\nCada insígnia tem seu próprio desafio. Complete-o para desbloqueá-la.\n\nVocê pode acompanhar o progresso e equipá-las aqui ou no seu perfil.",
   "homeSectionTasks": "Tarefas",
-  "homeTasksHelpText": "Acompanhe as tarefas pendentes e complete-as antes que seus prazos terminem.\n\nTarefas concluídas a tempo darão pontos para subir de nível. Evolua para ganhar novas insígnias e se destacar na classificação.\n\nVocê pode adicionar tarefas através do \"+\" localizado no centro inferior da tela.",
+  "homeTasksHelpText": "Acompanhe as tarefas pendentes e complete-as antes que seus prazos terminem.\n\nTarefas concluídas a tempo darão experiência para subir de nível. Evolua para ganhar novas insígnias e se destacar na classificação.\n\nVocê pode adicionar tarefas através do \"+\" localizado no centro inferior da tela.",
   "homeEdit": "Editar",
   "emptyTaskHint": "Nenhuma tarefa pendente. Toque no \"+\" para criar.",
   "taskTimeRemainingDays": "{count} {count, plural, =1{dia} other{dias}} restante{count, plural, =1{} other{s}}",
@@ -108,6 +108,31 @@
   "taskExpired": "Expirada",
   "taskCompleted": "Concluída",
   "taskCancelled": "Cancelada",
+  "timeAgoNow": "Agora",
+  "timeAgoMinutes": "{count, plural, =1{Há 1 minuto} other{Há {count} minutos}}",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeAgoHours": "{count, plural, =1{Há 1 hora} other{Há {count} horas}}",
+  "@timeAgoHours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeAgoDays": "{count, plural, =1{Há 1 dia} other{Há {count} dias}}",
+  "@timeAgoDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "timeAgoWeeks": "{count, plural, =1{Há 1 semana} other{Há {count} semanas}}",
+  "@timeAgoWeeks": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
   "taskFormTitleAdd": "Nova tarefa",
   "taskFormTitleEdit": "Editar tarefa",
   "taskFormName": "Nome da tarefa",
@@ -122,7 +147,7 @@
   "taskFormDeadline1Week": "1 semana",
   "taskFormDeadline2Weeks": "2 semanas",
   "taskFormDeadline1Month": "1 mês",
-  "taskFormInfo": "Concluir uma tarefa adiciona +5 pontos à sua pontuação.\n\nAs tarefas podem ter subtarefas, cada uma adiciona +2 a pontuação total.\n\nCancelar uma tarefa remove 1 ponto.\n\nTarefas expiradas removem 3 pontos.\n\nO nome, a descrição, as subtarefas e a categoria da tarefa podem ser editados.\n\nAo criar uma tarefa, você terá 30 minutos para excluí-la sem perder sua pontuação.\n\nAs tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem.",
+  "taskFormInfo": "Regras de experiência:\n\n- Concluir tarefa: +5 XP\n- Subtarefa concluída: +2 XP cada\n\n- Cancelar tarefa: -1 XP\n- Tarefa expirada: -3 XP\n\nRegras importantes:\n\n- O nome, a descrição, as subtarefas e a categoria da tarefa podem ser editados\n- Tarefas podem ser canceladas ou reativadas a qualquer momento antes de expirarem\n- Ao criar uma tarefa, você tem 30 minutos para excluí-la sem penalidade",
   "taskFormSave": "Criar tarefa",
   "taskFormSaveEdit": "Salvar alterações",
   "taskFormPreviewTitle": "Minha tarefa",
@@ -137,9 +162,12 @@
   "taskDetailsTitle": "Detalhes da tarefa",
   "taskDetailsDescription": "Sem descrição",
   "taskDetailsCategory": "Categoria",
+  "taskDetailsCompletedAt": "Concluída em",
+  "taskDetailsCancelledAt": "Cancelada em",
+  "taskDetailsExpiredAt": "Expirada em",
   "taskDetailsDeadline": "Prazo",
   "taskDetailsCreatedAt": "Criada em",
-  "taskDetailsPoints": "{points} pts",
+  "taskDetailsPoints": "{points} XP",
   "@taskDetailsPoints": {
     "placeholders": {
       "points": { "type": "int" }
@@ -149,6 +177,7 @@
   "taskDetailsCancel": "Cancelar",
   "taskDetailsUncancel": "Reativar",
   "taskDetailsEdit": "Editar",
+  "taskDetailsRepeat": "Repetir tarefa",
   "taskDetailsDelete": "Excluir",
   "taskDetailsDeleteTimer": "Excluir ({minutes}min)",
   "@taskDetailsDeleteTimer": {
@@ -157,15 +186,33 @@
     }
   },
   "taskDetailsDeleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
-  "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 ponto.",
-  "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} pontos!",
+  "taskDetailsCancelConfirm": "Tem certeza que deseja cancelar esta tarefa? Você perderá 1 XP.",
+  "taskDetailsCompleteConfirm": "Concluir esta tarefa? Você ganhará {points} XP!",
   "taskDetailsSubtasksPending": "Você precisa concluir todas as subtarefas antes de finalizar esta tarefa.",
   "@taskDetailsCompleteConfirm": {
     "placeholders": {
       "points": { "type": "int" }
     }
   },
-  "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 ponto de volta.",
+  "taskDetailsUncancelTimerDays": "Reativar ({count}d)",
+  "@taskDetailsUncancelTimerDays": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelTimerHours": "Reativar ({count}h)",
+  "@taskDetailsUncancelTimerHours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelTimerMinutes": "Reativar ({count}min)",
+  "@taskDetailsUncancelTimerMinutes": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "taskDetailsUncancelConfirm": "Reativar esta tarefa? Você receberá 1 XP de volta.",
   "taskDetailsSuccess": "Tarefa atualizada com sucesso!",
   "taskDetailsDeleteSuccess": "Tarefa excluída com sucesso!",
   "taskStatusPending": "Pendente",
@@ -244,7 +291,7 @@
       "level": { "type": "int" }
     }
   },
-  "profileLevelProgress": "{points} pts para o Nível {nextLevel}",
+  "profileLevelProgress": "{points} XP para o Nível {nextLevel}",
   "@profileLevelProgress": {
     "placeholders": {
       "points": { "type": "int" },
@@ -286,8 +333,8 @@
   "badgeCompleted01Desc": "Complete sua primeira tarefa.",
   "badgeCompleted10Name": "Dedicação Total",
   "badgeCompleted10Desc": "Complete 10 tarefas.",
-  "badgeCanceled10Name": "Mudança de Planos",
-  "badgeCanceled10Desc": "Cancele 10 tarefas.",
+  "badgeCancelled10Name": "Mudança de Planos",
+  "badgeCancelled10Desc": "Cancele 10 tarefas.",
   "badgeExpired10Name": "Tempo Esgotado",
   "badgeExpired10Desc": "Deixe 10 tarefas expirarem.",
   "badgeLevel0001Name": "Primeiro Passo",
@@ -319,5 +366,27 @@
   "badgeLevel1000Name": "Milênio",
   "badgeLevel1000Desc": "Alcance o nível 1000.",
   "badgeLevel2000Name": "Transcendente",
-  "badgeLevel2000Desc": "Alcance o nível 2000."
+  "badgeLevel2000Desc": "Alcance o nível 2000.",
+
+  "progressSectionStatistics": "Estatísticas",
+  "progressStatisticsHelpText": "Veja suas estatísticas de tarefas concluídas, canceladas e expiradas.\n\nFiltre os dados por último mês, semestre, ano ou todo o período.",
+  "progressFilterLastMonth": "Último mês",
+  "progressFilterLast6Months": "6 meses",
+  "progressFilterLastYear": "Último ano",
+  "progressFilterAllTime": "Todo período",
+  "progressCompleted": "Concluídas",
+  "progressCancelled": "Canceladas",
+  "progressExpired": "Expiradas",
+  "progressEmpty": "Nenhuma tarefa encontrada neste período.",
+  "progressTotal": "{count} {count, plural, =1{tarefa} other{tarefas}}",
+  "@progressTotal": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "historySectionTasks": "Tarefas",
+  "historyTasksHelpText": "Veja todas as suas tarefas finalizadas.\n\nFiltre por status para encontrar tarefas concluídas, canceladas ou expiradas.",
+  "historyTasksFilterAll": "Todas",
+  "historyTasksEmpty": "Nenhuma tarefa encontrada."
 }

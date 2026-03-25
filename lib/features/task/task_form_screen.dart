@@ -16,9 +16,10 @@ import 'package:nowly/features/home/home_provider.dart';
 import 'package:nowly/features/task/task_form_provider.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
-  const TaskFormScreen({super.key, this.task});
+  const TaskFormScreen({super.key, this.task, this.isTemplate = false});
 
   final Task? task;
+  final bool isTemplate;
 
   @override
   ConsumerState<TaskFormScreen> createState() => _TaskFormScreenState();
@@ -33,7 +34,11 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!_initialized && mounted) {
-        await ref.read(taskFormProvider.notifier).init(widget.task);
+        if (widget.isTemplate && widget.task != null) {
+          await ref.read(taskFormProvider.notifier).initFromTemplate(widget.task!);
+        } else {
+          await ref.read(taskFormProvider.notifier).init(widget.task);
+        }
         if (mounted) setState(() => _initialized = true);
       }
     });
@@ -62,7 +67,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
     final formState = ref.watch(taskFormProvider);
     final notifier = ref.read(taskFormProvider.notifier);
-    final isEditing = widget.task != null;
+    final isEditing = widget.task != null && !widget.isTemplate;
     final effectiveCategoryId = !_initialized && isEditing
         ? widget.task!.categoryId
         : formState.selectedCategoryId;
@@ -139,7 +144,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                     onPressed: () async {
                       final success = await notifier.save(
                         context.l10n,
-                        existing: widget.task,
+                        existing: isEditing ? widget.task : null,
                       );
                       if (success && context.mounted) {
                         context.pop();
@@ -157,7 +162,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
   Widget _buildPreview(TaskFormNotifier notifier, TaskFormState formState, String? categoryId) {
     final now = DateTime.now();
-    final isEditing = widget.task != null;
+    final isEditing = widget.task != null && !widget.isTemplate;
     final previewTask = Task(
       id: '',
       userId: '',

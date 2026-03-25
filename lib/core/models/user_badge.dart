@@ -1,7 +1,7 @@
 import 'package:nowly/core/models/user.dart';
 import 'package:nowly/l10n/app_localizations.dart';
 
-enum BadgeType { defaultBadge, completed, canceled, expired, level }
+enum BadgeType { defaultBadge, completed, cancelled, expired, level }
 
 typedef _L10nGetter = String Function(AppLocalizations l10n);
 
@@ -29,7 +29,7 @@ class UserBadge {
     final current = switch (type) {
       BadgeType.defaultBadge => threshold,
       BadgeType.completed => user.totalCompleted,
-      BadgeType.canceled => user.totalCanceled,
+      BadgeType.cancelled => user.totalCancelled,
       BadgeType.expired => user.totalExpired,
       BadgeType.level => user.highestLevel,
     };
@@ -41,7 +41,7 @@ class UserBadge {
     return switch (type) {
       BadgeType.defaultBadge => threshold,
       BadgeType.completed => user.totalCompleted,
-      BadgeType.canceled => user.totalCanceled,
+      BadgeType.cancelled => user.totalCancelled,
       BadgeType.expired => user.totalExpired,
       BadgeType.level => user.highestLevel,
     };
@@ -52,7 +52,7 @@ class UserBadge {
     return switch (type) {
       BadgeType.defaultBadge => true,
       BadgeType.completed => user.totalCompleted >= threshold,
-      BadgeType.canceled => user.totalCanceled >= threshold,
+      BadgeType.cancelled => user.totalCancelled >= threshold,
       BadgeType.expired => user.totalExpired >= threshold,
       BadgeType.level => user.highestLevel >= threshold,
     };
@@ -63,7 +63,7 @@ class UserBadge {
     'nowly_letter': (l10n) => l10n.badgeNowlyLetterName,
     'completed_01': (l10n) => l10n.badgeCompleted01Name,
     'completed_10': (l10n) => l10n.badgeCompleted10Name,
-    'canceled_10': (l10n) => l10n.badgeCanceled10Name,
+    'cancelled_10': (l10n) => l10n.badgeCancelled10Name,
     'expired_10': (l10n) => l10n.badgeExpired10Name,
     'level_0001': (l10n) => l10n.badgeLevel0001Name,
     'level_0005': (l10n) => l10n.badgeLevel0005Name,
@@ -87,7 +87,7 @@ class UserBadge {
     'nowly_letter': (l10n) => l10n.badgeNowlyLetterDesc,
     'completed_01': (l10n) => l10n.badgeCompleted01Desc,
     'completed_10': (l10n) => l10n.badgeCompleted10Desc,
-    'canceled_10': (l10n) => l10n.badgeCanceled10Desc,
+    'cancelled_10': (l10n) => l10n.badgeCancelled10Desc,
     'expired_10': (l10n) => l10n.badgeExpired10Desc,
     'level_0001': (l10n) => l10n.badgeLevel0001Desc,
     'level_0005': (l10n) => l10n.badgeLevel0005Desc,
@@ -146,11 +146,11 @@ abstract final class UserBadges {
       threshold: 10,
     ),
 
-    // Canceled
+    // Cancelled
     UserBadge(
-      key: 'canceled_10',
-      assetPath: 'assets/images/badges/canceled_10.jpg',
-      type: BadgeType.canceled,
+      key: 'cancelled_10',
+      assetPath: 'assets/images/badges/cancelled_10.jpg',
+      type: BadgeType.cancelled,
       threshold: 10,
     ),
 

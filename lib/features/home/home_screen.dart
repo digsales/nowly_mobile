@@ -11,8 +11,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
+
     final horizontalPadding = EdgeInsets.only(
-      left: context.paddingLeft + 32,
+      left: (railWide ? 0 : context.paddingLeft) + 32,
       right: context.paddingRight + 32,
     );
 
@@ -38,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: context.paddingLeft + 32),
+                            padding: EdgeInsets.only(left: (railWide ? 0 : context.paddingLeft) + 32),
                             child:AppTitle(
                               title: context.l10n.homeSectionCategories,
                               helpText: context.l10n.homeCategoryHelpText,
