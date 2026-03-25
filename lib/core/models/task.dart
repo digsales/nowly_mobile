@@ -18,6 +18,14 @@ extension TaskStatusX on TaskStatus {
       TaskStatus.cancelled => 'cancelled',
     };
   }
+
+  String get colorKey => switch (this) {
+    TaskStatus.pending => 'purple',
+    TaskStatus.completed => 'green',
+    TaskStatus.expired => 'red',
+    TaskStatus.cancelled => 'orange',
+  };
+
 }
 
 class Task {
@@ -29,7 +37,7 @@ class Task {
   final DateTime endDate;
   final TaskStatus status;
   final DateTime createdAt;
-  final DateTime? completedAt;
+  final DateTime? resolvedAt;
   final int pointsEarned;
 
   const Task({
@@ -41,7 +49,7 @@ class Task {
     required this.endDate,
     required this.status,
     required this.createdAt,
-    this.completedAt,
+    this.resolvedAt,
     required this.pointsEarned,
   });
 
@@ -55,8 +63,8 @@ class Task {
       endDate: DateTime.parse(json['endDate'] as String),
       status: TaskStatusX.fromJson(json['status'] as String),
       createdAt: DateTime.parse(json['createdAt'] as String),
-      completedAt: json['completedAt'] != null
-          ? DateTime.parse(json['completedAt'] as String)
+      resolvedAt: json['resolvedAt'] != null
+          ? DateTime.parse(json['resolvedAt'] as String)
           : null,
       pointsEarned: json['pointsEarned'] as int,
     );
@@ -71,13 +79,13 @@ class Task {
       'endDate': endDate.toIso8601String(),
       'status': status.toJson(),
       'createdAt': createdAt.toIso8601String(),
-      'completedAt': completedAt?.toIso8601String(),
+      'resolvedAt': resolvedAt?.toIso8601String(),
       'pointsEarned': pointsEarned,
     };
   }
 
   bool get canDelete =>
-      DateTime.now().difference(createdAt).inMinutes < 30;
+      status == TaskStatus.pending && DateTime.now().difference(createdAt).inMinutes < 30;
 
   bool get canUncancel =>
       status == TaskStatus.cancelled && endDate.isAfter(DateTime.now());
@@ -90,7 +98,7 @@ class Task {
     DateTime? endDate,
     TaskStatus? status,
     DateTime? createdAt,
-    DateTime? completedAt,
+    DateTime? resolvedAt,
     int? pointsEarned,
   }) {
     return Task(
@@ -102,7 +110,7 @@ class Task {
       endDate: endDate ?? this.endDate,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
-      completedAt: completedAt ?? this.completedAt,
+      resolvedAt: resolvedAt ?? this.resolvedAt,
       pointsEarned: pointsEarned ?? this.pointsEarned,
     );
   }

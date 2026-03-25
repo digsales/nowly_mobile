@@ -74,16 +74,48 @@ class TaskRepository {
 
   Future<void> completeTask(Task task) async {
     try {
-      final batch = _firestore.batch();
-      batch.update(_tasks.doc(task.id), {
-        'status': 'completed',
-        'completedAt': DateTime.now().toIso8601String(),
+      await _firestore.runTransaction((tx) async {
+        final userSnap = await tx.get(_userDoc(task.userId));
+        final data = userSnap.data();
+
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        final lastStreakRaw = data?['lastStreakDate'] as String?;
+        final lastStreakDate = lastStreakRaw != null ? DateTime.parse(lastStreakRaw) : null;
+        final lastStreakDay = lastStreakDate != null
+            ? DateTime(lastStreakDate.year, lastStreakDate.month, lastStreakDate.day)
+            : null;
+
+        final currentStreak = data?['currentStreak'] as int? ?? 0;
+
+        final Map<String, dynamic> streakUpdate;
+        if (lastStreakDay == today) {
+          // Already completed today — don't change streak
+          streakUpdate = {};
+        } else if (lastStreakDay == today.subtract(const Duration(days: 1))) {
+          // Completed yesterday — increment streak
+          streakUpdate = {
+            'currentStreak': currentStreak + 1,
+            'lastStreakDate': today.toIso8601String(),
+          };
+        } else {
+          // First time or streak broken — reset to 1
+          streakUpdate = {
+            'currentStreak': 1,
+            'lastStreakDate': today.toIso8601String(),
+          };
+        }
+
+        tx.update(_tasks.doc(task.id), {
+          'status': 'completed',
+          'resolvedAt': now.toIso8601String(),
+        });
+        tx.update(_userDoc(task.userId), {
+          'totalCompleted': FieldValue.increment(1),
+          'totalPoints': FieldValue.increment(task.pointsEarned),
+          ...streakUpdate,
+        });
       });
-      batch.update(_userDoc(task.userId), {
-        'totalCompleted': FieldValue.increment(1),
-        'totalPoints': FieldValue.increment(task.pointsEarned),
-      });
-      await batch.commit();
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
@@ -95,9 +127,12 @@ class TaskRepository {
         final userSnap = await tx.get(_userDoc(task.userId));
         final currentPoints = userSnap.data()?['totalPoints'] as int? ?? 0;
 
-        tx.update(_tasks.doc(task.id), {'status': 'cancelled'});
+        tx.update(_tasks.doc(task.id), {
+          'status': 'cancelled',
+          'resolvedAt': DateTime.now().toIso8601String(),
+        });
         tx.update(_userDoc(task.userId), {
-          'totalCanceled': FieldValue.increment(1),
+          'totalCancelled': FieldValue.increment(1),
           'totalPoints': max(0, currentPoints - 1),
         });
       });
@@ -114,9 +149,12 @@ class TaskRepository {
 
     try {
       final batch = _firestore.batch();
-      batch.update(_tasks.doc(task.id), {'status': 'pending'});
+      batch.update(_tasks.doc(task.id), {
+        'status': 'pending',
+        'resolvedAt': null,
+      });
       batch.update(_userDoc(task.userId), {
-        'totalCanceled': FieldValue.increment(-1),
+        'totalCancelled': FieldValue.increment(-1),
         'totalPoints': FieldValue.increment(1),
       });
       await batch.commit();
@@ -137,6 +175,62 @@ class TaskRepository {
     } on FirebaseException catch (e) {
       throw Exception(e.message);
     }
+  }
+
+  // ─── Stats by period ────────────────────────────────────────────────────────
+
+  Future<({int completed, int cancelled, int expired})> fetchStatsByPeriod({
+    required String userId,
+    required DateTime from,
+  }) async {
+    final snapshot = await _tasks
+        .where('userId', isEqualTo: userId)
+        .where('status', whereIn: ['completed', 'cancelled', 'expired'])
+        .where('createdAt', isGreaterThan: from.toIso8601String())
+        .get();
+
+    var completed = 0;
+    var cancelled = 0;
+    var expired = 0;
+
+    for (final doc in snapshot.docs) {
+      final status = doc.data()['status'] as String;
+      switch (status) {
+        case 'completed':
+          completed++;
+        case 'cancelled':
+          cancelled++;
+        case 'expired':
+          expired++;
+      }
+    }
+
+    return (completed: completed, cancelled: cancelled, expired: expired);
+  }
+
+  // ─── History (paginated) ────────────────────────────────────────────────────
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchHistoryPage({
+    required String userId,
+    required int limit,
+    String? statusFilter,
+    DocumentSnapshot? startAfter,
+  }) {
+    final statuses = statusFilter != null
+        ? [statusFilter]
+        : ['completed', 'cancelled', 'expired'];
+
+    Query<Map<String, dynamic>> query = _tasks
+        .where('userId', isEqualTo: userId)
+        .where('status', whereIn: statuses)
+        .orderBy('resolvedAt', descending: true)
+        .limit(limit);
+
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter);
+    }
+
+    return query.get();
   }
 
   // ─── Subtasks ────────────────────────────────────────────────────────────────
@@ -179,20 +273,23 @@ class TaskRepository {
     await batch.commit();
   }
 
-  Future<void> markAsExpired(List<String> taskIds, {required String userId}) async {
-    if (taskIds.isEmpty) return;
+  Future<void> markAsExpired(List<Task> tasks, {required String userId}) async {
+    if (tasks.isEmpty) return;
 
-    final penalty = taskIds.length * 3;
+    final penalty = tasks.length * 3;
 
     await _firestore.runTransaction((tx) async {
       final userSnap = await tx.get(_userDoc(userId));
       final currentPoints = userSnap.data()?['totalPoints'] as int? ?? 0;
 
-      for (final id in taskIds) {
-        tx.update(_tasks.doc(id), {'status': 'expired'});
+      for (final task in tasks) {
+        tx.update(_tasks.doc(task.id), {
+          'status': 'expired',
+          'resolvedAt': task.endDate.toIso8601String(),
+        });
       }
       tx.update(_userDoc(userId), {
-        'totalExpired': FieldValue.increment(taskIds.length),
+        'totalExpired': FieldValue.increment(tasks.length),
         'totalPoints': max(0, currentPoints - penalty),
       });
     });

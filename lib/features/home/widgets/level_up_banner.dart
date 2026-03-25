@@ -104,7 +104,7 @@ class _LevelUpBannerState extends State<LevelUpBanner>
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
-                              Ionicons.trophy_outline,
+                              Ionicons.book_outline,
                               color: context.colorScheme.onPrimary,
                               size: context.textTheme.displayMedium!.fontSize,
                             ),

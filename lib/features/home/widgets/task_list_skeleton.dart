@@ -7,12 +7,35 @@ class TaskListSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: context.colorScheme.onSurface.withValues(alpha: 0.08),
-      highlightColor: context.colorScheme.onSurface.withValues(alpha: 0.16),
-      child: Column(
-        children: List.generate(3, (_) => _tile()),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final wide = constraints.maxWidth >= 600;
+        final shimmer = Shimmer.fromColors(
+          baseColor: context.colorScheme.onSurface.withValues(alpha: 0.08),
+          highlightColor: context.colorScheme.onSurface.withValues(alpha: 0.16),
+          child: wide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: List.generate(2, (_) => _tile()),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        children: List.generate(2, (_) => _tile()),
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: List.generate(3, (_) => _tile()),
+                ),
+        );
+        return shimmer;
+      },
     );
   }
 

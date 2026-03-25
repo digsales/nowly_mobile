@@ -11,13 +11,17 @@ import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nowly/core/router/app_router.dart';
+import 'package:nowly/core/widgets/app_divider.dart';
+import 'package:nowly/features/task/task_form_provider.dart';
 import 'package:nowly/core/widgets/app_bottom_sheet.dart';
 import 'package:nowly/core/widgets/app_button.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/status_badge.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
+import 'package:nowly/features/history/history_provider.dart';
 import 'package:nowly/features/home/home_provider.dart';
+import 'package:nowly/features/performance/performance_provider.dart';
 
 class TaskDetailsSheet extends ConsumerStatefulWidget {
   const TaskDetailsSheet({super.key, required this.task});
@@ -38,6 +42,8 @@ class TaskDetailsSheet extends ConsumerStatefulWidget {
 class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
   Timer? _deleteTimer;
   int _deleteMinutesLeft = 0;
+  Timer? _uncancelTimer;
+  Duration _uncancelRemaining = Duration.zero;
   List<Subtask>? _optimisticSubtasks;
 
   @override
@@ -48,6 +54,13 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
       _deleteTimer = Timer.periodic(
         const Duration(seconds: 30),
         (_) => _updateDeleteTimer(),
+      );
+    }
+    if (widget.task.canUncancel) {
+      _updateUncancelTimer();
+      _uncancelTimer = Timer.periodic(
+        const Duration(minutes: 1),
+        (_) => _updateUncancelTimer(),
       );
     }
   }
@@ -64,9 +77,19 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
     if (mounted) setState(() => _deleteMinutesLeft = remaining.clamp(0, 30));
   }
 
+  void _updateUncancelTimer() {
+    final remaining = widget.task.endDate.difference(DateTime.now());
+    if (remaining.isNegative) {
+      _uncancelTimer?.cancel();
+      _uncancelTimer = null;
+    }
+    if (mounted) setState(() => _uncancelRemaining = remaining);
+  }
+
   @override
   void dispose() {
     _deleteTimer?.cancel();
+    _uncancelTimer?.cancel();
     super.dispose();
   }
 
@@ -179,6 +202,8 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
 
     if (!success || !mounted) return;
 
+    ref.invalidate(filteredTaskStatsProvider);
+    ref.invalidate(historyProvider);
     Navigator.of(context).pop();
     // AppSnackBar.show(context, successMessage, type: SnackBarType.success);
   }
@@ -200,10 +225,12 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           children: [
             Expanded(
               child: TouchableOpacity(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  context.push(AppRoutes.taskForm, extra: task);
-                },
+                onTap: isPending 
+                  ? () {
+                      Navigator.of(context).pop();
+                      context.push(AppRoutes.taskForm, extra: task);
+                    }
+                  : null,
                 child: Text.rich(
                   TextSpan(
                     text: task.title,
@@ -228,7 +255,22 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
               ),
             ),
             const SizedBox(width: 8),
-            StatusBadge(status: task.status),
+            Column(
+              children: [
+                StatusBadge(status: task.status),
+                Text(
+                  task.status == TaskStatus.completed || task.status == TaskStatus.pending
+                    ? "+${context.l10n.taskDetailsPoints(task.pointsEarned)}"
+                    : task.status == TaskStatus.cancelled
+                      ? "-${context.l10n.taskDetailsPoints(1)}"
+                      : "-${context.l10n.taskDetailsPoints(3)}",
+                  style: context.textTheme.bodyLarge?.copyWith(
+                      color: ref.usePrimaryColor(task.status.colorKey),
+                      fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
         if (task.description != null) ...[
@@ -239,10 +281,7 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           ),
         ],
         _buildSubtasks(task, category),
-        Divider(
-          height: 32,
-          color: context.colorScheme.outlineVariant,
-        ),
+        const AppDivider(),
         _buildInfoRow(
           icon: category?.icon,
           value: category?.name ?? context.l10n.taskFormCategoryNone,
@@ -252,22 +291,35 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
         ),
         const SizedBox(height: 12),
         _buildInfoRow(
-          icon: Ionicons.calendar_outline,
-          label: context.l10n.taskDetailsDeadline,
-          value: _formatDate(task.endDate),
-        ),
-        const SizedBox(height: 12),
-        _buildInfoRow(
           icon: Ionicons.time_outline,
           label: context.l10n.taskDetailsCreatedAt,
           value: _formatDate(task.createdAt),
         ),
-        const SizedBox(height: 12),
-        _buildInfoRow(
-          icon: Ionicons.star_outline,
-          label: 'Pontos',
-          value: context.l10n.taskDetailsPoints(task.pointsEarned),
-        ),
+        if (task.status != TaskStatus.expired) ...[
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            icon: Ionicons.timer_outline,
+            label: context.l10n.taskDetailsDeadline,
+            value: _formatDate(task.endDate),
+          ),
+        ],
+        if (task.resolvedAt != null) ...[
+          const SizedBox(height: 12),
+          _buildInfoRow(
+            icon: switch (task.status) {
+              TaskStatus.completed => Ionicons.checkmark_circle_outline,
+              TaskStatus.cancelled => Ionicons.close_circle_outline,
+              _ => Ionicons.timer_outline,
+            },
+            label: switch (task.status) {
+              TaskStatus.completed => context.l10n.taskDetailsCompletedAt,
+              TaskStatus.cancelled => context.l10n.taskDetailsCancelledAt,
+              _ => context.l10n.taskDetailsExpiredAt,
+            },
+            value: _formatDate(task.resolvedAt!),
+            color: ref.usePrimaryColor(task.status.colorKey),
+          ),
+        ],
         const SizedBox(height: 24),
         _buildActions(isPending, isCancelled),
       ],
@@ -394,14 +446,16 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           Text(
             '$label: ',
             style: context.textTheme.bodyMedium?.copyWith(
-              color: context.colorScheme.onSurfaceVariant,
+              color: color ?? context.colorScheme.onSurfaceVariant,
             ),
           ),
         Expanded(
           child: Text(
             value,
             style: context.textTheme.bodyMedium?.copyWith(
-              color: color ?? context.colorScheme.onSurface,
+              color: label == null && color != null
+                ? color
+                : context.colorScheme.onSurface,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -422,6 +476,20 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
           ),
           const SizedBox(height: 8),
         ],
+        if (!isPending) ...[
+          AppButton(
+            detailColor: context.colorScheme.primary,
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.push(
+                AppRoutes.taskForm,
+                extra: TaskFormArgs.template(widget.task),
+              );
+            },
+            text: context.l10n.taskDetailsRepeat,
+          ),
+          const SizedBox(height: 8),
+        ],
         Row(
           children: [
             if (isPending)
@@ -437,7 +505,14 @@ class _TaskDetailsSheetState extends ConsumerState<TaskDetailsSheet> {
                 child: AppButton(
                   detailColor: ref.usePrimaryColor('orange'),
                   onPressed: _uncancelTask,
-                  text: context.l10n.taskDetailsUncancel,
+                  text: _uncancelRemaining.isNegative
+                      ? context.l10n.taskDetailsUncancel
+                      : _uncancelRemaining.inDays > 0
+                          ? context.l10n.taskDetailsUncancelTimerDays(_uncancelRemaining.inDays)
+                          : _uncancelRemaining.inHours > 0
+                              ? context.l10n.taskDetailsUncancelTimerHours(_uncancelRemaining.inHours)
+                              : context.l10n.taskDetailsUncancelTimerMinutes(
+                                  _uncancelRemaining.inMinutes.clamp(1, 59)),
                 ),
               ),
             const SizedBox(width: 8),

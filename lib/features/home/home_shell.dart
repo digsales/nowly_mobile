@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:nowly/core/router/app_router.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/models/user.dart';
 import 'package:nowly/core/models/user_badge.dart';
 import 'package:nowly/core/utils/level_utils.dart';
 import 'package:nowly/features/home/widgets/level_up_banner.dart';
 import 'package:nowly/features/home/widgets/user_level_bar.dart';
 import 'package:nowly/features/home/widgets/home_bottom_nav_bar.dart';
+import 'package:nowly/features/home/widgets/home_navigation_rail.dart';
 import 'package:nowly/core/repositories/user_repository.dart';
 import 'package:nowly/core/theme/theme_provider.dart';
 import 'package:nowly/features/profile/profile_provider.dart';
@@ -26,6 +28,23 @@ class HomeShell extends ConsumerStatefulWidget {
 
 class _HomeShellState extends ConsumerState<HomeShell> {
   OverlayEntry? _levelUpEntry;
+  bool _streakChecked = false;
+
+  void _checkStreakReset(User user) {
+    if (_streakChecked) return;
+    _streakChecked = true;
+    final lastStreak = user.lastStreakDate;
+    if (lastStreak == null || user.currentStreak == 0) return;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final lastDay = DateTime(lastStreak.year, lastStreak.month, lastStreak.day);
+    if (today.difference(lastDay).inDays >= 2) {
+      ref.read(userRepositoryProvider).updateUser(user.id, {
+        'currentStreak': 0,
+        'lastStreakDate': null,
+      });
+    }
+  }
 
   void _showLevelUp(int newLevel) {
     _levelUpEntry?.remove();
@@ -58,6 +77,11 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final showLevelBar = ref.watch(showLevelBarProvider);
     final userAsync = ref.watch(currentUserProvider);
 
+    final user = userAsync.asData?.value;
+    if (user != null && !_streakChecked) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkStreakReset(user));
+    }
+
     ref.listen(currentUserProvider, (prev, next) {
       if (prev == null || prev.asData == null) return;
       final prevLevel = calculateLevel(prev.asData!.value!.totalPoints);
@@ -86,51 +110,86 @@ class _HomeShellState extends ConsumerState<HomeShell> {
     final isRootTab = const [
       AppRoutes.home,
       AppRoutes.ranking,
-      AppRoutes.history,
+      AppRoutes.progress,
       AppRoutes.profile,
     ].contains(location);
 
-    return Scaffold(
-      extendBody: isRootTab,
-      body: Column(
-        children: [
-          if (showLevelBar)
-            Padding(
-              padding: EdgeInsets.fromLTRB(32, context.paddingTop + 12, 32, 20),
-              child: UserLevelBar(
-                totalPoints: userAsync.asData?.value?.totalPoints ?? 0,
-                isLoading: userAsync is! AsyncData,
-                textColor: context.colorScheme.onPrimary,
-                subtitleColor: context.colorScheme.onPrimary.withValues(alpha: 0.7),
-                trackColor: context.colorScheme.onPrimary.withValues(alpha: 0.3),
-                indicatorColor: context.colorScheme.onPrimary,
-              ),
-            )
-          else
-            SizedBox(height: context.paddingTop != 0 ? context.paddingTop + 10 : 20),
-          Expanded(child: widget.navigationShell),
-        ],
-      ),
-      floatingActionButton: isRootTab
-          ? FloatingActionButton(
-              onPressed: () => context.push(AppRoutes.taskForm),
-              tooltip: context.l10n.fabAddTask,
-              foregroundColor: context.colorScheme.onPrimary,
-              backgroundColor: context.colorScheme.primary,
-              shape: const CircleBorder(),
-              child: const Icon(Ionicons.add),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: isRootTab
-          ? HomeBottomNavBar(
-              activeIndex: widget.navigationShell.currentIndex,
-              onTap: (index) => widget.navigationShell.goBranch(
-                index,
-                initialLocation: index == widget.navigationShell.currentIndex,
-              ),
-            )
-          : null,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final railWide = constraints.maxWidth >= 840;
+
+        final body = Column(
+          children: [
+            if (showLevelBar)
+              Padding(
+                padding: EdgeInsets.fromLTRB(32, context.paddingTop + 12, 32, 20),
+                child: UserLevelBar(
+                  totalPoints: userAsync.asData?.value?.totalPoints ?? 0,
+                  isLoading: userAsync is! AsyncData,
+                  textColor: context.colorScheme.onPrimary,
+                  subtitleColor: context.colorScheme.onPrimary.withValues(alpha: 0.7),
+                  trackColor: context.colorScheme.onPrimary.withValues(alpha: 0.3),
+                  indicatorColor: context.colorScheme.onPrimary,
+                ),
+              )
+            else
+              SizedBox(height: context.paddingTop != 0 ? context.paddingTop + 10 : 20),
+            Expanded(child: widget.navigationShell),
+          ],
+        );
+
+        if (railWide) {
+          return Scaffold(
+            floatingActionButton: isRootTab 
+              ? FloatingActionButton(
+                  onPressed: () => context.push(AppRoutes.taskForm),
+                  tooltip: context.l10n.fabAddTask,
+                  foregroundColor: context.colorScheme.onPrimary,
+                  backgroundColor: context.colorScheme.primary,
+                  shape: const CircleBorder(),
+                  child: const Icon(Ionicons.add),
+                )
+              : null,
+            body: Row(
+              children: [
+                HomeNavigationRail(
+                  activeIndex: widget.navigationShell.currentIndex,
+                  onTap: (index) => widget.navigationShell.goBranch(
+                    index,
+                    initialLocation: index == widget.navigationShell.currentIndex,
+                  ),
+                ),
+                Expanded(child: body),
+              ],
+            ),
+          );
+        }
+
+        return Scaffold(
+          extendBody: isRootTab,
+          body: body,
+          floatingActionButton: isRootTab
+              ? FloatingActionButton(
+                  onPressed: () => context.push(AppRoutes.taskForm),
+                  tooltip: context.l10n.fabAddTask,
+                  foregroundColor: context.colorScheme.onPrimary,
+                  backgroundColor: context.colorScheme.primary,
+                  shape: const CircleBorder(),
+                  child: const Icon(Ionicons.add),
+                )
+              : null,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: isRootTab
+              ? HomeBottomNavBar(
+                  activeIndex: widget.navigationShell.currentIndex,
+                  onTap: (index) => widget.navigationShell.goBranch(
+                    index,
+                    initialLocation: index == widget.navigationShell.currentIndex,
+                  ),
+                )
+              : null,
+        );
+      },
     );
   }
 }

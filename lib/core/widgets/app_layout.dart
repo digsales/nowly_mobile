@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_back_button.dart';
 import 'package:nowly/core/widgets/app_title.dart';
@@ -24,6 +25,7 @@ class AppLayout extends StatefulWidget {
     this.headerBuilder,
     this.showBackButton = false,
     this.onRefresh,
+    this.onScrollNearEnd,
     this.bodyPadding,
     required this.body,
   });
@@ -48,6 +50,9 @@ class AppLayout extends StatefulWidget {
   /// in a [RefreshIndicator].
   final RefreshCallback? onRefresh;
 
+  /// Called when the user scrolls near the end of the content (80%).
+  final VoidCallback? onScrollNearEnd;
+
   /// Custom padding for the body area. When null, uses the default
   /// (32px horizontal + safe area, 32px top, 50px + safe area bottom).
   final EdgeInsets? bodyPadding;
@@ -61,15 +66,40 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout> {
   final _scrollController = ScrollController();
+  bool _showScrollToTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final show = _scrollController.hasClients && _scrollController.offset > 80;
+    if (show != _showScrollToTop) {
+      setState(() => _showScrollToTop = show);
+    }
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
+    );
+  }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
+
     Widget scrollView = NestedScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
@@ -94,7 +124,7 @@ class _AppLayoutState extends State<AppLayout> {
               },
               child: Padding(
                 padding: EdgeInsets.only(
-                  left: context.paddingLeft + 16,
+                  left: (railWide ? 0 : context.paddingLeft) + 16,
                   right: context.paddingRight + 32,
                 ),
                 child: ConstrainedBox(
@@ -125,10 +155,53 @@ class _AppLayoutState extends State<AppLayout> {
         body: _buildBody(context),
     );
 
-    return Scaffold(body: scrollView);
+    return Scaffold(
+      body: Stack(
+        children: [
+          scrollView,
+          Positioned(
+            top: 12,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: AnimatedScale(
+                scale: _showScrollToTop ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: GestureDetector(
+                  onTap: _scrollToTop,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: context.colorScheme.primary,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.colorScheme.shadow.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Ionicons.chevron_up_outline,
+                      color: context.colorScheme.onPrimary,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildBody(BuildContext context) {
+    final railWide = MediaQuery.sizeOf(context).width >= 840;
+    
     final content = Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -138,19 +211,32 @@ class _AppLayoutState extends State<AppLayout> {
           topRight: Radius.circular(50),
         ),
       ),
-      child: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: widget.bodyPadding ??
-                EdgeInsets.only(
-                  top: 32,
-                  left: context.paddingLeft + 32,
-                  right: context.paddingRight + 32,
-                  bottom: context.paddingBottom + 50,
-                ),
-            sliver: SliverToBoxAdapter(child: widget.body),
-          ),
-        ],
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (widget.onScrollNearEnd != null &&
+              notification is ScrollEndNotification) {
+            final metrics = notification.metrics;
+            if (metrics.maxScrollExtent > 0 &&
+                metrics.pixels >= metrics.maxScrollExtent * 0.8) {
+              widget.onScrollNearEnd!();
+            }
+          }
+          return false;
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: widget.bodyPadding ??
+                  EdgeInsets.only(
+                    top: 32,
+                    left: (railWide ? 0 : context.paddingLeft) + 32,
+                    right: context.paddingRight + 32,
+                    bottom: context.paddingBottom + 50,
+                  ),
+              sliver: SliverToBoxAdapter(child: widget.body),
+            ),
+          ],
+        ),
       ),
     );
 
