@@ -85,6 +85,7 @@ class AuthLayout extends StatelessWidget {
         Expanded(
           child: Container(
             width: double.infinity,
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: context.colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -92,13 +93,12 @@ class AuthLayout extends StatelessWidget {
                 topRight: Radius.circular(50),
               ),
             ),
-            padding: EdgeInsets.only(top: 16, bottom: context.paddingBottom),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return SingleChildScrollView(
-                  padding: EdgeInsets.only(left: context.paddingLeft + 32, right: context.paddingRight + 32),
+                  padding: EdgeInsets.fromLTRB(context.paddingLeft + 32, 16, context.paddingRight + 32, context.paddingBottom),
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight - 16 - context.paddingBottom),
                     child: body,
                   ),
                 );
@@ -151,19 +151,19 @@ class AuthLayout extends StatelessWidget {
             ),
             child: Container(
               height: double.infinity,
+              clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 color: context.colorScheme.surface,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(50),
                 ),
               ),
-              padding: EdgeInsets.fromLTRB(0, 16, 0, context.paddingBottom),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
-                    padding: EdgeInsets.only(left: 32, right: context.paddingRight + 32),
+                    padding: EdgeInsets.fromLTRB(32, 16, context.paddingRight + 32, context.paddingBottom),
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      constraints: BoxConstraints(minHeight: constraints.maxHeight - 16 - context.paddingBottom),
                       child: body,
                     ),
                   );
