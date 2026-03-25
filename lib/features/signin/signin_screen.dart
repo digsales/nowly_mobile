@@ -11,7 +11,7 @@ import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/auth_layout.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/signin/signin_provider.dart';
-import 'package:nowly/features/signin/widgets/social_login_pin.dart';
+import 'package:nowly/core/widgets/social_login.dart';
 
 class SigninPage extends ConsumerWidget {
   const SigninPage({super.key});
@@ -87,18 +87,7 @@ class SigninPage extends ConsumerWidget {
         const SizedBox(height: 24),
         AppDivider(text: context.l10n.or),
         const SizedBox(height: 24),
-        const Center(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 30,
-            runSpacing: 20,
-            children: [
-              SocialLoginPin(image: 'assets/images/social/google.png'),
-              SocialLoginPin(image: 'assets/images/social/facebook.png'),
-              SocialLoginPin(image: 'assets/images/social/apple.png'),
-            ],
-          ),
-        ),
+        const SocialLogin(),
       ],
     );
   }

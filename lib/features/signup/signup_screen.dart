@@ -5,9 +5,11 @@ import 'package:ionicons/ionicons.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/router/app_router.dart';
 import 'package:nowly/core/widgets/app_button.dart';
+import 'package:nowly/core/widgets/app_divider.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/core/widgets/app_text_field.dart';
 import 'package:nowly/core/widgets/auth_layout.dart';
+import 'package:nowly/core/widgets/social_login.dart';
 import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/signup/signup_provider.dart';
 
@@ -99,6 +101,10 @@ class SignupPage extends ConsumerWidget {
           onPressed: () => notifier.signup(context.l10n),
           isProcessing: state.isLoading,
         ),
+        const SizedBox(height: 24),
+        AppDivider(text: context.l10n.or),
+        const SizedBox(height: 24),
+        const SocialLogin(),
       ],
     );
   }
