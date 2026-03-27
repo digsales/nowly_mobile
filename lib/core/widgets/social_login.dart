@@ -34,6 +34,8 @@ class SocialLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(socialLoginProvider);
+
     ref.listen(socialLoginProvider, (prev, next) {
       if (next.errorMessage != null && next.errorMessage != prev?.errorMessage) {
         AppSnackBar.show(context, next.errorMessage!);
@@ -52,18 +54,24 @@ class SocialLogin extends ConsumerWidget {
             [
               SocialLoginPin(
                 image: 'assets/images/social/google.png',
+                isLoading: state.loadingProvider == SocialProvider.google,
+                disabled: state.isLoading,
                 onPressed: () => notifier.signIn(SocialProvider.google, l10n),
               ),
 
               // // TODO: Add Facebook sign in configuration in firebase.
               // SocialLoginPin(
               //   image: 'assets/images/social/facebook.png',
+              //   isLoading: state.loadingProvider == SocialProvider.facebook,
+              //   disabled: state.isLoading,
               //   onPressed: () => notifier.signIn(SocialProvider.facebook, l10n),
               // ),
 
               // // TODO: Add Apple sign in configuration in firebase.
               // SocialLoginPin(
               //   image: 'assets/images/social/apple.png',
+              //   isLoading: state.loadingProvider == SocialProvider.apple,
+              //   disabled: state.isLoading,
               //   onPressed: () => notifier.signIn(SocialProvider.apple, l10n),
               // ),
             ],
@@ -77,25 +85,39 @@ class SocialLoginPin extends StatelessWidget {
     super.key,
     required this.image,
     this.onPressed,
+    this.isLoading = false,
+    this.disabled = false,
   });
 
   final String image;
   final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
     return TouchableOpacity(
-      onTap: onPressed,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(
-            image: AssetImage(image),
-            fit: BoxFit.cover,
+      onTap: disabled ? null : onPressed,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedOpacity(
+            opacity: isLoading ? 0.3 : 1.0,
+            duration: const Duration(milliseconds: 200),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
-        ),
+          if (isLoading) CircularProgressIndicator(color: context.colorScheme.surface,),
+        ],
       ),
     );
   }

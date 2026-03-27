@@ -17,16 +17,22 @@ final socialLoginProvider =
 
 class SocialLoginState {
   const SocialLoginState({
-    this.isLoading = false,
+    this.loadingProvider,
     this.errorMessage,
   });
 
-  final bool isLoading;
+  final SocialProvider? loadingProvider;
   final String? errorMessage;
 
-  SocialLoginState copyWith({bool? isLoading, String? errorMessage}) {
+  bool get isLoading => loadingProvider != null;
+
+  SocialLoginState copyWith({
+    SocialProvider? Function()? loadingProvider,
+    String? errorMessage,
+  }) {
     return SocialLoginState(
-      isLoading: isLoading ?? this.isLoading,
+      loadingProvider:
+          loadingProvider != null ? loadingProvider() : this.loadingProvider,
       errorMessage: errorMessage,
     );
   }
@@ -46,7 +52,7 @@ class SocialLoginNotifier extends Notifier<SocialLoginState> {
   }
 
   Future<void> signIn(SocialProvider provider, AppLocalizations l10n) async {
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(loadingProvider: () => provider);
 
     try {
       final credential = switch (provider) {
@@ -87,28 +93,19 @@ class SocialLoginNotifier extends Notifier<SocialLoginState> {
         );
       }
     } on AuthException catch (e) {
-      if (e.code == 'sign-in-cancelled') {
-        state = state.copyWith(isLoading: false);
-        return;
+      if (e.code != 'sign-in-cancelled' && ref.mounted) {
+        debugPrint('Social login AuthException: ${e.code}');
+        state = state.copyWith(errorMessage: e.message(l10n));
       }
-      debugPrint('Social login AuthException: ${e.code}');
-      if (!ref.mounted) return;
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: e.message(l10n),
-      );
-      return;
     } on Exception catch (e) {
       debugPrint('Social login error: $e');
-      if (!ref.mounted) return;
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: l10n.authErrorUnknown,
-      );
-      return;
+      if (ref.mounted) {
+        state = state.copyWith(errorMessage: l10n.authErrorUnknown);
+      }
+    } finally {
+      if (ref.mounted) {
+        state = state.copyWith(loadingProvider: () => null);
+      }
     }
-
-    if (!ref.mounted) return;
-    state = state.copyWith(isLoading: false);
   }
 }
