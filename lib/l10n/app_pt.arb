@@ -73,6 +73,7 @@
   "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
   "authErrorWeakPassword": "Senha muito fraca",
   "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
+  "authErrorAccountExistsWithDifferentCredential": "Este e-mail j\u00e1 est\u00e1 vinculado a outra forma de login. Tente entrar com o m\u00e9todo original.",
   "authErrorUnknown": "Erro inesperado. Tente novamente",
 
   "fabAddTask": "Adicionar tarefa",
