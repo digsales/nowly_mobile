@@ -22,6 +22,10 @@ dependencies:
   firebase_core: ^4.4.0
   firebase_auth: ^6.1.4
   cloud_firestore: ^6.1.0
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
+  flutter_facebook_auth: ^7.1.6
+  crypto: ^3.0.7
   animated_bottom_navigation_bar: ^1.4.0
   shared_preferences: ^2.5.4
   shimmer: ^3.0.0
