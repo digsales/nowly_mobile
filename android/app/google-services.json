@@ -12,7 +12,20 @@
           "package_name": "com.diogosales.nowly"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1090384398970-qrjkpp0u0e8uuuk00vu326itfqou0oup.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diogosales.nowly",
+            "certificate_hash": "ce7ce3a77588dbe79ee42229ddd09b0c8398c6ed"
+          }
+        },
+        {
+          "client_id": "1090384398970-j960pi4j8ufmct4qqqdhs8dpg99r2atm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCeKiyoi-6qcjFjo8OJuk7IQjEH9prtnUU"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090384398970-j960pi4j8ufmct4qqqdhs8dpg99r2atm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1090384398970-a19gks31enu88p1g8hd0qc0lcrt6bghr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.nowly"
+              }
+            }
+          ]
         }
       }
     }
