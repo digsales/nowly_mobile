@@ -53,11 +53,12 @@ class HistoryNotifier extends AsyncNotifier<HistoryState> {
   @override
   Future<HistoryState> build() async {
     ref.watch(historyFilterProvider);
+    ref.watch(authStateProvider);
     return _fetchPage();
   }
 
   Future<HistoryState> _fetchPage({DocumentSnapshot? startAfter}) async {
-    final uid = ref.read(authServiceProvider).currentUser?.uid;
+    final uid = ref.read(authStateProvider).asData?.value?.uid;
     if (uid == null) return const HistoryState(hasMore: false);
 
     final filter = ref.read(historyFilterProvider);

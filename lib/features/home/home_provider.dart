@@ -38,6 +38,9 @@ final pendingTasksProvider = StreamProvider<List<Task>>((ref) {
 });
 
 final subtasksProvider = StreamProvider.family<List<Subtask>, String>((ref, taskId) {
+  final uid = ref.watch(authStateProvider).asData?.value?.uid;
+  if (uid == null) return Stream.value([]);
+
   final repo = ref.watch(taskRepositoryProvider);
   return repo.watchSubtasks(taskId);
 });

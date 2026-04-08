@@ -21,13 +21,6 @@ class TaskHistory extends ConsumerWidget {
         _FilterChips(filter: filter, ref: ref),
         const SizedBox(height: 24),
         switch (historyAsync) {
-          AsyncLoading() => const TaskListSkeleton(),
-          AsyncError() => Text(
-              context.l10n.errorMessage,
-              style: context.textTheme.labelSmall?.copyWith(
-                color: context.colorScheme.error,
-              ),
-            ),
           AsyncData(:final value) when value.tasks.isEmpty => Text(
               context.l10n.historyTasksEmpty,
               style: context.textTheme.bodyMedium?.copyWith(
@@ -52,6 +45,13 @@ class TaskHistory extends ConsumerWidget {
                 );
               },
             ),
+          AsyncError() => Text(
+              context.l10n.errorMessage,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.error,
+              ),
+            ),
+          _ => const TaskListSkeleton(),
         },
       ],
     );
