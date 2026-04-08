@@ -19,7 +19,7 @@ class AppLoading extends StatefulWidget {
   /// Hourglass color. Defaults to `colorScheme.primary`.
   final Color? color;
 
-  /// Width and height. Defaults to `20.sp`.
+  /// Width and height. Defaults to `24`.
   final double? size;
 
   @override
@@ -48,7 +48,7 @@ class _AppLoadingState extends State<AppLoading>
   @override
   Widget build(BuildContext context) {
     final resolvedColor = widget.color ?? Theme.of(context).colorScheme.primary;
-    final resolvedSize = widget.size ?? 30;
+    final resolvedSize = widget.size ?? 24;
 
     return RotationTransition(
       turns: _controller,
