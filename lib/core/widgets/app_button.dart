@@ -22,6 +22,7 @@ enum AppButtonVariant { filled, outlined }
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
+    this.leading,
     required this.text,
     required this.onPressed,
     this.variant = AppButtonVariant.filled,
@@ -30,6 +31,9 @@ class AppButton extends StatelessWidget {
     this.textColor,
     this.isProcessing = false,
   });
+
+  /// Optional widget rendered before the [text] (e.g. an icon or image).
+  final Widget? leading;
 
   /// Text displayed on the button.
   final String text;
@@ -60,15 +64,25 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _buildChild(BuildContext context) {
-    if (isProcessing) {
-      return AppLoading(color: _resolveTextColor(context));
-    }
+    final loading = AppLoading(color: _resolveTextColor(context));
 
-    return Text(
+    final label = Text(
       text,
       style: context.textTheme.labelLarge?.copyWith(
         color: _resolveTextColor(context),
       ),
+      textAlign: TextAlign.center,
+    );
+
+    return Row(
+      children: [
+        leading ?? const SizedBox.shrink(),
+        Expanded(
+          child: isProcessing 
+            ? loading
+            : label,
+        ),
+      ],
     );
   }
 
