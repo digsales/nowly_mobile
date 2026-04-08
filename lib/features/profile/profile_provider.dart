@@ -9,8 +9,7 @@ import 'package:nowly/core/validators/validators.dart';
 import 'package:nowly/l10n/app_localizations.dart';
 
 final currentUserProvider = StreamProvider<User?>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final uid = authService.currentUser?.uid;
+  final uid = ref.watch(authStateProvider).asData?.value?.uid;
   if (uid == null) return Stream.value(null);
 
   final repo = ref.watch(userRepositoryProvider);

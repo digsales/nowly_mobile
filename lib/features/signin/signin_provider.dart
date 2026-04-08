@@ -66,16 +66,21 @@ class SigninNotifier extends Notifier<SigninState> {
         password: password.text,
       );
 
+      if (!ref.mounted) return;
+
       // Sync Auth email → Firestore
       final uid = credential.user?.uid;
       final authEmail = credential.user?.email;
       if (uid != null && authEmail != null) {
         final user = await _userRepository.getUser(uid);
+        if (!ref.mounted) return;
         if (user != null && user.email != authEmail) {
           await _userRepository.updateUser(uid, {'email': authEmail});
+          if (!ref.mounted) return;
         }
       }
     } on AuthException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         isLoading: false,
         errorMessage: e.message(l10n),

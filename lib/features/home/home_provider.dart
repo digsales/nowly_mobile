@@ -7,8 +7,7 @@ import 'package:nowly/core/repositories/task_repository.dart';
 import 'package:nowly/core/services/auth_service_provider.dart';
 
 final categoriesProvider = StreamProvider<List<Category>>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final uid = authService.currentUser?.uid;
+  final uid = ref.watch(authStateProvider).asData?.value?.uid;
   if (uid == null) return Stream.value([]);
 
   final repo = ref.watch(categoryRepositoryProvider);
@@ -19,8 +18,7 @@ final categoriesProvider = StreamProvider<List<Category>>((ref) {
 });
 
 final pendingTasksProvider = StreamProvider<List<Task>>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final uid = authService.currentUser?.uid;
+  final uid = ref.watch(authStateProvider).asData?.value?.uid;
   if (uid == null) return Stream.value([]);
 
   final repo = ref.watch(taskRepositoryProvider);
