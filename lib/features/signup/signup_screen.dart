@@ -104,7 +104,7 @@ class SignupPage extends ConsumerWidget {
         const SizedBox(height: 24),
         AppDivider(text: context.l10n.signupOrSocialLogin),
         const SizedBox(height: 24),
-        const SocialLogin(),
+        const SocialLogin.pin(),
       ],
     );
   }
