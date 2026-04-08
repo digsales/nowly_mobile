@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1090384398970-qkpnfdr3dns27483glih0phrtpe3h96e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diogosales.nowly",
+            "certificate_hash": "f139e3fd46a0d348a2dbaa13cd44583bf57947e5"
+          }
+        },
+        {
           "client_id": "1090384398970-qrjkpp0u0e8uuuk00vu326itfqou0oup.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
