@@ -76,7 +76,7 @@ class SocialLoginNotifier extends Notifier<SocialLoginState> {
               firebaseUser.email?.split('@').first ??
               '',
           email: firebaseUser.email ?? '',
-          avatarUrl: firebaseUser.photoURL,
+          // avatarUrl: firebaseUser.photoURL,
           createdAt: DateTime.now(),
           totalPoints: 0,
           totalCompleted: 0,
