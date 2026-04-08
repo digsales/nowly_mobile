@@ -102,7 +102,7 @@ class SignupPage extends ConsumerWidget {
           isProcessing: state.isLoading,
         ),
         const SizedBox(height: 24),
-        AppDivider(text: context.l10n.or),
+        AppDivider(text: context.l10n.signupOrSocialLogin),
         const SizedBox(height: 24),
         const SocialLogin(),
       ],

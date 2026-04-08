@@ -23,11 +23,13 @@
   "signinGreeting": "Olá\nEntre em sua conta",
   "signinForgotPassword": "Esqueceu a senha?",
   "signinButton": "Entrar",
+  "signinOrSocialLogin": "Ou entre com",
   "signinNoAccount": "Não tem uma conta?\n",
   "signinRegister": "Cadastre-se",
 
   "signupGreeting": "Bem vindo\nCrie sua conta",
   "signupButton": "Cadastrar",
+  "signupOrSocialLogin": "Ou cadastre-se com",
   "signupHasAccount": "Já tem uma conta?\n",
   "signupSignin": "Entre",
 
