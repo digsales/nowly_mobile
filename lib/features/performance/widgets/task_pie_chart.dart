@@ -24,18 +24,6 @@ class TaskPieChart extends ConsumerWidget {
             _FilterChips(filter: filter, ref: ref),
             const SizedBox(height: 32),
             switch (statsAsync) {
-              AsyncLoading(:final value?) => _buildChart(wide, value, ref),
-              AsyncLoading() => TaskPieChartSkeleton(wide: wide, ref: ref),
-              AsyncError() => Padding(
-                  padding: const EdgeInsets.only(top: 64),
-                  child: Text(
-                    context.l10n.progressEmpty,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               AsyncData(:final value) when value.isEmpty => Padding(
                   padding: const EdgeInsets.only(top: 64),
                   child: Text(
@@ -47,6 +35,17 @@ class TaskPieChart extends ConsumerWidget {
                   ),
                 ),
               AsyncData(:final value) => _buildChart(wide, value, ref),
+              AsyncError() => Padding(
+                  padding: const EdgeInsets.only(top: 64),
+                  child: Text(
+                    context.l10n.progressEmpty,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              _ => TaskPieChartSkeleton(wide: wide, ref: ref),
             },
           ],
         );

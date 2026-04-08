@@ -33,7 +33,7 @@ class TaskStatsNotifier extends AsyncNotifier<TaskStats> {
       );
     }
 
-    final uid = ref.read(authServiceProvider).currentUser?.uid;
+    final uid = ref.watch(authStateProvider).asData?.value?.uid;
     if (uid == null) return TaskStats.empty;
 
     final now = DateTime.now();
