@@ -39,7 +39,7 @@ class _BadgeProgressCarouselState extends ConsumerState<BadgeProgressCarousel> {
     final userAsync = ref.watch(currentUserProvider);
 
     return switch (userAsync) {
-      AsyncData(:final value) when value != null => _buildCarousel(value),
+      AsyncData(:final value?) => _buildCarousel(value),
       AsyncError() => _buildCarousel(null),
       _ => const BadgeCarouselSkeleton(),
     };

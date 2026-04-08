@@ -27,13 +27,13 @@ class TaskList extends ConsumerWidget {
             return _buildList(value);
           },
         ),
-      AsyncLoading() => const TaskListSkeleton(),
       AsyncError() => Text(
           context.l10n.errorMessage,
           style: context.textTheme.labelSmall?.copyWith(
             color: context.colorScheme.error,
           ),
         ),
+      _ => const TaskListSkeleton(),
     };
   }
 
