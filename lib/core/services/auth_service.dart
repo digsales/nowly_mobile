@@ -26,6 +26,9 @@ class AuthException implements Exception {
       'requires-recent-login' => l10n.authErrorRequiresRecentLogin,
       'account-exists-with-different-credential' =>
         l10n.authErrorAccountExistsWithDifferentCredential,
+      'credential-already-in-use' => l10n.authErrorCredentialAlreadyInUse,
+      'provider-already-linked' => l10n.authErrorProviderAlreadyLinked,
+      'last-auth-method' => l10n.authErrorLastAuthMethod,
       _ => l10n.authErrorUnknown,
     };
   }
@@ -177,6 +180,58 @@ class AuthService {
     // // TODO: Add Facebook sign in configuration in firebase.
     // await FacebookAuth.instance.logOut();
     await _auth.signOut();
+  }
+
+  Future<void> linkGoogle() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw AuthException('user-not-found');
+
+      if (kIsWeb) {
+        final provider = GoogleAuthProvider()
+          ..addScope('email')
+          ..addScope('profile');
+        await user.linkWithPopup(provider);
+        return;
+      }
+
+      await _ensureGoogleInitialized();
+      final googleUser = await GoogleSignIn.instance.authenticate();
+      final idToken = googleUser.authentication.idToken;
+      final credential = GoogleAuthProvider.credential(idToken: idToken);
+      await user.linkWithCredential(credential);
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        throw AuthException('sign-in-cancelled');
+      }
+      throw AuthException(e.code.name);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'popup-closed-by-user' ||
+          e.code == 'cancelled-popup-request') {
+        throw AuthException('sign-in-cancelled');
+      }
+      throw AuthException(e.code);
+    }
+  }
+
+  Future<void> unlinkProvider(String providerId) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw AuthException('user-not-found');
+
+      final providers = user.providerData.map((p) => p.providerId).toSet();
+      if (providers.length <= 1) {
+        throw AuthException('last-auth-method');
+      }
+
+      await user.unlink(providerId);
+
+      if (!kIsWeb && providerId == 'google.com') {
+        await GoogleSignIn.instance.signOut();
+      }
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
+    }
   }
 
   Future<void> reauthenticate({

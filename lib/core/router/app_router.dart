@@ -11,6 +11,7 @@ import 'package:nowly/features/task/task_form_provider.dart';
 import 'package:nowly/features/task/task_form_screen.dart';
 import 'package:nowly/features/home/home_screen.dart';
 import 'package:nowly/features/home/home_shell.dart';
+import 'package:nowly/features/linked_accounts/linked_accounts_screen.dart';
 import 'package:nowly/features/profile/profile_screen.dart';
 
 import '../../features/forgot_password/forgot_password_screen.dart';
@@ -32,6 +33,7 @@ abstract class AppRoutes {
   static const String ranking = '/ranking';
   static const String progress = '/progress';
   static const String profile = '/profile';
+  static const String linkedAccounts = '/profile/linked-accounts';
 }
 
 class _BottomToTopPage<T> extends CustomTransitionPage<T> {
@@ -225,6 +227,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: AppRoutes.profile,
                 pageBuilder: (context, state) =>
                     const NoTransitionPage(child: ProfileScreen()),
+                routes: [
+                  GoRoute(
+                    path: 'linked-accounts',
+                    pageBuilder: (context, state) => _BottomToTopPage(
+                      child: const LinkedAccountsScreen(),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
