@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nowly/l10n/app_localizations.dart';
@@ -70,13 +71,23 @@ class AuthService {
 
   Future<void> _ensureGoogleInitialized() async {
     if (!_googleInitialized) {
-      await GoogleSignIn.instance.initialize();
+      await GoogleSignIn.instance.initialize(
+        clientId: kIsWeb ? '1090384398970-j960pi4j8ufmct4qqqdhs8dpg99r2atm.apps.googleusercontent.com' : null,
+        serverClientId: !kIsWeb ? '1090384398970-j960pi4j8ufmct4qqqdhs8dpg99r2atm.apps.googleusercontent.com' : null,
+      );
       _googleInitialized = true;
     }
   }
 
   Future<UserCredential> signInWithGoogle() async {
     try {
+      if (kIsWeb) {
+        final provider = GoogleAuthProvider()
+          ..addScope('email')
+          ..addScope('profile');
+        return await _auth.signInWithPopup(provider);
+      }
+
       await _ensureGoogleInitialized();
       final googleUser = await GoogleSignIn.instance.authenticate();
 
@@ -89,6 +100,10 @@ class AuthService {
       }
       throw AuthException(e.code.name);
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'popup-closed-by-user' ||
+          e.code == 'cancelled-popup-request') {
+        throw AuthException('sign-in-cancelled');
+      }
       throw AuthException(e.code);
     }
   }
@@ -156,7 +171,9 @@ class AuthService {
   }
 
   Future<void> signout() async {
-    await GoogleSignIn.instance.signOut();
+    if (!kIsWeb) {
+      await GoogleSignIn.instance.signOut();
+    }
     // // TODO: Add Facebook sign in configuration in firebase.
     // await FacebookAuth.instance.logOut();
     await _auth.signOut();
