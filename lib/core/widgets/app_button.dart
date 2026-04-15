@@ -74,15 +74,21 @@ class AppButton extends StatelessWidget {
       textAlign: TextAlign.center,
     );
 
-    return Row(
-      children: [
-        leading ?? const SizedBox.shrink(),
-        Expanded(
-          child: isProcessing 
-            ? loading
-            : label,
-        ),
-      ],
+    final child = isProcessing ? loading : label;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bounded = constraints.maxWidth.isFinite;
+
+        return Row(
+          mainAxisSize: bounded ? MainAxisSize.max : MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            leading ?? const SizedBox.shrink(),
+            if (bounded) Expanded(child: child) else child,
+          ],
+        );
+      },
     );
   }
 
