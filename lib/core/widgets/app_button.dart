@@ -64,7 +64,9 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _buildChild(BuildContext context) {
-    final loading = AppLoading(color: _resolveTextColor(context));
+    if (isProcessing) {
+      return AppLoading(color: _resolveTextColor(context));
+    }
 
     final label = Text(
       text,
@@ -74,21 +76,13 @@ class AppButton extends StatelessWidget {
       textAlign: TextAlign.center,
     );
 
-    final child = isProcessing ? loading : label;
+    if (leading == null) return label;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final bounded = constraints.maxWidth.isFinite;
-
-        return Row(
-          mainAxisSize: bounded ? MainAxisSize.max : MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            leading ?? const SizedBox.shrink(),
-            if (bounded) Expanded(child: child) else child,
-          ],
-        );
-      },
+    return Row(
+      children: [
+        leading!,
+        Expanded(child: label),
+      ],
     );
   }
 
