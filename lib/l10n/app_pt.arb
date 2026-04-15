@@ -270,6 +270,8 @@
   "settingsChangeEmailButton": "Alterar",
   "settingsNewEmail": "Novo e-mail",
   "settingsNewEmailHint": "Digite o novo e-mail",
+  "settingsConfirmNewEmail": "Confirmar novo e-mail",
+  "settingsConfirmNewEmailHint": "Confirme o novo e-mail",
   "settingsChangeEmailMessage": "Um link de confirmação será enviado para o novo e-mail. Após confirmar, faça login novamente.",
   "settingsChangeEmailSuccess": "Um link de confirmação foi enviado para o seu novo e-mail",
   "settingsChangePassword": "Senha",
