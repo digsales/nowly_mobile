@@ -5,7 +5,7 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/theme/primary_colors.dart';
 import 'package:nowly/core/widgets/app_dialog.dart';
 import 'package:nowly/core/widgets/app_loading.dart';
-import 'package:nowly/core/widgets/app_setting_tile.dart';
+import 'package:nowly/core/widgets/touchable_opacity.dart';
 import 'package:nowly/features/linked_accounts/linked_accounts_provider.dart';
 
 /// Settings tile representing a single social login provider.
@@ -42,13 +42,13 @@ class LinkedAccountTile extends ConsumerWidget {
   /// When `true`, some tile (possibly another one) is busy. Disables interaction
   /// to prevent overlapping operations.
   final bool anyBusy;
-
-  IconData _iconFor(LinkedProvider p) => switch (p) {
-        LinkedProvider.google => Ionicons.logo_google,
+  
+  Image _imageFor(LinkedProvider p) => switch (p) {
+        LinkedProvider.google => Image.asset('assets/images/social/google.png', width: 40, height: 40),
       };
 
   String _labelFor(BuildContext context, LinkedProvider p) => switch (p) {
-        LinkedProvider.google => context.l10n.linkedAccountsGoogle,
+        LinkedProvider.google => "Google",
       };
 
   Future<void> _onTap(BuildContext context, WidgetRef ref) async {
@@ -92,21 +92,60 @@ class LinkedAccountTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AppSettingTile(
-      icon: _iconFor(account.provider),
-      label: _labelFor(context, account.provider),
-      trailingText: account.email ?? context.l10n.linkedAccountsNotLinked,
-      trailing: busy
-          ? SizedBox(
-              width: 18,
-              height: 18,
-              child: AppLoading(
-                color: context.colorScheme.onSurfaceVariant,
-                size: 18,
+    return Row(
+      children: [
+        _imageFor(account.provider),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                account.email ?? context.l10n.linkedAccountsNotLinked,
+                style: context.textTheme.headlineSmall,
+                textAlign: TextAlign.start,
               ),
-            )
-          : const Icon(Ionicons.chevron_forward_outline, size: 18),
-      onTap: () => _onTap(context, ref),
+              Text(
+                _labelFor(context, account.provider),
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colorScheme.onSurfaceVariant
+                ),
+                textAlign: TextAlign.start,
+              ),
+              
+            ],
+          ),
+        ),
+        if (busy)
+          SizedBox(
+            width: 18,
+            height: 18,
+            child: AppLoading(
+              color: context.colorScheme.onSurfaceVariant,
+              size: 18,
+            ),
+          )
+        else
+          TouchableOpacity(
+            onTap: anyBusy ? null : () => _onTap(context, ref),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: account.isLinked
+                  ? Icon(
+                      Ionicons.close,
+                      size: 20,
+                      color: context.colorScheme.error,
+                    )
+                  : Text(
+                      "Vincular",
+                      style: context.textTheme.labelMedium?.copyWith(
+                        color: context.colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+            ),
+          ),
+      ],
     );
   }
 }
