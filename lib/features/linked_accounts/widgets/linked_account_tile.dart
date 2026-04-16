@@ -129,7 +129,7 @@ class LinkedAccountTile extends ConsumerWidget {
           TouchableOpacity(
             onTap: anyBusy ? null : () => _onTap(context, ref),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.fromLTRB(8, 4, 0, 4),
               child: account.isLinked
                   ? Icon(
                       Ionicons.close,
