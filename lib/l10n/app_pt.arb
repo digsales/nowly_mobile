@@ -88,9 +88,9 @@
   "authErrorProviderAlreadyLinked": "Este método de login já está vinculado a esta conta.",
   "authErrorLastAuthMethod": "Você precisa ter pelo menos um método de login ativo.",
 
-  "linkedAccountsTitle": "Contas vinculadas",
+  "linkedAccountsTitle": "Conexões",
   "linkedAccountsHelpText": "Vincule contas de outras plataformas para facilitar seu login.\n\nVocê pode vincular ou desvincular a qualquer momento, desde que mantenha ao menos um método de login ativo.",
-  "linkedAccountsSection": "Contas vinculadas",
+  "linkedAccountsSection": "Conexões",
   "linkedAccountsGoogle": "Conta Google",
   "linkedAccountsNotLinked": "Não vinculada",
   "linkedAccountsLink": "Vincular",
