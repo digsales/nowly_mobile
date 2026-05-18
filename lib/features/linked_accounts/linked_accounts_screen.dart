@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nowly/core/extensions/context_extensions.dart';
+import 'package:nowly/core/widgets/app_divider.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_snack_bar.dart';
 import 'package:nowly/features/linked_accounts/linked_accounts_provider.dart';
@@ -26,12 +27,18 @@ class LinkedAccountsScreen extends ConsumerWidget {
       showBackButton: true,
       body: Column(
         children: [
-          for (final account in state.accounts)
-            LinkedAccountTile(
-              account: account,
-              busy: state.isBusy(account.provider),
-              anyBusy: state.busyProvider != null,
+          for (var i = 0; i < state.accounts.length; i++) ...[
+            if (i > 0)
+              const AppDivider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: LinkedAccountTile(
+                account: state.accounts[i],
+                busy: state.isBusy(state.accounts[i].provider),
+                anyBusy: state.busyProvider != null,
+              ),
             ),
+          ],
 
           // TODO: Add Apple sign in configuration in Firebase.
           // LinkedAccountTile for Apple goes here once enabled.
