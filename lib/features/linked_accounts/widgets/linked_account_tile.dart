@@ -102,7 +102,7 @@ class LinkedAccountTile extends ConsumerWidget {
             children: [
               Text(
                 account.email ?? context.l10n.linkedAccountsNotLinked,
-                style: context.textTheme.headlineSmall,
+                style: context.textTheme.bodyLarge,
                 textAlign: TextAlign.start,
               ),
               Text(
