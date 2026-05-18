@@ -237,8 +237,8 @@ class _LegendItem extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 20,
-          height: 20,
+          width: 14,
+          height: 14,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
