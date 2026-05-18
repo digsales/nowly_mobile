@@ -24,16 +24,6 @@ class TaskPieChart extends ConsumerWidget {
             _FilterChips(filter: filter, ref: ref),
             const SizedBox(height: 32),
             switch (statsAsync) {
-              AsyncData(:final value) when value.isEmpty => Padding(
-                  padding: const EdgeInsets.only(top: 64),
-                  child: Text(
-                    context.l10n.progressEmpty,
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      color: context.colorScheme.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
               AsyncData(:final value) => _buildChart(wide, value, ref),
               AsyncError() => Padding(
                   padding: const EdgeInsets.only(top: 64),
@@ -145,31 +135,40 @@ class _Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     return PieChart(
       PieChartData(
-        sectionsSpace: 3,
+        sectionsSpace: stats.isEmpty ? 0 : 3,
         centerSpaceRadius: 40,
-        sections: [
-            PieChartSectionData(
-              value: stats.expired.toDouble(),
-              color: ref.usePrimaryColor('red'),
-              title: '${stats.expired}',
-              titleStyle: _sectionTextStyle(context),
-              radius: 40,
-            ),
-            PieChartSectionData(
-              value: stats.completed.toDouble(),
-              color: ref.usePrimaryColor('green'),
-              title: '${stats.completed}',
-              titleStyle: _sectionTextStyle(context),
-              radius: 50,
-            ),
-            PieChartSectionData(
-              value: stats.cancelled.toDouble(),
-              color: ref.usePrimaryColor('orange'),
-              title: '${stats.cancelled}',
-              titleStyle: _sectionTextStyle(context),
-              radius: 45,
-            ),
-        ],
+        sections: stats.isEmpty
+            ? [
+                PieChartSectionData(
+                  value: 1,
+                  color: context.colorScheme.surfaceContainerHighest,
+                  title: '',
+                  radius: 45,
+                ),
+              ]
+            : [
+                PieChartSectionData(
+                  value: stats.expired.toDouble(),
+                  color: ref.usePrimaryColor('red'),
+                  title: '${stats.expired}',
+                  titleStyle: _sectionTextStyle(context),
+                  radius: 40,
+                ),
+                PieChartSectionData(
+                  value: stats.completed.toDouble(),
+                  color: ref.usePrimaryColor('green'),
+                  title: '${stats.completed}',
+                  titleStyle: _sectionTextStyle(context),
+                  radius: 50,
+                ),
+                PieChartSectionData(
+                  value: stats.cancelled.toDouble(),
+                  color: ref.usePrimaryColor('orange'),
+                  title: '${stats.cancelled}',
+                  titleStyle: _sectionTextStyle(context),
+                  radius: 45,
+                ),
+              ],
       ),
     );
   }
@@ -210,7 +209,9 @@ class _Legend extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Text(
-          context.l10n.progressTotal(stats.total),
+          stats.isEmpty
+              ? context.l10n.progressEmpty
+              : context.l10n.progressTotal(stats.total),
           style: context.textTheme.bodySmall?.copyWith(
             color: context.colorScheme.onSurfaceVariant,
           ),
