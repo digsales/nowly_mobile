@@ -85,8 +85,8 @@ class _ChangeEmailDialogState extends ConsumerState<ChangeEmailDialog> {
           AppTextField(
             controller: _confirmEmail.controller,
             keyboardType: TextInputType.emailAddress,
-            hintText: context.l10n.textFieldHintConfirmEmail,
-            label: context.l10n.textFieldLabelConfirmEmail,
+            hintText: context.l10n.settingsConfirmNewEmailHint,
+            label: context.l10n.settingsConfirmNewEmail,
             prefixIcon: Ionicons.mail_outline,
             onChanged: (_) => setState(() {
               if (_confirmEmail.error != null) _confirmEmail.validate();

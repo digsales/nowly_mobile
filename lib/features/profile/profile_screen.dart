@@ -24,6 +24,8 @@ import 'package:nowly/features/profile/widgets/reset_preferences_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_email_dialog.dart';
 import 'package:nowly/features/profile/widgets/change_password_dialog.dart';
 import 'package:nowly/features/profile/widgets/edit_name_dialog.dart';
+import 'package:nowly/core/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nowly/features/profile/widgets/primary_color_dialog.dart';
 import 'package:sizer/sizer.dart';
 
@@ -203,6 +205,12 @@ class ProfileScreen extends ConsumerWidget {
               builder: (_) => const ChangePasswordDialog(),
             );
           },
+        ),
+        AppSettingTile(
+          icon: Ionicons.link_outline,
+          label: context.l10n.linkedAccountsTitle,
+          trailing: const Icon(Ionicons.chevron_forward_outline, size: 18),
+          onTap: () => context.push(AppRoutes.linkedAccounts),
         ),
       ],
     );

@@ -29,7 +29,10 @@ class AppDivider extends StatelessWidget {
                   maxWidth: constraints.maxWidth * 0.6,
                 ),
                 child: Text(
-                  text!,
+                  text!.toUpperCase(),
+                  style: context.textTheme.labelSmall?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
                   textAlign: TextAlign.center,
                   softWrap: true,
                 ),

@@ -60,16 +60,19 @@ class TaskPieChartSkeleton extends StatelessWidget {
       ],
     );
 
-    final chartPlaceholder = Shimmer.fromColors(
-      baseColor: context.colorScheme.onSurface.withValues(alpha: 0.08),
-      highlightColor: context.colorScheme.onSurface.withValues(alpha: 0.16),
-      child: Center(
-        child: Container(
-          width: 180,
-          height: 180,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
+    final chartPlaceholder = SizedBox(
+      height: 200,
+      child: Shimmer.fromColors(
+        baseColor: context.colorScheme.onSurface.withValues(alpha: 0.08),
+        highlightColor: context.colorScheme.onSurface.withValues(alpha: 0.16),
+        child: Center(
+          child: Container(
+            width: 180,
+            height: 180,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
           ),
         ),
       ),
