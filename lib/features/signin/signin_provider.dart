@@ -75,7 +75,10 @@ class SigninNotifier extends Notifier<SigninState> {
           await _userRepository.updateUser(uid, {'email': authEmail});
         }
       }
+
+      if (!ref.mounted) return;
     } on AuthException catch (e) {
+      if (!ref.mounted) return;
       state = state.copyWith(
         isLoading: false,
         errorMessage: e.message(l10n),

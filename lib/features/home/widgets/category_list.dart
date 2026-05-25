@@ -79,7 +79,6 @@ class CategoryList extends ConsumerWidget {
             ),
           ],
         ),
-      AsyncLoading() => const CategorySkeleton(),
       AsyncError() => Padding(
           padding: horizontalPadding,
           child: Text(
@@ -89,7 +88,7 @@ class CategoryList extends ConsumerWidget {
             ),
           ),
         ),
-      _ => const SizedBox.shrink(),
+      _ => const CategorySkeleton(),
     };
   }
 }

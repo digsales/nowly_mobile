@@ -23,13 +23,23 @@
   "signinGreeting": "Olá\nEntre em sua conta",
   "signinForgotPassword": "Esqueceu a senha?",
   "signinButton": "Entrar",
+  "signinOrSocialLogin": "Ou entre com",
   "signinNoAccount": "Não tem uma conta?\n",
   "signinRegister": "Cadastre-se",
 
   "signupGreeting": "Bem vindo\nCrie sua conta",
   "signupButton": "Cadastrar",
+  "signupOrSocialLogin": "Ou cadastre-se com",
   "signupHasAccount": "Já tem uma conta?\n",
   "signupSignin": "Entre",
+
+  "socialContinueWith": "Continuar com {provider}",
+  "@socialContinueWith": {
+    "description": "Provider de login social.",
+    "placeholders": {
+      "provider": { "type": "String" }
+    }
+  },
 
   "forgotPasswordGreeting": "Redefina sua senha",
   "forgotPasswordButton": "Enviar e-mail",
@@ -73,11 +83,27 @@
   "authErrorEmailAlreadyInUse": "E-mail já cadastrado",
   "authErrorWeakPassword": "Senha muito fraca",
   "authErrorRequiresRecentLogin": "Por segurança, faça login novamente para excluir sua conta.",
+  "authErrorAccountExistsWithDifferentCredential": "Este e-mail j\u00e1 est\u00e1 vinculado a outra forma de login. Tente entrar com o m\u00e9todo original.",
+  "authErrorCredentialAlreadyInUse": "Esta conta já está vinculada a outro usuário.",
+  "authErrorProviderAlreadyLinked": "Este método de login já está vinculado a esta conta.",
+  "authErrorLastAuthMethod": "Você precisa ter pelo menos um método de login ativo.",
+
+  "linkedAccountsTitle": "Conexões",
+  "linkedAccountsHelpText": "Vincule contas de outras plataformas para facilitar seu login.\n\nVocê pode vincular ou desvincular a qualquer momento, desde que mantenha ao menos um método de login ativo.",
+  "linkedAccountsSection": "Conexões",
+  "linkedAccountsGoogle": "Conta Google",
+  "linkedAccountsNotLinked": "Não vinculada",
+  "linkedAccountsLink": "Vincular",
+  "linkedAccountsUnlink": "Desvincular",
+  "linkedAccountsLinkConfirm": "Vincular sua conta Google permitirá que você faça login usando ela.",
+  "linkedAccountsUnlinkConfirm": "Deseja desvincular esta conta Google? Você não poderá mais entrar por ela até vincular novamente.",
   "authErrorUnknown": "Erro inesperado. Tente novamente",
 
   "fabAddTask": "Adicionar tarefa",
 
   "dialogBack": "Voltar",
+
+  "or": "Ou",
 
   "homeSectionCategories": "Categorias",
   "homeCategoryHelpText": "Organize suas tarefas por categoria para melhor acompanhamento.\n\nGerencie-as por nome, cor e ícone.\n\nToque em \"Adicionar\" para criar ou em uma existente para editá-la.",
@@ -257,6 +283,8 @@
   "settingsChangeEmailButton": "Alterar",
   "settingsNewEmail": "Novo e-mail",
   "settingsNewEmailHint": "Digite o novo e-mail",
+  "settingsConfirmNewEmail": "Confirmar novo e-mail",
+  "settingsConfirmNewEmailHint": "Confirme o novo e-mail",
   "settingsChangeEmailMessage": "Um link de confirmação será enviado para o novo e-mail. Após confirmar, faça login novamente.",
   "settingsChangeEmailSuccess": "Um link de confirmação foi enviado para o seu novo e-mail",
   "settingsChangePassword": "Senha",
