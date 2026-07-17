@@ -29,6 +29,21 @@ class User {
     this.unlockedBadges = const [],
   });
 
+  /// [currentStreak] as it stands right now.
+  ///
+  /// The stored value is only reset when the app starts, so it goes stale
+  /// while the app stays open across a day boundary. This derives the streak
+  /// from [lastStreakDate] instead: it survives a completion today or
+  /// yesterday, and is broken beyond that.
+  int get liveStreak {
+    final last = lastStreakDate;
+    if (last == null || currentStreak == 0) return 0;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final lastDay = DateTime(last.year, last.month, last.day);
+    return today.difference(lastDay).inDays >= 2 ? 0 : currentStreak;
+  }
+
   factory User.fromJson(String id, Map<String, dynamic> json) {
     return User(
       id: id,

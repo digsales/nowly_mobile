@@ -396,6 +396,14 @@
   "badgeLevel2000Name": "Transcendente",
   "badgeLevel2000Desc": "Alcance o nível 2000.",
 
+  "streakDaysLabel": "{count, plural, =1{dia seguido} other{dias seguidos}}",
+  "@streakDaysLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "statsBadgesLabel": "insígnias",
+
   "progressSectionStatistics": "Estatísticas",
   "progressStatisticsHelpText": "Veja suas estatísticas de tarefas concluídas, canceladas e expiradas.\n\nFiltre os dados por último mês, semestre, ano ou todo o período.",
   "progressFilterLastMonth": "Último mês",

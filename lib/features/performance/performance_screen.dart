@@ -4,6 +4,7 @@ import 'package:nowly/core/extensions/context_extensions.dart';
 import 'package:nowly/core/widgets/app_layout.dart';
 import 'package:nowly/core/widgets/app_title.dart';
 import 'package:nowly/features/performance/performance_provider.dart';
+import 'package:nowly/features/performance/widgets/performance_highlights.dart';
 import 'package:nowly/features/performance/widgets/task_pie_chart.dart';
 
 class PerformanceScreen extends ConsumerWidget {
@@ -15,6 +16,8 @@ class PerformanceScreen extends ConsumerWidget {
       headerText: context.l10n.performance,
       body: Column(
         children: [
+          const PerformanceHighlights(),
+          const SizedBox(height: 32),
           AppTitle(
             title: context.l10n.progressSectionStatistics,
             onRefresh: () async {
